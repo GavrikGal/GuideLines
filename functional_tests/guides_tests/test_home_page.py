@@ -13,13 +13,11 @@ class HomePageTest(FunctionalTest):
         # Он вводит адрес
         self.browser.get(self.live_server_url)
 
-        print(self.live_server_url)
-
         # и спокойно попадает на главную страницу
-        # на которой видит название лаборатории
-        title = self.browser.find_element(By.TAG_NAME, 'title')
-        time.sleep(3)
+        # и видит слово GuideLines в тайтле страницы
         self.assertIn(
             'GuideLines',
-            title.text
+            self.browser.title
         )
+
+        # Это ли не счастье?
