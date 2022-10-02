@@ -1,29 +1,48 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}Главная{% endblock %} - GuideLines</title>
+{% extends 'bootstrap5/bootstrap5.html' %}
 
-</head>
-<body>
-    <div id="header">
-        {% if user.is_authenticated %}
-            {% if user.first_name %}
-                {{ user.first_name }} {{ user.last_name }}
+{% load static %}
+{% load bootstrap5 %}
+
+{% block bootstrap5_title %}{% block title %}Главная{% endblock %} - GuideLines{% endblock %}
+
+{% block bootstrap5_content %}
+<div class="container">
+    <div id="header" class="navbar navbar-light navbar-expand-lg bg-light">
+        <div class="container-fluid">
+
+            <span class="navbar-brand mb-0 h1 d-lg-inline d-none">GuideLines</span>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <a class="nav-link active" aria-current="page" href="#">Руководства</a>
+                    <a class="nav-link" href="#">Авторы</a>
+                </div>
+
+
+            </div>
+
+            {% if user.is_authenticated %}
+                <span class="navbar-text me-2">
+                    {% if user.first_name %}
+                        {{ user.first_name }} {{ user.last_name }}
+                    {% else %}
+                        {{ user.username }}
+                    {% endif %}
+                </span>
+                <a class="btn btn-outline-secondary" href="{% url 'logout' %}" id="logout-btn">Выход</a>
             {% else %}
-                {{ user.username }}
+                <a class="btn btn-outline-primary" href="{% url 'login' %}" id="login-btn">Вход</a>
             {% endif %}
-            |<a href="{% url 'logout' %}" id="logout-btn">Выход</a>
-        {% else %}
-            <a href="{% url 'login' %}" id="login-btn">Вход</a>
-        {% endif %}
+        </div>
     </div>
+
     <div id="content">
-        {% block content %}
-            Test
-        {% endblock %}
+    {% block content %}
+        Test
+    {% endblock %}
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
