@@ -1,5 +1,3 @@
-import time
-
 from django.contrib.auth import get_user_model
 
 from functional_tests.base import FunctionalTest
