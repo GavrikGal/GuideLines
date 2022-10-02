@@ -8,6 +8,22 @@
 
 </head>
 <body>
-Test
+    <div id="header">
+        {% if user.is_authenticated %}
+            {% if user.first_name %}
+                {{ user.first_name }} {{ user.last_name }}
+            {% else %}
+                {{ user.username }}
+            {% endif %}
+            |<a href="{% url 'logout' %}" id="logout-btn">Выход</a>
+        {% else %}
+            <a href="{% url 'login' %}" id="login-btn">Вход</a>
+        {% endif %}
+    </div>
+    <div id="content">
+        {% block content %}
+            Test
+        {% endblock %}
+    </div>
 </body>
 </html>

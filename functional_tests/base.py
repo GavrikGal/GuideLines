@@ -96,3 +96,20 @@ class FunctionalTest(StaticLiveServerTestCase):
     def wait_for(self, fn):
         """ожидать"""
         return fn()
+
+    @staticmethod
+    def create_user(username='Test_user', password='Password12',
+                    first_name='Test_First_Name', last_name='Test_Last_name',
+                    email='test.dmitry.gal@gmail.com', is_superuser=False) -> 'User':
+        """
+        Создать пользователя.
+           Все аргументы могут быть опущены. Что приведет к созданию тестового пользователя по-умолчанию
+        """
+        user = User.objects.create(username=username,
+                                   first_name=first_name,
+                                   last_name=last_name,
+                                   email=email)
+        user.set_password(password)
+        user.is_superuser = is_superuser
+        user.save()
+        return user
