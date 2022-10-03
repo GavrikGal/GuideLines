@@ -15,6 +15,9 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
+
+
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav me-auto mb-2 mb-lg-0">
                     <a class="nav-link active" aria-current="page" href="#">Руководства</a>
@@ -25,7 +28,7 @@
             </div>
 
             {% if user.is_authenticated %}
-                <span class="navbar-text me-2">
+                <span class="navbar-text me-2 ms-auto">
                     {% if user.first_name %}
                         {{ user.first_name }} {{ user.last_name }}
                     {% else %}
@@ -34,14 +37,159 @@
                 </span>
                 <a class="btn btn-outline-secondary" href="{% url 'logout' %}" id="logout-btn">Выход</a>
             {% else %}
-                <a class="btn btn-outline-primary" href="{% url 'login' %}" id="login-btn">Вход</a>
+                <a class="btn btn-outline-primary ms-auto" href="{% url 'login' %}" id="login-btn">Вход</a>
             {% endif %}
+
         </div>
     </div>
 
     <div id="content">
     {% block content %}
-        Test
+        <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At culpa eaque esse iure maxime sapiente
+            suscipit! Ad adipisci, aspernatur assumenda commodi dolores fugit hic id, magni nemo nihil quae vel.
+        </div>
+        <div>Accusantium, blanditiis culpa ea, inventore natus nobis possimus quae, quam quidem reprehenderit similique
+            vitae voluptatibus. A accusamus alias, aliquid atque autem eveniet nobis placeat qui quo, quod reiciendis
+            tempora vero!
+        </div>
+        <div>Accusamus cum, delectus dolor earum enim error, ex excepturi fuga impedit ipsa ipsum iusto laboriosam
+            laborum magni minus officiis possimus provident quasi quibusdam quod sapiente suscipit totam vitae? Porro,
+            voluptas.
+        </div>
+        <div>Alias architecto aut commodi dignissimos dolorem, doloremque doloribus eos incidunt iure laborum libero
+            maiores officia omnis pariatur placeat provident quae qui quibusdam quidem, recusandae reiciendis sint sit
+            temporibus veniam vero.
+        </div>
+        <div>Aliquam amet enim est iure laudantium nam nisi odit perspiciatis quasi reiciendis, tempora temporibus unde.
+            Beatae consequuntur cumque dolor, ducimus ea esse laborum maiores minus nemo nobis provident quod voluptate!
+        </div>
+        <div>Esse impedit iure minima modi molestiae nostrum ullam! Accusamus ad autem consequatur consequuntur, dolorum
+            eum eveniet illo ipsam minus nulla obcaecati officia optio, praesentium, quod repellat? Deserunt libero
+            possimus recusandae?
+        </div>
+        <div>Delectus doloremque eius eveniet ex exercitationem non praesentium quis ratione. Cum cumque eaque earum
+            eius eligendi inventore officiis omnis similique tempora! Consectetur deserunt minus mollitia nobis nulla!
+            Natus, pariatur, repellendus?
+        </div>
+        <div>Cumque et fugit iste magnam mollitia, tempore voluptatem. Alias esse exercitationem impedit incidunt non
+            nostrum sunt tempora! Dicta explicabo illum in iste numquam quibusdam quisquam, quod recusandae, repellendus
+            vero voluptatibus.
+        </div>
+        <div>Adipisci animi architecto asperiores blanditiis, cumque, cupiditate deserunt doloribus dolorum ducimus
+            eaque eveniet facilis, hic ipsa iste iure neque nobis nulla officiis quia quibusdam quos reprehenderit
+            sapiente sed similique ut.
+        </div>
+        <div>Aliquid dolorem eos est, eveniet expedita iste minus molestias nostrum odio officiis possimus sequi unde
+            vero. Ab adipisci, alias, aperiam autem consequatur et expedita harum laborum natus qui sit, vero.
+        </div>
+        <div>Aut, facilis illum mollitia natus perferendis quae sed suscipit temporibus ullam voluptate? Ab adipisci
+            aspernatur cupiditate eius fugiat laborum quia quo quod? Delectus deserunt dolores eaque eos hic, sed? Quae.
+        </div>
+        <div>A ad architecto assumenda at cupiditate ea fuga, itaque mollitia perspiciatis soluta tenetur vitae,
+            voluptas voluptatum. A amet delectus, esse facere facilis itaque maiores nemo odit quae quidem sed
+            similique?
+        </div>
+        <div>Aspernatur ex exercitationem incidunt ipsum molestiae nihil nisi nobis non recusandae rem? A ad aliquam
+            consequatur dolorem earum eligendi, eum, facilis fugiat ipsam laborum molestias necessitatibus perferendis,
+            quis sint voluptatum!
+        </div>
+        <div>Accusantium ad delectus dolores doloribus ea excepturi facere illo incidunt ipsa iste iure iusto laboriosam
+            minus modi, nisi non numquam odio placeat quas quod reprehenderit saepe temporibus unde veritatis
+            voluptatum.
+        </div>
+        <div>Adipisci amet aut, corporis eligendi eos eveniet laudantium magnam necessitatibus perspiciatis provident
+            quibusdam suscipit ut vero. Deserunt dignissimos doloremque doloribus, eos facilis iste, magni nemo optio
+            quo sequi, unde velit.
+        </div>
+        <div>A autem cumque deleniti, dignissimos, doloremque harum itaque labore laborum, minima minus necessitatibus
+            numquam officiis optio quae quam sapiente velit veritatis. Alias asperiores assumenda aut labore libero
+            officiis quia reiciendis?
+        </div>
+        <div>Consectetur, cupiditate dolores eos in, incidunt magnam modi nam nemo, officiis pariatur repellendus ullam
+            unde. Alias, fuga illo iusto ut veniam vitae! Blanditiis ducimus eaque expedita illum itaque nihil
+            voluptate?
+        </div>
+        <div>A animi asperiores aspernatur at commodi consectetur culpa dignissimos, ducimus fuga ipsum magni nesciunt
+            numquam odit provident reiciendis reprehenderit suscipit totam ullam unde ut voluptas voluptate voluptatem
+            voluptatum. Nisi, odit!
+        </div>
+        <div>Aperiam distinctio explicabo hic, nobis nulla voluptate voluptatem. Blanditiis, consequatur delectus
+            deserunt earum error esse, eum exercitationem hic iusto labore magnam molestiae nulla perspiciatis quas
+            quisquam saepe similique sunt ut!
+        </div>
+        <div>Deserunt explicabo in maxime, modi molestiae praesentium quae quasi rem. Aspernatur delectus, id labore
+            nesciunt omnis perferendis praesentium quia repudiandae sapiente sed! Doloremque error exercitationem in
+            minus quibusdam sint totam.
+        </div>
+        <div>Ipsum nam, quo! Accusamus cum, deserunt enim, est, ex in necessitatibus non quam quas qui repellendus sunt
+            vel veritatis. Dolor incidunt laudantium sapiente. Ab, aliquid at beatae esse quam voluptatum!
+        </div>
+        <div>Commodi dolorem esse minima modi odio quas sit? Architecto, commodi cumque debitis dignissimos dolor earum
+            hic iste labore magnam maxime mollitia nemo numquam quibusdam quos saepe sequi similique unde voluptates.
+        </div>
+        <div>Aspernatur eos facilis fugiat molestiae quasi sequi voluptatum. Aperiam corporis ea eligendi laboriosam
+            laborum laudantium nemo nulla provident ratione similique! Accusantium alias assumenda dolor error excepturi
+            nemo perferendis quasi quidem.
+        </div>
+        <div>Quisquam quod, sit. A accusamus consectetur culpa cumque cupiditate dolorem dolores doloribus fuga,
+            inventore laborum maiores necessitatibus nihil officia optio perferendis porro quae, quaerat quis soluta
+            temporibus! Dolore, laboriosam quos.
+        </div>
+        <div>Animi asperiores autem, commodi debitis esse expedita fugiat id illum magni molestias quisquam rem sequi
+            voluptatibus. A aliquid asperiores beatae eos et inventore iure molestiae nostrum nulla, quam quod ratione?
+        </div>
+        <div>A ab ad animi asperiores beatae dignissimos, eveniet ipsa molestiae nisi quaerat quam quod saepe totam. Ad
+            alias aliquam consectetur illo illum impedit, neque nostrum possimus provident quae similique suscipit?
+        </div>
+        <div>Animi at aut cupiditate deserunt dicta doloremque esse fugiat id ipsa labore modi nam officiis optio porro
+            quasi quia quibusdam quisquam quo repudiandae sequi soluta, sunt suscipit tempore tenetur voluptatibus?
+        </div>
+        <div>Aperiam asperiores atque autem deleniti dolore eaque earum eos esse eum, exercitationem id ipsa iure modi
+            nemo obcaecati perspiciatis quis quisquam reiciendis rem sunt tempore velit voluptate voluptatibus. Ratione,
+            vel!
+        </div>
+        <div>Ad adipisci dolore, dolorum est explicabo facere id inventore maxime provident quis repellendus ullam
+            vitae. A alias culpa cumque, error iure pariatur perspiciatis quae quibusdam quod reiciendis. Dignissimos,
+            dolorum praesentium!
+        </div>
+        <div>Adipisci eaque eum excepturi explicabo neque nulla quasi reprehenderit sunt. Ab animi corporis deserunt,
+            fugiat in itaque iusto nisi odit placeat porro quae, quas vel? Cum dolorem fugit mollitia optio.
+        </div>
+        <div>Adipisci alias autem commodi, deleniti eius enim eveniet labore libero molestias nostrum possimus
+            repellendus veritatis voluptatem. Aliquid autem, cupiditate deleniti dolor, explicabo ipsam labore maiores
+            nostrum quibusdam quisquam temporibus velit.
+        </div>
+        <div>Accusantium ad autem beatae consectetur cum deleniti dicta distinctio doloribus est ex expedita illum in
+            incidunt maiores nam, odit perspiciatis quibusdam recusandae sint ut? Dolore ea modi repellendus sit
+            voluptates.
+        </div>
+        <div>Aliquid, deserunt eveniet hic maiores qui quibusdam reiciendis similique ut veritatis voluptatum. Animi at
+            consequatur, cumque deserunt dicta doloribus ex expedita fuga, ipsum modi, nemo officiis pariatur quasi
+            reiciendis veritatis?
+        </div>
+        <div>Ab alias commodi, consequuntur cumque dicta hic illo, ipsa iusto magnam molestiae nisi nobis numquam optio,
+            perferendis provident repudiandae voluptate. Accusamus accusantium architecto dignissimos in molestias
+            placeat similique tempora vel!
+        </div>
+        <div>Ab alias amet ipsa porro rerum! Accusamus delectus dignissimos dolorem doloremque eaque eius esse eum illum
+            iusto, labore non nostrum, pariatur porro quaerat qui repellat tempora tempore, ullam veniam veritatis!
+        </div>
+        <div>Eaque eos quasi rerum sapiente veniam vitae. Amet aperiam dolorum expedita illum iste nulla placeat quis
+            sint soluta voluptas! Culpa harum magnam veritatis. Animi culpa eligendi, et perspiciatis quod quos?
+        </div>
+        <div>Culpa est eveniet magni maiores necessitatibus recusandae sint suscipit ullam! Blanditiis culpa esse ex
+            placeat possimus, rerum sint vel. Ab eaque labore sed! Accusantium inventore iusto, odio soluta ullam ut.
+        </div>
+        <div>Accusantium, eius exercitationem fugit modi odio qui recusandae reprehenderit voluptas! Harum ipsa libero
+            nemo obcaecati sequi tenetur? Aliquam aut consequuntur iusto minima nesciunt nihil nobis optio provident,
+            quidem unde vero!
+        </div>
+        <div>Adipisci amet assumenda at beatae commodi dignissimos distinctio dolores eaque eveniet fuga iure modi, nisi
+            non nulla obcaecati odit, quaerat quod sequi totam voluptatibus. Ad dignissimos illo nam ratione reiciendis?
+        </div>
+        <div>Ad harum nesciunt quae quod sint! Cumque ducimus magni ratione sed sit tenetur voluptatibus. Accusamus aut
+            blanditiis cum delectus dicta doloribus enim incidunt, ipsa ipsam, magnam quae ut voluptas voluptate!
+        </div>
     {% endblock %}
     </div>
 </div>
