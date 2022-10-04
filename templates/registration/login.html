@@ -7,11 +7,23 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post" class="form">
-        {% csrf_token %}
-        {% bootstrap_form form layout='inline' %}
-        {% buttons %}
-            <button type="submit" class="btn btn-primary">Вход</button>
-        {% endbuttons %}
-    </form>
+    <div class="row justify-content-center pt-5">
+        <div class="col-md-8">
+            {% if user.is_authenticated %}
+                <h3 class="text-center">Вы уже выполнили вход</h3>
+            {% else %}
+                <form method="post" class="form">
+                    {% csrf_token %}
+                    {% bootstrap_form form show_label='skip' field_class='mb-4' layout='horizontal'%}
+                    <div class="row mt-4">
+
+                    {% buttons %}
+                        <a href="#" class="btn btn-outline-primary">Регистрация</a>
+                        <button type="submit" class="btn btn-primary float-end">Вход</button>
+                    {% endbuttons %}
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
