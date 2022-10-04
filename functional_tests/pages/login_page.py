@@ -10,7 +10,7 @@ class LoginPage(BasePage):
     """Домашняя страница"""
 
     def __init__(self, test):
-        super().__init__(test, reverse('account/login'))  # установка адреса страницы
+        super().__init__(test, reverse('login'))  # установка адреса страницы
         self.login_field = InputField(self.test, 'id_username')
         self.password_field = InputField(self.test, 'id_password')
         self.login_to_system_btn = SubmitButton(self.test)
