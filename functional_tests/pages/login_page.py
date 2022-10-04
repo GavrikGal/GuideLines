@@ -1,9 +1,8 @@
 from django.urls import reverse
-from selenium.webdriver.common.by import By
 
 from functional_tests.pages.components.base_page import BasePage
 from functional_tests.pages.components.fields import InputField
-from functional_tests.pages.components.buttons import SubmitButton, LogoutButton
+from functional_tests.pages.components.buttons import SubmitButton, BaseButton
 
 
 class LoginPage(BasePage):
@@ -14,6 +13,7 @@ class LoginPage(BasePage):
         self.login_field = InputField(self.test, 'id_username')
         self.password_field = InputField(self.test, 'id_password')
         self.login_to_system_btn = SubmitButton(self.test)
+        self.registration_btn = BaseButton(self.test, id_='id_registration_btn')
 
     # @property
     # def popup_error_message(self):
