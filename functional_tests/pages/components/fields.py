@@ -1,17 +1,19 @@
 from selenium.webdriver.common.by import By
 
+from functional_tests.base import FunctionalTest
+
 
 class InputField(object):
     """Поле ввода"""
 
-    def __init__(self, test, _field_id):
-        self.test = test
+    def __init__(self, test: FunctionalTest, _field_id: str):
+        self._browser = test.browser
         self._field_id = _field_id
 
     @property
     def _field(self):
         """само поле ввода"""
-        return self.test.browser.find_element(By.ID, self._field_id)
+        return self._browser.find_element(By.ID, self._field_id)
 
     @property
     def value(self):
@@ -26,7 +28,7 @@ class InputField(object):
     @property
     def label(self):
         """Лэйбл, находящийся перед полем"""
-        return self.test.browser.find_element(
+        return self._browser.find_element(
             By.CSS_SELECTOR,
             f"#content label[for='{self._field_id}']"
         )
