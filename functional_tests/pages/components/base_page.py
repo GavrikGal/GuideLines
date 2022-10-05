@@ -1,5 +1,7 @@
 from selenium.webdriver.common.by import By
 
+from functional_tests.pages.components.buttons import LogoutButton, LoginButton
+
 
 class BasePage(object):
     """Общие элементы для всех страниц"""
@@ -7,6 +9,8 @@ class BasePage(object):
     def __init__(self, test, page_url=''):
         self.test = test
         self.page_url = page_url
+        self.login_btn = LoginButton(self.test)
+        self.logout_btn = LogoutButton(self.test)
 
     @property
     def page_title(self):
