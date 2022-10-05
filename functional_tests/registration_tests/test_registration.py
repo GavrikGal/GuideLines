@@ -34,18 +34,50 @@ class RegistrationTest(FunctionalTest):
         """Можно зарегистрироваться в системе"""
 
         # Гал открывает страницу регистрации
+        registration_page = RegistrationPage(self)
+        registration_page.go_to_page()
 
         # На ней видит поля для ввода логина
+        self.assertTrue(
+            registration_page.login_field.is_displayed()
+        )
 
         # Имени и фамилии
+        self.assertTrue(
+            registration_page.first_name_field.is_displayed()
+        )
+        self.assertTrue(
+            registration_page.last_name_field.is_displayed()
+        )
 
         # Пароля и подтверждения пароля
+        self.assertTrue(
+            registration_page.password_field.is_displayed()
+        )
+        self.assertTrue(
+            registration_page.confirm_password_field.is_displayed()
+        )
 
         # А также кнопку добавления аватара
+        self.assertTrue(
+            registration_page.avatar_btn.is_displayed()
+        )
 
         # Так же имеется кнопка регистрации
+        self.assertTrue(
+            registration_page.registration_to_system_btn.is_displayed()
+        )
 
         # Гал заполняет все данные
+        registration_page.login_field.send_keys('Test_Login')
+        registration_page.first_name_field.send_keys('Test_Gavrik')
+        registration_page.last_name_field.send_keys('Test_Gal')
+        registration_page.password_field.send_keys('Test_Password12')
+        registration_page.confirm_password_field.send_keys('Test_Password12')
+        registration_page.set_avatar_img(r'\functional_tests\img\avatar.jpg')
+        registration_page.registration_to_system_btn.click()
+
+
 
         # Нажимает кнопку регистрации
 
@@ -61,3 +93,4 @@ class RegistrationTest(FunctionalTest):
         # Он становится аутенцифицированным пользователем
         # Что подтверждает наличие его имени и фамилии в шапке
 
+        self.fail('Доделать')
