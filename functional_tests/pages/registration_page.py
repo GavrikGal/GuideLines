@@ -16,7 +16,6 @@ class RegistrationPage(BasePage):
         self.login_field = InputField(self.test, 'id_username')
         self.first_name_field = InputField(self.test, 'id_firstname')
         self.last_name_field = InputField(self.test, 'id_lastname')
-        self.email_field = InputField(self.test, 'id_email')
         self.password_field = InputField(self.test, 'id_password')
         self.confirm_password_field = InputField(self.test, 'id_confirm_password')
         self.registration_to_system_btn = SubmitButton(self.test)
