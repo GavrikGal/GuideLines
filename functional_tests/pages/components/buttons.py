@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webdriver import WebElement
 
 from functional_tests.base import FunctionalTest
 
@@ -15,7 +16,7 @@ class BaseButton(object):
         self._id = id_
 
     @property
-    def _btn(self):
+    def _btn(self) -> WebElement:
         """сама кнопка"""
         if self._id:
             return self._browser.find_element(
@@ -29,15 +30,15 @@ class BaseButton(object):
             )
 
     @property
-    def label(self):
+    def label(self) -> str:
         """Надпись на кнопке"""
         return self._btn.text
 
-    def click(self):
+    def click(self) -> None:
         """Клик по кнопке"""
-        return self._btn.click()
+        self._btn.click()
 
-    def is_displayed(self):
+    def is_displayed(self) -> bool:
         """Кнопка видима?"""
         return self._btn.is_displayed()
 

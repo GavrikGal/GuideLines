@@ -9,7 +9,7 @@ from functional_tests.pages.components.buttons import SubmitButton, BaseButton
 class LoginPage(BasePage):
     """Домашняя страница"""
 
-    def __init__(self, test: FunctionalTest):
+    def __init__(self, test: FunctionalTest) -> None:
         super().__init__(test, reverse('login'))  # установка адреса страницы
         self.login_field = InputField(self._test, 'id_username')
         self.password_field = InputField(self._test, 'id_password')

@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from functional_tests.base import FunctionalTest
+from selenium.webdriver.remote.webdriver import WebElement
 
 
 class InputField(object):
@@ -11,22 +12,22 @@ class InputField(object):
         self._field_id = _field_id
 
     @property
-    def _field(self):
+    def _field(self) -> WebElement:
         """само поле ввода"""
         return self._browser.find_element(By.ID, self._field_id)
 
     @property
-    def value(self):
+    def value(self) -> str:
         """значение написанное внутри поля ввода"""
         return self._field.get_attribute('value')
 
     @property
-    def error_message(self):
+    def error_message(self) -> WebElement:
         """следуемая за полем ввода ошибка"""
         return self._field.find_element(By.XPATH, "./following-sibling::div[@class='invalid-feedback']")
 
     @property
-    def label(self):
+    def label(self) -> WebElement:
         """Лэйбл, находящийся перед полем"""
         return self._browser.find_element(
             By.CSS_SELECTOR,
@@ -34,27 +35,27 @@ class InputField(object):
         )
 
     @property
-    def help_text(self):
+    def help_text(self) -> str:
         """следуемая за полем подсказка"""
         return self._field.find_element(By.XPATH, "./following-sibling::div[@class='help']").text
 
     @property
-    def placeholder(self):
+    def placeholder(self) -> str:
         """Плейсхолдер поля"""
         return self._field.get_attribute("placeholder")
 
-    def is_invalid(self):
+    def is_invalid(self) -> bool:
         """поле ввода не валидно?"""
         return 'is-invalid' in self._field.get_attribute("class").split()
 
-    def is_displayed(self):
+    def is_displayed(self) -> bool:
         """поле ввода видимо?"""
         return self._field.is_displayed()
 
-    def send_keys(self, keys):
+    def send_keys(self, keys: str) -> None:
         """нажать в поле ввода соответствующие кнопки"""
-        return self._field.send_keys(keys)
+        self._field.send_keys(keys)
 
-    def clear(self):
+    def clear(self) -> None:
         """очищает данные в поле"""
-        return self._field.clear()
+        self._field.clear()

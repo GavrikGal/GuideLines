@@ -32,13 +32,14 @@ class FunctionalTest(StaticLiveServerTestCase):
     """базовый функциональный тест"""
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
+        # Установка порта на котором будет проводится тестирование из переменных окружения
         if os.environ.get("TEST_SERVER_PORT"):
             cls.port = int(os.environ.get("TEST_SERVER_PORT"))
         super().setUpClass()
 
-    def setUp(self):
-        """установка"""
+    def setUp(self) -> None:
+        """Установка параметров тестовой среды"""
         options = Options()
         # использовать для тестов драйвер без окна или с окном
         self.used_headless_driver = os.environ.get("HEADLESS_DRIVER", False)
@@ -50,7 +51,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         if self.staging_server:
             self.live_server_url = 'http://' + self.staging_server
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         """демонтаж"""
         if self.used_headless_driver:
             if self._test_has_failed():
@@ -68,20 +69,20 @@ class FunctionalTest(StaticLiveServerTestCase):
         """тест не сработал"""
         return any(error for (method, error) in self._outcome.errors)
 
-    def take_screenshot(self):
+    def take_screenshot(self) -> None:
         """взять снимок экрана"""
         filename = self._get_filename() + '.png'
         print('screenshotting to', filename)
         self.browser.get_screenshot_as_file(filename)
 
-    def dump_html(self):
+    def dump_html(self) -> None:
         """выгрузить html"""
         filename = self._get_filename() + '.html'
         print('dumping page HTML to', filename)
         with open(filename, 'w') as f:
             f.write(self.browser.page_source)
 
-    def _get_filename(self):
+    def _get_filename(self) -> str:
         """получить имя файла"""
         timestamp = datetime.now().isoformat().replace(':', '.')[:19]
         return '{folder}/{classname}.{method}-window{windowid}-{timestamp}'.format(
@@ -100,15 +101,15 @@ class FunctionalTest(StaticLiveServerTestCase):
     @staticmethod
     def create_user(username='Test_user', password='Password12',
                     first_name='Test_First_Name', last_name='Test_Last_name',
-                    email='test.dmitry.gal@gmail.com', is_superuser=False) -> 'User':
+                    is_superuser=False) -> 'User':
         """
         Создать пользователя.
            Все аргументы могут быть опущены. Что приведет к созданию тестового пользователя по-умолчанию
         """
         user = User.objects.create(username=username,
                                    first_name=first_name,
-                                   last_name=last_name,
-                                   email=email)
+                                   last_name=last_name
+                                   )
         user.set_password(password)
         user.is_superuser = is_superuser
         user.save()

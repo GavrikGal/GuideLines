@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
-from functional_tests.base import FunctionalTest
+from selenium.webdriver.remote.webdriver import WebElement
 
+from functional_tests.base import FunctionalTest
 from functional_tests.pages.components.buttons import LogoutButton, LoginButton
 
 
@@ -15,18 +16,18 @@ class BasePage(object):
         self.logout_btn = LogoutButton(self._test)
 
     @property
-    def page_title(self):
+    def page_title(self) -> str:
         """заголовок страницы"""
         page_title = self._browser.title
         return page_title
 
     @property
-    def header(self):
+    def header(self) -> WebElement:
         """получить элемент шапки"""
         header = self._browser.find_element(By.ID, 'header')
         return header
 
-    def go_to_page(self):
+    def go_to_page(self) -> 'BasePage':
         """перейти на страницу"""
         self._browser.get(self._test.live_server_url + self.page_url)
         # Подождать пока загрузится тайтл страницы

@@ -1,5 +1,3 @@
-import time
-
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.registration_page import RegistrationPage
 from functional_tests.pages.login_page import LoginPage

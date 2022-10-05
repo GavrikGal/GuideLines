@@ -1,13 +1,10 @@
-import time
-
-from selenium.webdriver.common.by import By
 from functional_tests.base import FunctionalTest
 
 
 class HomePageTest(FunctionalTest):
     """тест главной страницы"""
 
-    def test_can_open_home_page(self):
+    def test_can_open_home_page(self) -> None:
         """тест можно открыть главную страницу"""
         # Гал хочет открыть главную страницу системы.
         # Он вводит адрес

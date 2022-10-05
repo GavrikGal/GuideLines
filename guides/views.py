@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 
@@ -11,11 +12,8 @@ class RegistrationView(CreateView):
     success_url = reverse_lazy('guides:home_page')
     template_name = 'registration/registration.html'
 
-#
-# def registration(request):
-#     return render(request, 'registration/registration.html')
 
-
-def home_page(request):
+def home_page(request) -> HttpResponse:
+    """Заплатка"""
     return render(request, 'base.html')
 
