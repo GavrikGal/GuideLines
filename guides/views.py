@@ -6,4 +6,4 @@ def home_page(request):
 
 
 def registration(request):
-    pass
+    return render(request, 'registration/registration.html')

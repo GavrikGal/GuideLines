@@ -12,7 +12,7 @@ class RegistrationPage(BasePage):
     """Страница регистрации"""
 
     def __init__(self, test):
-        super().__init__(test, reverse('registration'))  # установка адреса страницы
+        super().__init__(test, reverse('guides:registration'))  # установка адреса страницы
         self.login_field = InputField(self.test, 'id_username')
         self.first_name_field = InputField(self.test, 'id_firstname')
         self.last_name_field = InputField(self.test, 'id_lastname')
