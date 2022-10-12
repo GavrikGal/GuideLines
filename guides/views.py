@@ -14,6 +14,6 @@ class RegistrationView(CreateView):
 
 
 def home_page(request) -> HttpResponse:
-    """Заплатка"""
+    """Заплатка """
     return render(request, 'base.html')
 
