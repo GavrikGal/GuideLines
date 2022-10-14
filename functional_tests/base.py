@@ -33,7 +33,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        # Установка порта на котором будет проводится тестирование из переменных окружения
+        # Установка порта на котором будет проводится тестирование из переменных окружения TEST_SERVER_PORT=15051
         if os.environ.get("TEST_SERVER_PORT"):
             cls.port = int(os.environ.get("TEST_SERVER_PORT"))
         super().setUpClass()
