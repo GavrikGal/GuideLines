@@ -6,13 +6,15 @@ from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.firefox.options import Options
 from django.conf import settings
+from django.test import Client
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 import time
 
 
 MAX_WAIT = 3
 SCREEN_DUMP_LOCATION = settings.BASE_DIR / 'logs' / 'screendumps'
-User = get_user_model()
+UserModel = get_user_model()
 
 
 def wait(fn):
@@ -47,6 +49,7 @@ class FunctionalTest(StaticLiveServerTestCase):
             options.add_argument('--headless')
             options.add_argument('--disable-gpu')
         self.browser = webdriver.Firefox(options=options)
+        self.client = Client()
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
             self.live_server_url = 'http://' + self.staging_server
@@ -101,15 +104,15 @@ class FunctionalTest(StaticLiveServerTestCase):
     @staticmethod
     def create_user(username='Test_user', password='Password12',
                     first_name='Test_First_Name', last_name='Test_Last_name',
-                    is_superuser=False) -> 'User':
+                    is_superuser=False) -> User:
         """
         Создать пользователя.
            Все аргументы могут быть опущены. Что приведет к созданию тестового пользователя по-умолчанию
         """
-        user = User.objects.create(username=username,
-                                   first_name=first_name,
-                                   last_name=last_name
-                                   )
+        user = UserModel.objects.create(username=username,
+                                        first_name=first_name,
+                                        last_name=last_name
+                                        )
         user.set_password(password)
         user.is_superuser = is_superuser
         user.save()
