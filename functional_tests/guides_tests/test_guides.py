@@ -20,6 +20,9 @@ class GuidesTest(FunctionalTest):
         home_page.go_to_page()
 
         # Находит кнопку добавления нового руководства
+        self.assertTrue(
+            home_page.new_guide_btn.is_displayed()
+        )
 
         # Нажимает на нее
 
