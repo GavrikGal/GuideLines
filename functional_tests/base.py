@@ -17,7 +17,7 @@ import time
 
 MAX_WAIT = 3
 SCREEN_DUMP_LOCATION = settings.BASE_DIR / 'logs' / 'screendumps'
-UserModel = get_user_model()
+# UserModel = get_user_model()
 
 
 def wait(fn):
@@ -112,7 +112,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         Создать пользователя.
            Все аргументы могут быть опущены. Что приведет к созданию тестового пользователя по-умолчанию
         """
-        # todo: перенести UserModel сюда
+        UserModel = get_user_model()
         user = UserModel.objects.create(username=username,
                                         first_name=first_name,
                                         last_name=last_name
