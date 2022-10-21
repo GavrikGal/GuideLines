@@ -105,18 +105,18 @@ class FunctionalTest(StaticLiveServerTestCase):
         return fn()
 
     @staticmethod
-    def create_user(username='Test_user', password='Password12',
-                    first_name='Test_First_Name', last_name='Test_Last_name',
-                    is_superuser=False) -> User:
+    def create_user(username: str = 'Test_user', password: str = 'Password12',
+                    first_name: str = 'Test_First_Name', last_name: str = 'Test_Last_name',
+                    is_superuser: bool = False) -> User:
         """
         Создать пользователя.
            Все аргументы могут быть опущены. Что приведет к созданию тестового пользователя по-умолчанию
         """
-        UserModel = get_user_model()
-        user = UserModel.objects.create(username=username,
-                                        first_name=first_name,
-                                        last_name=last_name
-                                        )
+        user_model = get_user_model()
+        user = user_model.objects.create(username=username,
+                                         first_name=first_name,
+                                         last_name=last_name
+                                         )
         user.set_password(password)
         user.is_superuser = is_superuser
         user.save()

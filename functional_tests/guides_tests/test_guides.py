@@ -12,14 +12,12 @@ class GuidesTest(FunctionalTest):
     def test_can_create_new_guide(self) -> None:
         """тест можно создать новое руководство"""
         # Гал хочет создать свое первое Руководство.
-        # Он зарегестрированный пользователь
-        # и залогиненый пользователь
+        # Он зарегестрированный пользователь и залогиненый пользователь
         self.create_pre_authenticated_session(username='Gal', first_name='Дмитрий', last_name='Гал')
 
         # Он открывает главную страницу
         home_page = HomePage(self)
         home_page.go_to_page()
-        time.sleep(5)
 
         # Находит кнопку добавления нового руководства
 
