@@ -2,12 +2,15 @@ import os
 from datetime import datetime
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.sessions.backends.db import SessionStore
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.firefox.options import Options
 from django.conf import settings
-from django.test import Client
-from django.contrib.auth import get_user_model
+from django.contrib.auth import (
+    SESSION_KEY, BACKEND_SESSION_KEY, HASH_SESSION_KEY,
+    get_user_model
+)
 from django.contrib.auth.models import User
 import time
 
@@ -49,7 +52,7 @@ class FunctionalTest(StaticLiveServerTestCase):
             options.add_argument('--headless')
             options.add_argument('--disable-gpu')
         self.browser = webdriver.Firefox(options=options)
-        self.client = Client()
+        self.cookies = None
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
             self.live_server_url = 'http://' + self.staging_server
@@ -109,6 +112,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         Создать пользователя.
            Все аргументы могут быть опущены. Что приведет к созданию тестового пользователя по-умолчанию
         """
+        # todo: перенести UserModel сюда
         user = UserModel.objects.create(username=username,
                                         first_name=first_name,
                                         last_name=last_name
@@ -117,3 +121,32 @@ class FunctionalTest(StaticLiveServerTestCase):
         user.is_superuser = is_superuser
         user.save()
         return user
+
+    def create_pre_authenticated_session(self, username: str = 'Test_user',
+                                         password: str = 'Password12',
+                                         first_name: str = 'Test_First_Name',
+                                         last_name: str = 'Test_Last_name',) -> None:
+        """
+        Создать пользователя и аутентифицированную сессию
+            Все аргументы могут быть опущены. Что приведет к созданию тестового пользователя по-умолчанию
+        """
+        # First, create a new test user
+        user = self.create_user(username, password, first_name, last_name)
+
+        # Then create the authenticated session using the new user credentials
+        session = SessionStore()
+        session[SESSION_KEY] = user.pk
+        session[BACKEND_SESSION_KEY] = settings.AUTHENTICATION_BACKENDS[0]
+        session[HASH_SESSION_KEY] = user.get_session_auth_hash()
+        session.save()
+
+        self.browser.get(self.live_server_url + '/404_no_such_url/')
+
+        cookie = {
+            'name': settings.SESSION_COOKIE_NAME,
+            'value': session.session_key,
+            'secure': False,
+            'path': '/',
+        }
+
+        self.browser.add_cookie(cookie)

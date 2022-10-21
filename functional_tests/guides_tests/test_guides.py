@@ -13,17 +13,8 @@ class GuidesTest(FunctionalTest):
         """тест можно создать новое руководство"""
         # Гал хочет создать свое первое Руководство.
         # Он зарегестрированный пользователь
-        user = self.create_user(username='Gal', password='Password123')
-
         # и залогиненый пользователь
-        # todo: реализовать вход в тесте с помощью cookies
-
-        response = self.client.post('/account/login/', {'username': 'Gal', 'password': 'Password123'})
-        # print(self.client.login(username='Gal', password='Password123'))
-        cookies = self.client.cookies
-        print(cookies)
-
-        self.browser.add_cookie({'/': cookies})
+        self.create_pre_authenticated_session(username='Gal', first_name='Дмитрий', last_name='Гал')
 
         # Он открывает главную страницу
         home_page = HomePage(self)
