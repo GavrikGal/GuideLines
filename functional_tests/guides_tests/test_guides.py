@@ -3,7 +3,14 @@ from django.contrib.auth.models import User
 
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
-from guides.models import CustomUser
+from functional_tests.pages.new_guide_page import NewGuidePage
+
+TEST_GUIDE_NAME = 'Моё новое Руководство'
+TEST_GUIDE_DESCRIPTION = 'Это Руководство замечательно отражает всё то, что мы хотим показать. Это будет ' \
+                         'увлекательное руководство. Главное, чтобы в описании было бы много строк, а то не ' \
+                         'получится нормально протоестировать это описание. Я думаю этого должно хватить. Но, ' \
+                         'на всякий случай, пусть будет еще пару слов. Пара слов."'
+TEST_GUIDE_COVER_IMG_PATH = r'\functional_tests\img\Guide Cover.jpg'
 
 
 class GuidesTest(FunctionalTest):
@@ -25,20 +32,39 @@ class GuidesTest(FunctionalTest):
         )
 
         # Нажимает на нее
+        home_page.new_guide_btn.click()
 
         # Попадает на страницу создания нового Руководства
+        new_guide_page = NewGuidePage(self)
+        self.assertIn(
+            "Новое Руководство",
+            new_guide_page.page_title
+        )
 
         # Где он может ввести название руководства
+        self.assertTrue(
+            new_guide_page.guide_name_field.is_displayed()
+        )
 
         # Описание руководства
+        self.assertTrue(
+            new_guide_page.description_field
+        )
 
-        # Обложку руководства
+        # Видит кнопку выбора обложки руководства
+        self.assertTrue(
+            new_guide_page.guide_cover_btn.is_displayed()
+        )
 
         # Он заполняет соответствующие поля
+        new_guide_page.guide_name_field.send_keys(TEST_GUIDE_NAME)
+        new_guide_page.description_field.send_keys(TEST_GUIDE_DESCRIPTION)
 
         # Устатавливает фон
+        new_guide_page.guide_cover_btn.send_keys(TEST_GUIDE_COVER_IMG_PATH)
 
         # Нажимает кнопку "Создать Руководство"
+        new_guide_page.create_guide_btn.click()
 
         # И его чудесным образом переносит на страницу
         # только что созданного Руководста

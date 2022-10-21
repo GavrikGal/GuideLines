@@ -8,12 +8,13 @@ class BaseButton(object):
     """Базовая кнопка"""
 
     def __init__(self, test: FunctionalTest, type_: str = None,
-                 section: str = '#content', class_: str = 'btn', id_: str = ''):
+                 section: str = '#content', class_: str = 'btn', id_: str = '', name: str = None):
         self._browser = test.browser
         self._type = type_
         self._section = section
         self._class = class_
         self._id = id_
+        self._name = name
 
     @property
     def _btn(self) -> WebElement:
@@ -22,6 +23,11 @@ class BaseButton(object):
             return self._browser.find_element(
                 By.ID,
                 self._id
+            )
+        elif self._name:
+            return self._browser.find_element(
+                By.NAME,
+                self._name
             )
         else:
             return self._browser.find_element(

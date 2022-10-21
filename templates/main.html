@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load bootstrap5 %}
+
+{% block title %}
+    Главная
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <a href="{% url 'guides:new_guide' %}">
+            {% bootstrap_button content='Новое Руководство' name='new_guide_btn'%}
+        </a>
+    {% else %}
+        <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut consectetur, consequuntur corporis deserunt
+            error ex exercitationem libero maiores molestiae nam omnis, porro quaerat quam quidem recusandae rem
+            repellat voluptatum? Impedit.
+        </div>
+        <div>Ad consequuntur culpa cupiditate eligendi laudantium magni obcaecati officiis quia, quidem sit. Accusantium
+            exercitationem hic ipsa laudantium ut. A aliquam aperiam aut corporis debitis, dolor facere id illum
+            provident unde?
+        </div>
+    {% endif %}
+{% endblock %}

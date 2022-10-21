@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
+from django.views.generic import TemplateView
 
 from .forms import CustomUserCreationForm
 
@@ -13,7 +13,12 @@ class RegistrationView(CreateView):
     template_name = 'registration/registration.html'
 
 
-def home_page(request) -> HttpResponse:
-    """Заплатка """
-    return render(request, 'base.html')
+class HomePageView(TemplateView):
+    """Главная страница"""
+    template_name = 'main.html'
 
+
+def new_guide(request):
+    """заглушка"""
+    # todo: вместо этого метода сделать класс NewGuide(CreateView) по аналогии с RegistrationView(CreateView)
+    return render(request, 'guide/new.html')

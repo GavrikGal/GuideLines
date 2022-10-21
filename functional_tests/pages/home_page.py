@@ -8,5 +8,5 @@ class HomePage(BasePage):
 
     def __init__(self, test: FunctionalTest) -> None:
         super().__init__(test, '/')  # установка адреса страницы
-        self.new_guide_btn = BaseButton(test, id_="id_add_guide_btn")
+        self.new_guide_btn = BaseButton(test, name="new_guide_btn")
 
