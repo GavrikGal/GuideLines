@@ -19,10 +19,6 @@ class CustomUserChangeForm(UserChangeForm):
 
 class CreationGuideForm(ModelForm):
 
-    # def save(self):
-    #     """добавить автора при сохранении"""
-    #
-
     class Meta:
         model = Guide
         fields = ['name', 'description', 'cover']

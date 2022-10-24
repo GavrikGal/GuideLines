@@ -123,7 +123,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"  # при сборе статики (collectstatic) в папке STATIC_ROOT будет собрана вся статика со всего проекта и потом раздаваться из этой папки
+STATICFILES_DIRS = [  # папки где django будет искать статику для сбора
+    BASE_DIR / "static",
+]
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -134,3 +139,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+# Default settings
+BOOTSTRAP5 = {
+
+    # The complete URL to the Bootstrap CSS file.
+    # Note that a URL can be either a string
+    # ("https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"),
+    # or a dict with keys `url`, `integrity` and `crossorigin` like the default value below.
+    "theme_url": {
+        "url": STATIC_URL + 'css/style.css'
+    },
+}
+

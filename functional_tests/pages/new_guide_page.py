@@ -11,7 +11,7 @@ from functional_tests.pages.components.buttons import SubmitButton
 
 
 class NewGuidePage(BasePage):
-    """Страница регистрации"""
+    """Страница нового Руководства"""
 
     def __init__(self, test: FunctionalTest) -> None:
         super().__init__(test, reverse('guides:new_guide'))  # установка адреса страницы

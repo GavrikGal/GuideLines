@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load bootstrap5 %}
+{% load static %}
+
+{% block title %}
+    {{ guide.name }}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-5">
+    <div class="col-md-8">
+{#        <h1 class="h1 text-center">{{ guide.name }}</h1>#}
+
+        <div class="row mt-5" >
+            <div class="col">
+
+                <div class="card bg-dark text-white" id="guide">
+                    <img src="{{ guide.cover.url }}" class="card-img" alt="">
+                    <div class="card-img-overlay">
+                        <h1 class="card-title">{{ guide.name }}</h1>
+                        <p class="card-text mt-5">{{ guide.description }}</p>
+                    </div>
+                </div>
+
+{#                <div class="description-container" id="guide">#}
+{#                    <img src="{{ guide.cover.url }}" class="cover img-fluid" alt="">#}
+{#                    <div class="container description-text p-5">#}
+{#                        <div class="row">#}
+{#                            <div class="col">#}
+{#                                <p class="">{{ guide.description }}</p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+            </div>
+{#            <p class="p-5 text-dark">{{ guide.description }}</p>#}
+        </div>
+
+{#        <div id="guide-cover-bg">#}
+{#            {% if guide.cover %}#}
+{#                <div id="guide-cover-bg-box" style="background-image: url('{{ guide.cover.url }}')"></div>#}
+{#            {% else %}#}
+{#                <div id="guide-cover-bg-box"#}
+{#                     style="background-image: url('{% static 'img/default-guide-cover.jpg' %}')"></div>#}
+{#            {% endif %}#}
+{##}
+{#            {% block profile-bg-link %}{% endblock %}#}
+{##}
+{#        </div>#}
+{##}
+{#        <div>#}
+{#            <p>{{ guide.description }}</p>#}
+{#        </div>#}
+    </div>
+</div>
+{% endblock %}

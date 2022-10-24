@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
 from functional_tests.pages.new_guide_page import NewGuidePage
+from functional_tests.pages.detail_guide_page import DetailGuidePage
 
 TEST_GUIDE_NAME = 'Моё новое Руководство'
 TEST_GUIDE_DESCRIPTION = 'Это Руководство замечательно отражает всё то, что мы хотим показать. Это будет ' \
@@ -68,6 +69,11 @@ class GuidesTest(FunctionalTest):
 
         # И его чудесным образом переносит на страницу
         # только что созданного Руководста
+        detail_guide_page = DetailGuidePage(self)
+        self.assertIn(
+            TEST_GUIDE_NAME,
+            detail_guide_page.page_title
+        )
 
         # Где он видит загруженную им обложку
 

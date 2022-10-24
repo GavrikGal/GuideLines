@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser
+from .forms import CreationGuideForm
+from .models import CustomUser, Guide
 
 
 class CustomUserAdmin(UserAdmin):
@@ -12,4 +13,14 @@ class CustomUserAdmin(UserAdmin):
     list_display = ['username', 'first_name', 'last_name', 'avatar',]
 
 
+class GuideAdmin(admin.ModelAdmin):
+    add_form = CreationGuideForm
+    model = Guide
+    list_display = ['name', 'description', 'cover', 'author']
+
+
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Guide, GuideAdmin)
+
+
+
