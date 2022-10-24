@@ -10,7 +10,7 @@ TEST_GUIDE_DESCRIPTION = 'Это Руководство замечательно
                          'увлекательное руководство. Главное, чтобы в описании было бы много строк, а то не ' \
                          'получится нормально протоестировать это описание. Я думаю этого должно хватить. Но, ' \
                          'на всякий случай, пусть будет еще пару слов. Пара слов."'
-TEST_GUIDE_COVER_IMG_PATH = r'\functional_tests\img\Guide Cover.jpg'
+TEST_GUIDE_COVER_IMG_PATH = r'\functional_tests\img\Cover.jpg'
 
 
 class GuidesTest(FunctionalTest):
@@ -61,7 +61,7 @@ class GuidesTest(FunctionalTest):
         new_guide_page.description_field.send_keys(TEST_GUIDE_DESCRIPTION)
 
         # Устатавливает фон
-        new_guide_page.guide_cover_btn.send_keys(TEST_GUIDE_COVER_IMG_PATH)
+        new_guide_page.set_cover_img(TEST_GUIDE_COVER_IMG_PATH)
 
         # Нажимает кнопку "Создать Руководство"
         new_guide_page.create_guide_btn.click()
@@ -73,6 +73,8 @@ class GuidesTest(FunctionalTest):
 
         # А на ней красуется название Руководства
         # и описание
+
+        # И Гал видит, что автором руководства является он Сам. Красавчик!
 
         self.fail("Доделать")
 
