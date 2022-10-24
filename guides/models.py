@@ -26,7 +26,7 @@ class Guide(models.Model):
 
     name = models.CharField(max_length=200, verbose_name='Название')
     description = models.TextField(blank=True)
-    cover = models.ImageField(upload_to='media',
+    cover = models.ImageField(upload_to=_upload_path,
                               null=True,
                               blank=True)
     author = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
