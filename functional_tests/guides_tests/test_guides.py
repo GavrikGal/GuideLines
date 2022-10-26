@@ -1,11 +1,14 @@
-import time
-from django.contrib.auth.models import User
+from os.path import splitext, basename
 
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
 from functional_tests.pages.new_guide_page import NewGuidePage
 from functional_tests.pages.detail_guide_page import DetailGuidePage
 
+
+TEST_USERNAME = 'Gal'
+TEST_FIRST_NAME = 'Дмитрий'
+TEST_LAST_NAME = 'Гал'
 TEST_GUIDE_NAME = 'Моё новое Руководство'
 TEST_GUIDE_DESCRIPTION = 'Это Руководство замечательно отражает всё то, что мы хотим показать. Это будет ' \
                          'увлекательное руководство. Главное, чтобы в описании было бы много строк, а то не ' \
@@ -21,7 +24,9 @@ class GuidesTest(FunctionalTest):
         """тест можно создать новое руководство"""
         # Гал хочет создать свое первое Руководство.
         # Он зарегестрированный пользователь и залогиненый пользователь
-        self.create_pre_authenticated_session(username='Gal', first_name='Дмитрий', last_name='Гал')
+        self.create_pre_authenticated_session(username=TEST_USERNAME,
+                                              first_name=TEST_FIRST_NAME,
+                                              last_name=TEST_LAST_NAME)
 
         # Он открывает главную страницу
         home_page = HomePage(self)
@@ -76,13 +81,31 @@ class GuidesTest(FunctionalTest):
         )
 
         # Где он видит загруженную им обложку
+        self.assertTrue(
+            detail_guide_page.guide_cover.is_displayed()
+        )
+        self.assertIn(
+            splitext(basename(TEST_GUIDE_COVER_IMG_PATH))[0],
+            detail_guide_page.guide_cover.get_attribute('src')
+        )
 
         # А на ней красуется название Руководства
+        self.assertEqual(
+            TEST_GUIDE_NAME,
+            detail_guide_page.find_text(TEST_GUIDE_NAME)
+        )
         # и описание
+        self.assertEqual(
+            TEST_GUIDE_DESCRIPTION,
+            detail_guide_page.find_text(TEST_GUIDE_DESCRIPTION)
+        )
 
         # И Гал видит, что автором руководства является он Сам. Красавчик!
-
-        self.fail("Доделать")
-
-
-
+        self.assertIn(
+            TEST_FIRST_NAME,
+            detail_guide_page.guide_author
+        )
+        self.assertIn(
+            TEST_LAST_NAME,
+            detail_guide_page.guide_author
+        )
