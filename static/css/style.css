@@ -1,11 +1,15 @@
 #guide {
-	width: 100%; /* Ширина области */
-	height: 200px; /* Высота области */
-	margin: 0; /* Обнуляем отступы */
+	position: relative;
 }
 #guide img {
+	position: absolute;
+	height: 100%;
 	filter: opacity(40%) blur(4px);
-	width: 100%; /* Ширина изображений */
-	height: 100%; /* Высота изображении */
-	object-fit: cover; /* Вписываем фотографию в область */
+	object-fit: cover;
+}
+#guide .card-body {
+	position: relative;
+}
+#guide .card-footer {
+	position: relative;
 }

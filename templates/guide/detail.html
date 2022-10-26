@@ -10,16 +10,17 @@
 {% block content %}
 <div class="row justify-content-center pt-5">
     <div class="col">
-        <div class="row mt-5" >
+
+        <div class="row" >
             <div class="col">
-                <div class="card bg-dark text-white" id="guide">
+                <div class="card bg-dark text-light"  id="guide">
                     <img src="{{ guide.cover.url }}" class="card-img" alt="">
-                    <div class="card-img-overlay">
+                    <div class="card-body">
                         <h1 class="card-title">{{ guide.name }}</h1>
                         <p class="card-text mt-5">{{ guide.description }}</p>
-                        <div class="card-footer bg-transparent border-light">
-                            <p class="text-end">{{ guide.author.first_name }} {{ guide.author.last_name }}</p>
-                        </div>
+                    </div>
+                    <div class="card-footer border-light">
+                        <p class="card-text text-end py-2">{{ guide.author.first_name }} {{ guide.author.last_name }}</p>
                     </div>
                 </div>
             </div>
