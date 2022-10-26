@@ -15,12 +15,12 @@
             <div class="col">
                 <div class="card bg-dark text-light"  id="guide">
                     <img src="{{ guide.cover.url }}" class="card-img" alt="">
-                    <div class="card-body">
+                    <div class="card-body py-4">
                         <h1 class="card-title">{{ guide.name }}</h1>
-                        <p class="card-text mt-5 pb-2">{{ guide.description }}</p>
+                        <p class="card-text mt-5">{{ guide.description }}</p>
                     </div>
-                    <div class="card-footer border-light">
-                        <p class="card-text text-end py-2">{{ guide.author.first_name }} {{ guide.author.last_name }}</p>
+                    <div class="card-footer border-light py-3">
+                        <p class="card-text text-end ">{{ guide.author.first_name }} {{ guide.author.last_name }}</p>
                     </div>
                 </div>
             </div>
