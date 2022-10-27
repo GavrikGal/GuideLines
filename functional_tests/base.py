@@ -17,7 +17,7 @@ import time
 
 MAX_WAIT = 3
 SCREEN_DUMP_LOCATION = settings.BASE_DIR / 'logs' / 'screendumps'
-# UserModel = get_user_model()
+
 
 
 def wait(fn):

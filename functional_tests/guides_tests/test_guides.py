@@ -4,17 +4,10 @@ from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
 from functional_tests.pages.new_guide_page import NewGuidePage
 from functional_tests.pages.detail_guide_page import DetailGuidePage
-
-
-TEST_USERNAME = 'Gal'
-TEST_FIRST_NAME = 'Дмитрий'
-TEST_LAST_NAME = 'Гал'
-TEST_GUIDE_NAME = 'Моё новое Руководство'
-TEST_GUIDE_DESCRIPTION = 'Это Руководство замечательно отражает всё то, что мы хотим показать. Это будет ' \
-                         'увлекательное руководство. Главное, чтобы в описании было бы много строк, а то не ' \
-                         'получится нормально протоестировать это описание. Я думаю этого должно хватить. Но, ' \
-                         'на всякий случай, пусть будет еще пару слов. Пара слов."'
-TEST_GUIDE_COVER_IMG_PATH = r'\functional_tests\img\Cover.jpg'
+from functional_tests.const import (
+    TEST_USERNAME, TEST_LAST_NAME, TEST_GUIDE_NAME, TEST_FIRST_NAME,
+    TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH
+)
 
 
 class GuidesTest(FunctionalTest):

@@ -2,13 +2,9 @@ from functional_tests.base import FunctionalTest
 from functional_tests.pages.registration_page import RegistrationPage
 from functional_tests.pages.login_page import LoginPage
 from functional_tests.pages.home_page import HomePage
-
-
-TEST_LOGIN = 'Test_Login'
-TEST_FIRST_NAME = 'Test_Gavrik'
-TEST_LAST_NAME = 'Test_Gal'
-TEST_PASSWORD = 'TestPassword12345!'
-TEST_AVATAR_IMG_PATH = r'\functional_tests\img\avatar.jpg'
+from functional_tests.const import (
+    TEST_USERNAME, TEST_LAST_NAME, TEST_FIRST_NAME, TEST_PASSWORD, TEST_AVATAR_IMG_PATH
+)
 
 
 class RegistrationTest(FunctionalTest):
@@ -75,7 +71,7 @@ class RegistrationTest(FunctionalTest):
         )
 
         # Гал заполняет все данные
-        registration_page.login_field.send_keys(TEST_LOGIN)
+        registration_page.login_field.send_keys(TEST_USERNAME)
         registration_page.first_name_field.send_keys(TEST_FIRST_NAME)
         registration_page.last_name_field.send_keys(TEST_LAST_NAME)
         registration_page.password_field.send_keys(TEST_PASSWORD)
@@ -98,7 +94,7 @@ class RegistrationTest(FunctionalTest):
         login_page.go_to_page()
 
         # Где введя логин и пароль, и нажав "вход"
-        login_page.login_field.send_keys(TEST_LOGIN)
+        login_page.login_field.send_keys(TEST_USERNAME)
         login_page.password_field.send_keys(TEST_PASSWORD)
         login_page.login_to_system_btn.click()
 
