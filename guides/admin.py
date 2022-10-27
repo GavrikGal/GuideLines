@@ -10,7 +10,7 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ['username', 'first_name', 'last_name', 'avatar',]
+    list_display = ['username', 'first_name', 'last_name', 'avatar']
 
 
 class GuideAdmin(admin.ModelAdmin):
