@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from shutil import rmtree
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.sessions.backends.db import SessionStore
@@ -14,10 +15,12 @@ from django.contrib.auth import (
 from django.contrib.auth.models import User
 import time
 
+from functional_tests.const import (
+    TEST_USERNAME, TEST_LAST_NAME, TEST_FIRST_NAME, TEST_PASSWORD
+)
 
 MAX_WAIT = 3
 SCREEN_DUMP_LOCATION = settings.BASE_DIR / 'logs' / 'screendumps'
-
 
 
 def wait(fn):
@@ -69,6 +72,7 @@ class FunctionalTest(StaticLiveServerTestCase):
                     self.take_screenshot()
                     self.dump_html()
         self.browser.quit()
+        rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
         super().tearDown()
 
     def _test_has_failed(self):
@@ -105,8 +109,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         return fn()
 
     @staticmethod
-    def create_user(username: str = 'Test_user', password: str = 'Password12',
-                    first_name: str = 'Test_First_Name', last_name: str = 'Test_Last_name',
+    def create_user(username: str = TEST_USERNAME, password: str = TEST_PASSWORD,
+                    first_name: str = TEST_FIRST_NAME, last_name: str = TEST_LAST_NAME,
                     is_superuser: bool = False) -> User:
         """
         Создать пользователя.
@@ -122,10 +126,10 @@ class FunctionalTest(StaticLiveServerTestCase):
         user.save()
         return user
 
-    def create_pre_authenticated_session(self, username: str = 'Test_user',
-                                         password: str = 'Password12',
-                                         first_name: str = 'Test_First_Name',
-                                         last_name: str = 'Test_Last_name',) -> None:
+    def create_pre_authenticated_session(self, username: str = TEST_USERNAME,
+                                         password: str = TEST_PASSWORD,
+                                         first_name: str = TEST_FIRST_NAME,
+                                         last_name: str = TEST_LAST_NAME,) -> None:
         """
         Создать пользователя и аутентифицированную сессию
             Все аргументы могут быть опущены. Что приведет к созданию тестового пользователя по-умолчанию
