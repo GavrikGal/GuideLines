@@ -104,4 +104,3 @@ class RegistrationTest(FunctionalTest):
             TEST_FIRST_NAME,
             login_page.header.text
         )
-
