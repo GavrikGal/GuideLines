@@ -1,6 +1,10 @@
 from datetime import datetime
 from os.path import splitext
+import os
+from pathlib import Path
+from shutil import rmtree
 
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import pre_delete
@@ -37,7 +41,7 @@ class Guide(models.Model):
                                verbose_name='Автор')
 
     def get_upload_path(self, filename):
-        return str(self.author.username) + "/guides/" + str(self.name) + '__' \
+        return str(self.author.username) + "/guides/" + str(self.name) + '/' \
                + splitext(filename)[0] + '__' + str(datetime.now().timestamp()) + splitext(filename)[1]
 
     REQUIRED_FIELDS = ['name']
@@ -53,10 +57,13 @@ class Guide(models.Model):
 @receiver(pre_delete, sender=Guide)
 def cover_delete(sender, instance, **kwargs):
     if instance.cover.name:
+        dirname = os.path.dirname(instance.cover.name)
         instance.cover.delete(False)
+        if not os.listdir(settings.MEDIA_ROOT / dirname):
+            os.rmdir(settings.MEDIA_ROOT / dirname)
 
 
 @receiver(pre_delete, sender=CustomUser)
 def avatar_delete(sender, instance, **kwargs):
-    if instance.avatar.name:
-        instance.avatar.delete(False)
+    username = instance.username
+    rmtree(settings.MEDIA_ROOT / username, ignore_errors=True)
