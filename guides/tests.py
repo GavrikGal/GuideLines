@@ -1,3 +1,5 @@
+import os
+from abc import ABC, abstractmethod
 from os.path import splitext
 from shutil import rmtree
 
@@ -20,6 +22,16 @@ TEST_GUIDE_DESCRIPTION = 'Моё описание к первому тестов
 TEST_GUIDE_COVER_IMG_NAME = 'gal-guide-cover-12345.jpg'
 
 
+class BaseUnitTest(TestCase):
+    """Базовый класс для юнит-тестов"""
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        # Удаление мусора (всей папки TEST_USERNAME) после завершения теста
+        if os.listdir(settings.MEDIA_ROOT / TEST_USERNAME):
+            rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
+
+
 class UnitTest(TestCase):
     """Модульное тестирование"""
 
@@ -28,7 +40,7 @@ class UnitTest(TestCase):
         self.assertEqual(1 + 2, 3)
 
 
-class CustomUserModelTest(TestCase):
+class CustomUserModelTest(BaseUnitTest):
     """Модульное тестирование модели пользователя"""
 
     def test_custom_user_avatar_upload_path(self) -> None:
@@ -45,12 +57,8 @@ class CustomUserModelTest(TestCase):
             user.avatar.name
         )
 
-    def tearDown(self) -> None:
-        """удалить мусор после выполнения теста"""
-        rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
 
-
-class GuideModelTest(TestCase):
+class GuideModelTest(BaseUnitTest):
     """Модульное тестирование модели руководства"""
 
     def test_guide_cover_upload_path(self) -> None:
@@ -71,10 +79,3 @@ class GuideModelTest(TestCase):
             user.username + '/guides/' + guide.name + '/' + splitext(TEST_GUIDE_COVER_IMG_NAME)[0],
             guide.cover.name
         )
-
-    def tearDown(self) -> None:
-        """удалить мусор после выполнения теста"""
-        rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
-
-
-
