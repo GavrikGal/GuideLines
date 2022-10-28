@@ -1,4 +1,11 @@
+import os.path
+import time
 from os.path import splitext, basename
+
+from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+from guides.models import Guide
 
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
@@ -102,3 +109,60 @@ class GuidesTest(FunctionalTest):
             TEST_LAST_NAME,
             detail_guide_page.guide_author
         )
+
+    def test_can_update_guide(self) -> None:
+        """тест: можно редактировать свое Руководство"""
+
+        # Гал хочет отредактировать свое первое Руководство.
+        # Он зарегестрированный пользователь и залогиненый пользователь
+        self.create_pre_authenticated_session(username=TEST_USERNAME,
+                                              first_name=TEST_FIRST_NAME,
+                                              last_name=TEST_LAST_NAME)
+
+        # Оно у него уже есть
+        guide = Guide.objects.create(name=TEST_GUIDE_NAME,
+                                     description=TEST_GUIDE_DESCRIPTION,
+                                     author=self.user)
+        guide.cover = SimpleUploadedFile(TEST_GUIDE_COVER_IMG_PATH,
+                                         content=open(settings.BASE_DIR / TEST_GUIDE_COVER_IMG_PATH, 'rb').read(),
+                                         content_type='image/jpeg')
+        guide.save()
+
+        # Он заходит на страницу Руководства
+        detail_guide_page = DetailGuidePage(self, guide.pk)
+        detail_guide_page.go_to_page()
+        self.assertIn(
+            TEST_GUIDE_NAME,
+            detail_guide_page.page_title
+        )
+
+        # На обложке Руководства Гал видит три точечки
+        detail_guide_page.guide_menu_btn.is_displayed()
+
+        # Он нажимает на них.
+        detail_guide_page.guide_menu_btn.click()
+        # И вниз выпадает меню
+        detail_guide_page.guide_menu.is_displayed()
+
+        # Гал находит там кнопку редактировать
+        detail_guide_page.edit_guide_btn.is_displayed()
+
+        # Нажимает
+        detail_guide_page.edit_guide_btn.click()
+
+        # И попадает на страницу редактирования Руководства
+
+        # Тут он видит поля Названия и Описания, в которых,
+        # при создании руководства, были внесены данные
+
+        # Также видит кнопку выбора Обложки
+
+        # Кроме того, он видит заветную большую кнопку "Добавить статью"
+
+        # Для начала он пробует обновить все данные во внесенных им ранее полях (Название, Описание, Обложка)
+
+        # Находит кнопку "Сохранить". И жмет её
+
+        # Страница обновляется и он возвращается на страницу детального просмотра Руководства
+
+        self.fail("Доделать")

@@ -1,5 +1,6 @@
 import os
 
+from django.conf import settings
 from django.urls import reverse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebElement
@@ -26,4 +27,4 @@ class NewGuidePage(BasePage):
 
     def set_cover_img(self, img_path: str) -> None:
         """Установка картинки обложки Руководства"""
-        self.guide_cover_btn.send_keys(os.getcwd() + img_path)
+        self.guide_cover_btn.send_keys(str(settings.BASE_DIR / img_path))

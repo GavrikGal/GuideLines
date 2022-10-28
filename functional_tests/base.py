@@ -55,7 +55,7 @@ class FunctionalTest(StaticLiveServerTestCase):
             options.add_argument('--headless')
             options.add_argument('--disable-gpu')
         self.browser = webdriver.Firefox(options=options)
-        self.cookies = None
+        self.user = None
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
             self.live_server_url = 'http://' + self.staging_server
@@ -143,6 +143,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         session[BACKEND_SESSION_KEY] = settings.AUTHENTICATION_BACKENDS[0]
         session[HASH_SESSION_KEY] = user.get_session_auth_hash()
         session.save()
+
+        self.user = user
 
         self.browser.get(self.live_server_url + '/404_no_such_url/')
 
