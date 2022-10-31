@@ -1,12 +1,22 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
 
 
 from .forms import CustomUserCreationForm, CreationGuideForm
 from .models import Guide
+
+
+class UpdateGuideView(UpdateView):
+    """Обновление (редактирование) Руководства"""
+    model = Guide
+    fields = ['name', 'description', 'cover']
+    template_name = 'guide/edit.html'
+
+    def get_success_url(self):
+        return reverse_lazy('guides:detail_guide', kwargs={'pk': self.object.pk})
 
 
 class RegistrationView(CreateView):
@@ -43,7 +53,7 @@ class DetailGuideView(DetailView):
     template_name = 'guide/detail.html'
 
 
-def detail_guide(request):
+def edit_guide_view(request):
     """Заглушка"""
     pass
 

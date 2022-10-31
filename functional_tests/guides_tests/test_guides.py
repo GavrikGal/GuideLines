@@ -11,9 +11,10 @@ from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
 from functional_tests.pages.new_guide_page import NewGuidePage
 from functional_tests.pages.detail_guide_page import DetailGuidePage
+from functional_tests.pages.edit_guide_page import EditGuidePage
 from functional_tests.const import (
     TEST_USERNAME, TEST_LAST_NAME, TEST_GUIDE_NAME, TEST_FIRST_NAME,
-    TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH
+    TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH, TEST_GUIDE_NEW_COVER_IMG_PATH
 )
 
 
@@ -133,36 +134,80 @@ class GuidesTest(FunctionalTest):
         detail_guide_page.go_to_page()
         self.assertIn(
             TEST_GUIDE_NAME,
-            detail_guide_page.page_title
+            detail_guide_page.page_title,
+            'Невозможно зайти на страницу Руководства'
         )
 
         # На обложке Руководства Гал видит три точечки
-        detail_guide_page.guide_menu_btn.is_displayed()
+        self.assertTrue(
+            detail_guide_page.guide_menu_btn.is_displayed(),
+            'Не отображается кнопка меню Руководства'
+        )
 
         # Он нажимает на них.
         detail_guide_page.guide_menu_btn.click()
         # И вниз выпадает меню
-        detail_guide_page.guide_menu.is_displayed()
+        self.assertTrue(
+            detail_guide_page.guide_menu.is_displayed(),
+            'Не отображается выпадающее меню Руководства'
+        )
 
         # Гал находит там кнопку редактировать
-        detail_guide_page.edit_guide_btn.is_displayed()
+        self.assertTrue(
+            detail_guide_page.edit_guide_btn.is_displayed(),
+            'Не отображается кнопка редактирования'
+        )
 
         # Нажимает
         detail_guide_page.edit_guide_btn.click()
 
         # И попадает на страницу редактирования Руководства
+        edit_guide_page = EditGuidePage(self)
+        self.assertIn(
+            'Редактировать',
+            edit_guide_page.page_title,
+            'Не переходит на страницу редактирования Руководства'
+        )
 
         # Тут он видит поля Названия и Описания, в которых,
         # при создании руководства, были внесены данные
+        self.assertTrue(
+            edit_guide_page.guide_name_field.is_displayed(),
+            'Поле Названия не отображается'
+        )
+        self.assertTrue(
+            edit_guide_page.description_field.is_displayed(),
+            'Поле Описания не отображается'
+        )
 
         # Также видит кнопку выбора Обложки
+        self.assertTrue(
+            edit_guide_page.guide_cover_btn.is_displayed(),
+            'Кнопка выбора Обложки не отображается'
+        )
 
         # Кроме того, он видит заветную большую кнопку "Добавить статью"
+        self.assertTrue(
+            edit_guide_page.new_article_btn.is_displayed(),
+            'Кнопка добавления Статьи не отображается'
+        )
 
         # Для начала он пробует обновить все данные во внесенных им ранее полях (Название, Описание, Обложка)
+        edit_guide_page.guide_name_field.send_keys('Обновленное ' + TEST_GUIDE_NAME)
+        edit_guide_page.description_field.send_keys('Обновленное описание' + TEST_GUIDE_DESCRIPTION)
+        edit_guide_page.set_cover_img(TEST_GUIDE_NEW_COVER_IMG_PATH)
 
-        # Находит кнопку "Сохранить". И жмет её
+        # Находит кнопку "Сохранить".
+        self.assertTrue(
+            edit_guide_page.save_guide_btn.is_displayed(),
+            'Кнопка Сохранить не отображается'
+        )
+        # И жмет её
+        edit_guide_page.save_guide_btn.click()
 
         # Страница обновляется и он возвращается на страницу детального просмотра Руководства
-
-        self.fail("Доделать")
+        self.assertIn(
+            'Обновленное ' + TEST_GUIDE_NAME,
+            detail_guide_page.page_title,
+            'Невозможно зайти на страницу Руководства'
+        )
