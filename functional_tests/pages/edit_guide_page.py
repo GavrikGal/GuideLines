@@ -20,7 +20,6 @@ class EditGuidePage(BasePage):
         self.guide_name_field = InputField(self._test, 'id_name')
         self.description_field = InputField(self._test, 'id_description')
         self.save_guide_btn = SubmitButton(self._test)
-        self.new_article_btn = BaseButton(self._test, id_='id_new_article_btn')
         self.guide_cover_btn = BaseButton(self._test, id_='id_cover')
 
     def set_cover_img(self, img_path: str) -> None:

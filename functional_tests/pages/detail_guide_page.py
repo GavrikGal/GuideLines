@@ -18,6 +18,7 @@ class DetailGuidePage(BasePage):
         self.edit_guide_btn = BaseButton(test, id_="id_edit_guide_btn")
         self.guide_menu_btn = BaseButton(test, id_='id_guide_menu_btn')
         self.guide_menu = self.BaseDropDownMenu(test, _menu_id='id_guide_menu')
+        self.new_article_btn = BaseButton(self._test, id_='id_new_article_btn')
 
     @property
     def guide_cover(self) -> WebElement:

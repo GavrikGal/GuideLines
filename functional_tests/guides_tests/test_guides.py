@@ -111,6 +111,12 @@ class GuidesTest(FunctionalTest):
             detail_guide_page.guide_author
         )
 
+        # Кроме того, он видит заветную большую кнопку "Добавить статью"
+        self.assertTrue(
+            detail_guide_page.new_article_btn.is_displayed(),
+            'Кнопка добавления Статьи не отображается'
+        )
+
     def test_can_update_guide(self) -> None:
         """тест: можно редактировать свое Руководство"""
 
@@ -184,12 +190,6 @@ class GuidesTest(FunctionalTest):
         self.assertTrue(
             edit_guide_page.guide_cover_btn.is_displayed(),
             'Кнопка выбора Обложки не отображается'
-        )
-
-        # Кроме того, он видит заветную большую кнопку "Добавить статью"
-        self.assertTrue(
-            edit_guide_page.new_article_btn.is_displayed(),
-            'Кнопка добавления Статьи не отображается'
         )
 
         # Для начала он пробует обновить все данные во внесенных им ранее полях (Название, Описание, Обложка)
