@@ -5,14 +5,14 @@ from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
 
 
-from .forms import CustomUserCreationForm, CreationGuideForm
+from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm
 from .models import Guide
 
 
 class UpdateGuideView(UpdateView):
     """Обновление (редактирование) Руководства"""
     model = Guide
-    fields = ['name', 'description', 'cover']
+    form_class = UpdateGuideForm
     template_name = 'guide/edit.html'
 
     def get_success_url(self):

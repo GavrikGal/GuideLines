@@ -150,5 +150,6 @@ BOOTSTRAP5 = {
     "theme_url": {
         "url": STATIC_URL + 'css/style.css'
     },
+    "javascript_in_head": True,
 }
 

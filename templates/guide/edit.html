@@ -11,6 +11,7 @@
     <div class="col">
         <div class="card bg-dark text-light"  id="guide">
             <img src="{{ guide.cover.url }}" class="card-img" alt="">
+            <form method="post" class="form pt-2" enctype="multipart/form-data">
             <div class="card-body py-4">
                 <div class="dropdown">
                     <a href="#" class="btn rounded-circle text-light my-4 mx-3 p-2" id="id_guide_menu_btn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -22,54 +23,35 @@
                         <li><a class="dropdown-item text-danger" href="#">Удалить</a></li>
                     </ul>
                 </div>
-{#                        <h1 class="card-title mb-5">{{ guide.name }}</h1>#}
-{#                        <p class="card-text">{{ guide.description }}</p>#}
 
-                <form method="post" class="form" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {% bootstrap_form form show_label='skip' field_class='mb-4' layout='horizontal'%}
-
-                    <div class="row mt-4">
-                        {% buttons %}
-                            <button type="submit" class="btn btn-primary float-end">Сохранить</button>
-                        {% endbuttons %}
-                    </div>
-                </form>
+                {% csrf_token %}
+                {% bootstrap_field  form.name layout='horizontal' show_label='skip' size='medium' field_class='col-md-9 col-10'%}
+                {% bootstrap_field  form.description layout='horizontal' show_label='skip' size='medium' field_class='col pt-3'%}
+                {% bootstrap_field  form.cover layout='horizontal' show_label='skip' size='medium' field_class='col pt-3'%}
 
             </div>
             <div class="card-footer border-light py-3">
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary float-start">Сохранить</button>
+                {% endbuttons %}
                 <p class="card-text text-end ">{{ guide.author.first_name }} {{ guide.author.last_name }}</p>
             </div>
-
+            </form>
         </div>
-
-
-
-{#        <img src="{{ guide.cover.url }}" class="card-img" alt="">#}
-{#        <form method="post" class="form" enctype="multipart/form-data">#}
-{#            {% csrf_token %}#}
-{#            {% bootstrap_form form show_label='skip' field_class='mb-4' layout='horizontal'%}#}
-{#            <div class="row mt-4">#}
-
-{#            {% buttons %}#}
-{#                <button type="submit" class="btn btn-primary float-end">Сохранить</button>#}
-{#            {% endbuttons %}#}
-{#            #}
-{#        </form>#}
     </div>
 </div>
 
 <div class="row mb-5" id="articles">
-    <div class="col-3">
-        <div class="card">
-            <div class="card-body">
-                <a href="#" class="btn rounded" id="id_new_article_btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                    </svg>
-                </a>
+    <div class="col-lg-3 col-md-4 col-6">
+        <a href="#"     id="id_new_article_btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Добавить Статью">
+        <div class="card" >
+            <div class="card-body d-flex justify-content-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-plus align-self-center" viewBox="0 0 16 16">
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
             </div>
         </div>
+        </a>
     </div>
 </div>
 
