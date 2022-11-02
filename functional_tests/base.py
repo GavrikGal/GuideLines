@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from shutil import rmtree
+from typing import Optional
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.sessions.backends.db import SessionStore
@@ -163,16 +164,18 @@ class FunctionalTest(StaticLiveServerTestCase):
 
         return user
 
-    def create_guide(self, author: User, name: str = TEST_GUIDE_NAME, description: str = TEST_GUIDE_DESCRIPTION,
-                     cover_path: str = TEST_GUIDE_COVER_IMG_PATH) -> Guide:
+    def create_guide(self, author: User, name: str = TEST_GUIDE_NAME,
+                     description: Optional[str] = TEST_GUIDE_DESCRIPTION,
+                     cover_path: Optional[str] = TEST_GUIDE_COVER_IMG_PATH) -> Guide:
         """Создает Руководство с автором author, названием name, описанием description и обложкой, расположенной
         по пути cover_path. Если не задавать параметры name, description, cover_path, то будут испозованы тестовые
         значения поумолчанию"""
         guide = Guide.objects.create(name=name,
                                      description=description,
                                      author=author)
-        guide.cover = SimpleUploadedFile(cover_path,
-                                         content=open(settings.BASE_DIR / cover_path, 'rb').read(),
-                                         content_type='image/jpeg')
-        guide.save()
+        if cover_path:
+            guide.cover = SimpleUploadedFile(cover_path,
+                                             content=open(settings.BASE_DIR / cover_path, 'rb').read(),
+                                             content_type='image/jpeg')
+            guide.save()
         return guide

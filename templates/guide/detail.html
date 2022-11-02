@@ -12,7 +12,11 @@
     <div class="col">
 
         <div class="card bg-dark text-light"  id="guide">
-            <img src="{{ guide.cover.url }}" class="card-img" alt="">
+            {% if guide.cover %}
+                <img src="{{ guide.cover.url }}" class="card-img" alt="">
+            {% else %}
+                <img src="{% static 'img/default-guide-cover.jpg' %}" class="card-img" alt="">
+            {% endif %}
             <div class="card-body py-4">
                 <div class="dropdown">
                     <a href="#" class="btn rounded-circle text-light my-4 mx-3 p-2" id="id_guide_menu_btn" role="button" data-bs-toggle="dropdown" aria-expanded="false">

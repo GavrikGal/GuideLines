@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load bootstrap5 %}
+{% load static %}
 
 {% block title %}
     Редактировать
@@ -10,7 +11,12 @@
 <div class="row justify-content-center pt-5 mb-5">
     <div class="col">
         <div class="card bg-dark text-light"  id="guide">
-            <img src="{{ guide.cover.url }}" class="card-img" alt="">
+            {% if guide.cover %}
+                <img src="{{ guide.cover.url }}" class="card-img" alt="">
+            {% else %}
+                <img src="{% static 'img/default-guide-cover.jpg' %}" class="card-img" alt="">
+            {% endif %}
+            <div class="card-body py-4">
             <form method="post" class="form pt-2" enctype="multipart/form-data">
             <div class="card-body py-4">
                 <div class="dropdown">

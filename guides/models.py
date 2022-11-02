@@ -32,7 +32,7 @@ class Guide(models.Model):
     """Модель Руководства"""
 
     name = models.CharField(max_length=200, verbose_name='Название')
-    description = models.TextField(blank=True, verbose_name='Описание')
+    description = models.TextField(null=True, blank=True, verbose_name='Описание')
     cover = models.ImageField(upload_to=_upload_path,
                               null=True,
                               blank=True,

@@ -132,6 +132,8 @@ STATICFILES_DIRS = [  # папки где django будет искать ста�
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+DEFAULT_GUIDE_COVER_IMG_PATH = BASE_DIR / STATIC_URL / 'default-guide-cover.jpg'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
