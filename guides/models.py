@@ -22,7 +22,7 @@ class CustomUser(AbstractUser):
                                verbose_name='Аватар')
 
     def get_upload_path(self, filename):
-        return str(self.username) + "/avatar/" \
+        return str(self.username) + "/" \
                + splitext(filename)[0] + '.' + str(datetime.now().timestamp()) + splitext(filename)[1]
 
     REQUIRED_FIELDS = ['first_name', 'last_name']
@@ -41,7 +41,7 @@ class Guide(models.Model):
                                verbose_name='Автор')
 
     def get_upload_path(self, filename):
-        return str(self.author.username) + "/guides/" + str(self.name) + '/' \
+        return str(self.author.username) + '/' \
                + splitext(filename)[0] + '__' + str(datetime.now().timestamp()) + splitext(filename)[1]
 
     REQUIRED_FIELDS = ['name']

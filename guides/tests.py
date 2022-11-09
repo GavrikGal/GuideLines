@@ -2,7 +2,9 @@ import os
 from abc import ABC, abstractmethod
 from os.path import splitext
 from shutil import rmtree
+from unittest.mock import patch, call
 
+# from django.db import models
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -24,15 +26,19 @@ TEST_GUIDE_COVER_IMG_NAME = 'gal-guide-cover-12345.jpg'
 
 class BaseUnitTest(TestCase):
     """Базовый класс для юнит-тестов"""
+    #
+    # @classmethod
+    # def tearDownClass(cls) -> None:
+    #     # Удаление мусора (всей папки TEST_USERNAME) после завершения теста
+    #     try:
+    #         if os.listdir(settings.MEDIA_ROOT / TEST_USERNAME):
+    #             rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
+    #     except OSError as e:
+    #         if settings.DEBUG:
+    #             print(settings.MEDIA_ROOT / TEST_USERNAME)
 
-    @classmethod
-    def tearDownClass(cls) -> None:
-        # Удаление мусора (всей папки TEST_USERNAME) после завершения теста
-        if os.listdir(settings.MEDIA_ROOT / TEST_USERNAME):
-            rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
 
-
-class UnitTest(TestCase):
+class ReadyUnitTest(TestCase):
     """Модульное тестирование"""
 
     def test_can_start_test(self) -> None:
@@ -45,17 +51,39 @@ class CustomUserModelTest(BaseUnitTest):
 
     def test_custom_user_avatar_upload_path(self) -> None:
         """тест пути загрузки аватарки пользователя"""
-        user = CustomUser.objects.create(username=TEST_USERNAME,
-                                         first_name=TEST_FIRST_NAME,
-                                         last_name=TEST_LAST_NAME)
 
-        user.avatar = SimpleUploadedFile(TEST_AVATAR_IMG_NAME, b'', content_type='image/jpeg')
-        user.save()
+        user = CustomUser(username=TEST_USERNAME)
+        upload_path = user.get_upload_path(TEST_AVATAR_IMG_NAME)
 
         self.assertIn(
-            user.username + '/avatar/' + splitext(TEST_AVATAR_IMG_NAME)[0],
-            user.avatar.name
+            user.username + '/' + splitext(TEST_AVATAR_IMG_NAME)[0],
+            upload_path
         )
+
+    def test_media_is_upload(self) -> None:
+        """тест загружаются ли медиаданные указанные в ImageField модели
+        в место хранинения media"""
+
+        user = CustomUser(username=TEST_USERNAME)
+        user.avatar = SimpleUploadedFile(TEST_AVATAR_IMG_NAME, b'', content_type='image/jpeg')
+
+        user.save()
+        upload_path = user.avatar.name
+
+        print(upload_path)
+        print(os.path.isfile(upload_path))
+        print(settings.MEDIA_ROOT / 'dsfa' / upload_path )
+
+        self.assertIsNotNone(
+            os.path.isfile(settings.MEDIA_ROOT / 'dsfa' / upload_path )
+        )
+
+        try:
+            if os.listdir(settings.MEDIA_ROOT / TEST_USERNAME):
+                rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
+        except OSError:
+            pass
+        self.fail('Доделать')
 
 
 class GuideModelTest(BaseUnitTest):
@@ -63,19 +91,12 @@ class GuideModelTest(BaseUnitTest):
 
     def test_guide_cover_upload_path(self) -> None:
         """тест пути загрузки обложки Руководства"""
-        user = CustomUser.objects.create(username=TEST_USERNAME,
-                                         first_name=TEST_FIRST_NAME,
-                                         last_name=TEST_LAST_NAME,
-                                         avatar=TEST_AVATAR_IMG_NAME)
 
-        guide = Guide.objects.create(name=TEST_GUIDE_NAME,
-                                     description=TEST_GUIDE_DESCRIPTION,
-                                     author=user)
-
-        guide.cover = SimpleUploadedFile(TEST_GUIDE_COVER_IMG_NAME, b'', content_type='image/jpeg')
-        guide.save()
+        user = CustomUser(username=TEST_USERNAME)
+        guide = Guide(author=user)
+        upload_path = guide.get_upload_path(TEST_GUIDE_COVER_IMG_NAME)
 
         self.assertIn(
-            user.username + '/guides/' + guide.name + '/' + splitext(TEST_GUIDE_COVER_IMG_NAME)[0],
-            guide.cover.name
+            user.username + '/' + splitext(TEST_GUIDE_COVER_IMG_NAME)[0],
+            upload_path
         )
