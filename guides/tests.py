@@ -1,10 +1,7 @@
-import os
-from abc import ABC, abstractmethod
+from os.path import exists
 from os.path import splitext
 from shutil import rmtree
-from unittest.mock import patch, call
 
-# from django.db import models
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -24,20 +21,6 @@ TEST_GUIDE_DESCRIPTION = 'Моё описание к первому тестов
 TEST_GUIDE_COVER_IMG_NAME = 'gal-guide-cover-12345.jpg'
 
 
-class BaseUnitTest(TestCase):
-    """Базовый класс для юнит-тестов"""
-    #
-    # @classmethod
-    # def tearDownClass(cls) -> None:
-    #     # Удаление мусора (всей папки TEST_USERNAME) после завершения теста
-    #     try:
-    #         if os.listdir(settings.MEDIA_ROOT / TEST_USERNAME):
-    #             rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
-    #     except OSError as e:
-    #         if settings.DEBUG:
-    #             print(settings.MEDIA_ROOT / TEST_USERNAME)
-
-
 class ReadyUnitTest(TestCase):
     """Модульное тестирование"""
 
@@ -46,7 +29,7 @@ class ReadyUnitTest(TestCase):
         self.assertEqual(1 + 2, 3)
 
 
-class CustomUserModelTest(BaseUnitTest):
+class CustomUserModelTest(TestCase):
     """Модульное тестирование модели пользователя"""
 
     def test_custom_user_avatar_upload_path(self) -> None:
@@ -66,28 +49,21 @@ class CustomUserModelTest(BaseUnitTest):
 
         user = CustomUser(username=TEST_USERNAME)
         user.avatar = SimpleUploadedFile(TEST_AVATAR_IMG_NAME, b'', content_type='image/jpeg')
-
         user.save()
+
         upload_path = user.avatar.name
+        absolut_upload_path = settings.MEDIA_ROOT / upload_path
 
-        print(upload_path)
-        print(os.path.isfile(upload_path))
-        print(settings.MEDIA_ROOT / 'dsfa' / upload_path )
-
-        self.assertIsNotNone(
-            os.path.isfile(settings.MEDIA_ROOT / 'dsfa' / upload_path )
+        self.assertTrue(
+            exists(absolut_upload_path)
         )
 
-        try:
-            if os.listdir(settings.MEDIA_ROOT / TEST_USERNAME):
-                rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
-        except OSError:
-            pass
-        self.fail('Доделать')
+        if exists(settings.MEDIA_ROOT / TEST_USERNAME):
+            rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
 
 
-class GuideModelTest(BaseUnitTest):
-    """Модульное тестирование модели руководства"""
+class GuideModelTest(TestCase):
+    """Модульное тестирование модели Руководства"""
 
     def test_guide_cover_upload_path(self) -> None:
         """тест пути загрузки обложки Руководства"""
