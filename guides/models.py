@@ -23,7 +23,7 @@ class CustomUser(AbstractUser):
 
     def get_upload_path(self, filename):
         return str(self.username) + "/" \
-               + splitext(filename)[0] + '.' + str(datetime.now().timestamp()) + splitext(filename)[1]
+               + splitext(filename)[0] + '_' + str(datetime.now().timestamp()) + splitext(filename)[1]
 
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
@@ -42,7 +42,7 @@ class Guide(models.Model):
 
     def get_upload_path(self, filename):
         return str(self.author.username) + '/' \
-               + splitext(filename)[0] + '__' + str(datetime.now().timestamp()) + splitext(filename)[1]
+               + splitext(filename)[0] + '_' + str(datetime.now().timestamp()) + splitext(filename)[1]
 
     REQUIRED_FIELDS = ['name']
 
@@ -54,16 +54,8 @@ class Guide(models.Model):
         verbose_name_plural = 'Гайды'
 
 
-@receiver(pre_delete, sender=Guide)
-def cover_delete(sender, instance, **kwargs):
-    if instance.cover.name:
-        dirname = os.path.dirname(instance.cover.name)
-        instance.cover.delete(False)
-        if not os.listdir(settings.MEDIA_ROOT / dirname):
-            os.rmdir(settings.MEDIA_ROOT / dirname)
-
-
 @receiver(pre_delete, sender=CustomUser)
-def avatar_delete(sender, instance, **kwargs):
+def delete_user_root_dir(sender, instance, **kwargs):
     username = instance.username
-    rmtree(settings.MEDIA_ROOT / username, ignore_errors=True)
+    if os.path.exists(settings.MEDIA_ROOT / username):
+        rmtree(settings.MEDIA_ROOT / username, ignore_errors=True)

@@ -4,8 +4,10 @@ from shutil import rmtree
 
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db.models import signals
 from django.test import TestCase
 
+import guides.models
 from .models import CustomUser, Guide
 
 
@@ -60,6 +62,16 @@ class CustomUserModelTest(TestCase):
 
         if exists(settings.MEDIA_ROOT / TEST_USERNAME):
             rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
+
+    def test_delete_user_root_dir_calling(self) -> None:
+        """тест: функция удаления корневой медиа-директрории пользователя
+        delete_user_root_dir зарегистирована в с сигланах pre_delete моделей джанго"""
+
+        registered_functions = [r[1]() for r in signals.pre_delete.receivers]
+        self.assertIn(
+            guides.models.delete_user_root_dir,
+            registered_functions
+        )
 
 
 class GuideModelTest(TestCase):
