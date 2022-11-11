@@ -14,9 +14,13 @@ class HomePageTest(FunctionalTest):
         home_page.go_to_page()
         self.browser.set_window_size(1024, 768)
 
-        # И видит, что главное меню находится по центру страницы
-        main_menu = home_page.main_menu
-
+        # И видит, что хеадер страницы находится по центру экрана
+        header = home_page.header
+        self.assertAlmostEqual(
+            header.location['x'] + header.size['width'] / 2,
+            512,
+            delta=10
+        )
 
     def test_can_open_home_page(self) -> None:
         """тест можно открыть главную страницу"""
