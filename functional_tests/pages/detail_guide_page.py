@@ -29,6 +29,10 @@ class DetailGuidePage(BasePage):
         """Найти текст на странице"""
         return self._browser.find_element(By.XPATH, f"//*[text()='{text}']").text
 
+    def find_text(self, text) -> str:
+        """Найти текст на странице"""
+        return self._browser.find_element(By.XPATH, f"//*[text()='{text}']").text
+
     @property
     def guide_author(self) -> str:
         """Имя автора Руководства"""

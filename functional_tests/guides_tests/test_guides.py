@@ -38,9 +38,7 @@ class GuidesTest(FunctionalTest):
         """тест можно создать новое руководство"""
         # Гал хочет создать свое первое Руководство.
         # Он зарегестрированный пользователь и залогиненый пользователь
-        self.create_pre_authenticated_session(username=TEST_USERNAME,
-                                              first_name=TEST_FIRST_NAME,
-                                              last_name=TEST_LAST_NAME)
+        self.create_user_and_pre_authenticated_session()
 
         # Он открывает главную страницу
         home_page = HomePage(self)
@@ -135,18 +133,10 @@ class GuidesTest(FunctionalTest):
 
         # Гал хочет отредактировать свое первое Руководство.
         # Он зарегестрированный пользователь и залогиненый пользователь
-        self.create_pre_authenticated_session(username=TEST_USERNAME,
-                                              first_name=TEST_FIRST_NAME,
-                                              last_name=TEST_LAST_NAME)
+        user = self.create_user_and_pre_authenticated_session()
 
         # Оно у него уже есть
-        guide = Guide.objects.create(name=TEST_GUIDE_NAME,
-                                     description=TEST_GUIDE_DESCRIPTION,
-                                     author=self.user)
-        guide.cover = SimpleUploadedFile(TEST_GUIDE_COVER_IMG_PATH,
-                                         content=open(settings.BASE_DIR / TEST_GUIDE_COVER_IMG_PATH, 'rb').read(),
-                                         content_type='image/jpeg')
-        guide.save()
+        guide = self.create_guide(user)
 
         # Он заходит на страницу Руководства
         detail_guide_page = DetailGuidePage(self, guide.pk)
