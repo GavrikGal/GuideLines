@@ -27,12 +27,18 @@ class BasePage(object):
         header = self._browser.find_element(By.ID, 'header')
         return header
 
+    @property
+    def tooltip(self) -> WebElement:
+        """всплывающая подсказка bootstrap tooltip, появляющаяся при наведении на какой-либо элемент"""
+        return self._browser.find_element(By.CLASS_NAME, 'tooltip')
+
     def go_to_page(self) -> 'BasePage':
         """перейти на страницу"""
         self._browser.get(self._test.live_server_url + self.page_url)
         # Подождать пока загрузится тайтл страницы
         self._test.assertIn(
             'GuideLines',
-            self.page_title
+            self.page_title,
+            'Невозможно зайти на страницу. Текущий Title страницы: ' + self.page_title
         )
         return self

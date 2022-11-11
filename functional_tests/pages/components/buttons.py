@@ -1,5 +1,6 @@
 from typing import Optional
 import selenium.common.exceptions
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebElement
 
@@ -52,6 +53,13 @@ class BaseButton(object):
         """Клик по кнопке"""
         if self._btn:
             self._btn.click()
+
+    def hover(self) -> None:
+        """Навести курсор на кнопку"""
+        if self._btn:
+            btn_block = self._btn.find_element(By.TAG_NAME, 'div')
+            hover = ActionChains(self._browser).move_to_element(btn_block)
+            hover.perform()
 
     def is_displayed(self) -> bool:
         """Кнопка видима?"""

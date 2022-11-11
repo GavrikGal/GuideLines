@@ -1,11 +1,6 @@
-import os.path
-import time
 from os.path import splitext, basename
 
 from django.conf import settings
-from django.core.files.uploadedfile import SimpleUploadedFile
-
-from guides.models import Guide
 
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
@@ -13,13 +8,31 @@ from functional_tests.pages.new_guide_page import NewGuidePage
 from functional_tests.pages.detail_guide_page import DetailGuidePage
 from functional_tests.pages.edit_guide_page import EditGuidePage
 from functional_tests.const import (
-    TEST_USERNAME, TEST_LAST_NAME, TEST_GUIDE_NAME, TEST_FIRST_NAME,
+    TEST_LAST_NAME, TEST_GUIDE_NAME, TEST_FIRST_NAME,
     TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH, TEST_GUIDE_NEW_COVER_IMG_PATH
 )
 
 
 class GuidesTest(FunctionalTest):
     """тесты Руководств"""
+
+    def test_tooltip_with_bootstrap_javascript_work(self) -> None:
+        """тест: всплывающая подсказка tooltip из script.js и bootstrap загружена и работает"""
+        # Гал имеет созданное руководство
+        user = self.create_user_and_pre_authenticated_session()
+        guide = self.create_guide(user)
+
+        # Он заходит на страницу руководства
+        detail_guide_page = DetailGuidePage(self, guide.pk)
+        detail_guide_page.go_to_page()
+
+        # Наводит мышку на кнопку добавления Сататьи
+        detail_guide_page.new_article_btn.hover()
+
+        # И видит, что выскакивает подсказка. Это означает javascript отработал как надо
+        self.assertTrue(
+            detail_guide_page.tooltip.is_displayed()
+        )
 
     def test_can_create_new_guide(self) -> None:
         """тест можно создать новое руководство"""

@@ -1,5 +1,4 @@
 from functional_tests.base import FunctionalTest
-
 from functional_tests.pages.home_page import HomePage
 
 
