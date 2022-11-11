@@ -1,7 +1,5 @@
 from os.path import splitext, basename
 
-from django.conf import settings
-
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
 from functional_tests.pages.new_guide_page import NewGuidePage
