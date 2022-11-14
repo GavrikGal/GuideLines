@@ -1,8 +1,25 @@
 from functional_tests.base import FunctionalTest
+from functional_tests.pages.home_page import HomePage
 
 
 class HomePageTest(FunctionalTest):
     """тест главной страницы"""
+
+    def test_layout_and_styling(self) -> None:
+        """тест макета и стилевого оформления"""
+
+        # Гал заходит на главную страницу
+        home_page = HomePage(self)
+        home_page.go_to_page()
+        self.browser.set_window_size(1024, 768)
+
+        # И видит, что хеадер страницы находится по центру экрана
+        header = home_page.header
+        self.assertAlmostEqual(
+            header.location['x'] + header.size['width'] / 2,
+            512,
+            delta=10
+        )
 
     def test_can_open_home_page(self) -> None:
         """тест можно открыть главную страницу"""

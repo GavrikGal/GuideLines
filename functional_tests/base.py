@@ -1,9 +1,11 @@
 import os
 from datetime import datetime
 from shutil import rmtree
+from typing import Optional
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.sessions.backends.db import SessionStore
+from django.core.files.uploadedfile import SimpleUploadedFile
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.firefox.options import Options
@@ -16,8 +18,11 @@ from django.contrib.auth.models import User
 import time
 
 from functional_tests.const import (
-    TEST_USERNAME, TEST_LAST_NAME, TEST_FIRST_NAME, TEST_PASSWORD
+    TEST_USERNAME, TEST_LAST_NAME, TEST_FIRST_NAME, TEST_PASSWORD,
+    TEST_GUIDE_NAME, TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH,
 )
+
+from guides.models import Guide
 
 MAX_WAIT = 3
 SCREEN_DUMP_LOCATION = settings.BASE_DIR / 'logs' / 'screendumps'
@@ -55,7 +60,7 @@ class FunctionalTest(StaticLiveServerTestCase):
             options.add_argument('--headless')
             options.add_argument('--disable-gpu')
         self.browser = webdriver.Firefox(options=options)
-        self.cookies = None
+        self.user = None
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
             self.live_server_url = 'http://' + self.staging_server
@@ -126,10 +131,10 @@ class FunctionalTest(StaticLiveServerTestCase):
         user.save()
         return user
 
-    def create_pre_authenticated_session(self, username: str = TEST_USERNAME,
-                                         password: str = TEST_PASSWORD,
-                                         first_name: str = TEST_FIRST_NAME,
-                                         last_name: str = TEST_LAST_NAME,) -> None:
+    def create_user_and_pre_authenticated_session(self, username: str = TEST_USERNAME,
+                                                  password: str = TEST_PASSWORD,
+                                                  first_name: str = TEST_FIRST_NAME,
+                                                  last_name: str = TEST_LAST_NAME, ) -> User:
         """
         Создать пользователя и аутентифицированную сессию
             Все аргументы могут быть опущены. Что приведет к созданию тестового пользователя по-умолчанию
@@ -144,6 +149,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         session[HASH_SESSION_KEY] = user.get_session_auth_hash()
         session.save()
 
+        self.user = user
+
         self.browser.get(self.live_server_url + '/404_no_such_url/')
 
         cookie = {
@@ -154,3 +161,21 @@ class FunctionalTest(StaticLiveServerTestCase):
         }
 
         self.browser.add_cookie(cookie)
+
+        return user
+
+    def create_guide(self, author: User, name: str = TEST_GUIDE_NAME,
+                     description: Optional[str] = TEST_GUIDE_DESCRIPTION,
+                     cover_path: Optional[str] = TEST_GUIDE_COVER_IMG_PATH) -> Guide:
+        """Создает Руководство с автором author, названием name, описанием description и обложкой, расположенной
+        по пути cover_path. Если не задавать параметры name, description, cover_path, то будут испозованы тестовые
+        значения поумолчанию"""
+        guide = Guide.objects.create(name=name,
+                                     description=description,
+                                     author=author)
+        if cover_path:
+            guide.cover = SimpleUploadedFile(cover_path,
+                                             content=open(settings.BASE_DIR / cover_path, 'rb').read(),
+                                             content_type='image/jpeg')
+            guide.save()
+        return guide

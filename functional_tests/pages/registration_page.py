@@ -1,5 +1,6 @@
 import os
 
+from django.conf import settings
 from django.urls import reverse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebElement
@@ -29,4 +30,4 @@ class RegistrationPage(BasePage):
 
     def set_avatar_img(self, img_path: str) -> None:
         """Установка картинки аватара"""
-        self.avatar_btn.send_keys(os.getcwd() + img_path)
+        self.avatar_btn.send_keys(str(settings.BASE_DIR / img_path))

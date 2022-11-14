@@ -13,3 +13,13 @@
 #guide .card-footer {
 	position: relative;
 }
+
+#guide .dropdown {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+#articles .card-body {
+	aspect-ratio: 210 / 297;
+}

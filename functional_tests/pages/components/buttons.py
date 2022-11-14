@@ -1,3 +1,6 @@
+from typing import Optional
+import selenium.common.exceptions
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebElement
 
@@ -17,36 +20,57 @@ class BaseButton(object):
         self._name = name
 
     @property
-    def _btn(self) -> WebElement:
+    def _btn(self) -> Optional[WebElement]:
         """сама кнопка"""
-        if self._id:
-            return self._browser.find_element(
-                By.ID,
-                self._id
-            )
-        elif self._name:
-            return self._browser.find_element(
-                By.NAME,
-                self._name
-            )
-        else:
-            return self._browser.find_element(
-                By.CSS_SELECTOR,
-                f"{self._section} form .{self._class}[type='{self._type}']"
-            )
+        try:
+            if self._id:
+                return self._browser.find_element(
+                    By.ID,
+                    self._id
+                )
+            elif self._name:
+                return self._browser.find_element(
+                    By.NAME,
+                    self._name
+                )
+            else:
+                return self._browser.find_element(
+                    By.CSS_SELECTOR,
+                    f"{self._section} form .{self._class}[type='{self._type}']"
+                )
+        except selenium.common.exceptions.NoSuchElementException:
+            return None
 
     @property
-    def label(self) -> str:
+    def label(self) -> Optional[str]:
         """Надпись на кнопке"""
-        return self._btn.text
+        if self._btn:
+            return self._btn.text
+        else:
+            return None
 
     def click(self) -> None:
         """Клик по кнопке"""
-        self._btn.click()
+        if self._btn:
+            self._btn.click()
+
+    def hover(self) -> None:
+        """Навести курсор на кнопку"""
+        if self._btn:
+            btn_block = self._btn.find_element(By.TAG_NAME, 'div')
+            hover = ActionChains(self._browser).move_to_element(btn_block)
+            hover.perform()
 
     def is_displayed(self) -> bool:
         """Кнопка видима?"""
-        return self._btn.is_displayed()
+        if self._btn:
+            return self._btn.is_displayed()
+        else:
+            return False
+
+    def send_keys(self, keys: str) -> None:
+        """Отправить нажатие клавиш клавиатуры кнопке"""
+        self._btn.send_keys(keys)
 
 
 class SubmitButton(BaseButton):

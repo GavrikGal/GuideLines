@@ -22,8 +22,8 @@ class CustomUser(AbstractUser):
                                verbose_name='Аватар')
 
     def get_upload_path(self, filename):
-        return str(self.username) + "/avatar/" \
-               + splitext(filename)[0] + '.' + str(datetime.now().timestamp()) + splitext(filename)[1]
+        return str(self.username) + "/" \
+               + splitext(filename)[0] + '_' + str(datetime.now().timestamp()) + splitext(filename)[1]
 
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
@@ -32,7 +32,7 @@ class Guide(models.Model):
     """Модель Руководства"""
 
     name = models.CharField(max_length=200, verbose_name='Название')
-    description = models.TextField(blank=True, verbose_name='Описание')
+    description = models.TextField(null=True, blank=True, verbose_name='Описание')
     cover = models.ImageField(upload_to=_upload_path,
                               null=True,
                               blank=True,
@@ -41,8 +41,8 @@ class Guide(models.Model):
                                verbose_name='Автор')
 
     def get_upload_path(self, filename):
-        return str(self.author.username) + "/guides/" + str(self.name) + '/' \
-               + splitext(filename)[0] + '__' + str(datetime.now().timestamp()) + splitext(filename)[1]
+        return str(self.author.username) + '/' \
+               + splitext(filename)[0] + '_' + str(datetime.now().timestamp()) + splitext(filename)[1]
 
     REQUIRED_FIELDS = ['name']
 
@@ -54,16 +54,8 @@ class Guide(models.Model):
         verbose_name_plural = 'Гайды'
 
 
-@receiver(pre_delete, sender=Guide)
-def cover_delete(sender, instance, **kwargs):
-    if instance.cover.name:
-        dirname = os.path.dirname(instance.cover.name)
-        instance.cover.delete(False)
-        if not os.listdir(settings.MEDIA_ROOT / dirname):
-            os.rmdir(settings.MEDIA_ROOT / dirname)
-
-
 @receiver(pre_delete, sender=CustomUser)
-def avatar_delete(sender, instance, **kwargs):
+def delete_user_root_dir(sender, instance, **kwargs):
     username = instance.username
-    rmtree(settings.MEDIA_ROOT / username, ignore_errors=True)
+    if os.path.exists(settings.MEDIA_ROOT / username):
+        rmtree(settings.MEDIA_ROOT / username, ignore_errors=True)
