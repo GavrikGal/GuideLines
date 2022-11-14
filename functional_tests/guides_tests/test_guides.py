@@ -1,3 +1,4 @@
+import time
 from os.path import splitext, basename
 
 from functional_tests.base import FunctionalTest
@@ -212,3 +213,63 @@ class GuidesTest(FunctionalTest):
             detail_guide_page.page_title,
             'Невозможно зайти на страницу Руководства'
         )
+
+    def test_can_delete_guide(self) -> None:
+        """Тест можно удалить Руководство"""
+
+        # Гал имеет написанное руковдство, но он не хочет чтобы оно было, а хочет его удалить
+        user = self.create_user_and_pre_authenticated_session()
+        guide = self.create_guide(user)
+
+        # Он заходит на страницу детальной инфы о Руководстве
+        detail_guide_page = DetailGuidePage(self, guide.pk)
+        detail_guide_page.go_to_page()
+
+        # Нажимает на кнопку с тремя точками
+        detail_guide_page.guide_menu_btn.click()
+
+        # Выпадает меню
+        self.assertTrue(
+            detail_guide_page.guide_menu.is_displayed(),
+            "Нет выпадающего меню на Руководстве"
+        )
+
+        # В этом меню есть кнопка Удалить
+        self.assertTrue(
+            detail_guide_page.delete_guide_btn.is_displayed(),
+            "Нет кнопки удаления Руководства"
+        )
+
+        # Гал нажимает на кнопку
+        detail_guide_page.delete_guide_btn.click()
+
+        # Появляется модальное окно, где надо подтвердить своё намерение
+        self.assertTrue(
+            detail_guide_page.modal_delete_panel.is_displayed(),
+            'Нет модального окна подтверждения удаления Руководства'
+        )
+        self.assertTrue(
+            detail_guide_page.confirm_delete_guide_btn.is_displayed(),
+            'Нет кнопки подтверждающей удаление Руководства'
+        )
+
+        # Гал нажимает кнопку удалить в модальном окне
+        detail_guide_page.confirm_delete_guide_btn.click()
+
+        # Его перекидывает на главную страницу
+        home_page = HomePage(self)
+        self.assertIn(
+            'Главная',
+            home_page.page_title,
+            'Не перекинуло на главную страницу'
+        )
+
+        # Больше гал не может зайти на страницу удаленного Руководства
+        self.assertNotIn(
+            TEST_GUIDE_NAME,
+            detail_guide_page.page_title,
+            'Руководство не удалено. Всё еще можно зайти на страницу Руководства'
+        )
+
+        self.fail("Доделать")
+

@@ -26,7 +26,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="guide_menu_btn" id="id_guide_menu">
                         <li><a class="dropdown-item" href="{% url 'guides:edit_guide' pk=guide.pk%}" id="id_edit_guide_btn">Редактировать</a></li>
-                        <li><a class="dropdown-item text-danger" href="#">Удалить</a></li>
+                        <li><a class="dropdown-item text-danger" href="#" id="id_delete_guide_btn">Удалить</a></li>
                     </ul>
                 </div>
                 <h1 class="card-title mb-5">{{ guide.name }}</h1>
