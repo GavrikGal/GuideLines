@@ -1,4 +1,3 @@
-import time
 from os.path import splitext, basename
 
 from functional_tests.base import FunctionalTest

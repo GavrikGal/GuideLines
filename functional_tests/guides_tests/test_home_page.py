@@ -5,7 +5,7 @@ from functional_tests.pages.home_page import HomePage
 class HomePageTest(FunctionalTest):
     """тест главной страницы"""
 
-    def test_layout_and_styling(self) -> None:
+    def test_layout_and_CSS_styling(self) -> None:
         """тест макета и стилевого оформления"""
 
         # Гал заходит на главную страницу
