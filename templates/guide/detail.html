@@ -26,7 +26,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="guide_menu_btn" id="id_guide_menu">
                         <li><a class="dropdown-item" href="{% url 'guides:edit_guide' pk=guide.pk%}" id="id_edit_guide_btn">Редактировать</a></li>
-                        <li><a class="dropdown-item text-danger" href="#" id="id_delete_guide_btn">Удалить</a></li>
+                        <li><a class="dropdown-item text-danger" href="#" id="id_delete_guide_btn" data-bs-toggle="modal" data-bs-target="#id_modal_delete_panel">Удалить</a></li>
                     </ul>
                 </div>
                 <h1 class="card-title mb-5">{{ guide.name }}</h1>
@@ -52,5 +52,28 @@
         </div>
         </a>
     </div>
+</div>
+
+    <!-- Modal -->
+<div class="modal fade" id="id_modal_delete_panel" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Удаление руководства</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <p>Вы точно хотите удалить: <span class="fw-bold">{{ guide.name }}</span>?</p>
+          <p>Восстановлени будет невозможно</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <form method="POST" action="{% url "guides:delete_guide" pk=guide.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" id="id_confirm_delete_guide_btn" >Удалить</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

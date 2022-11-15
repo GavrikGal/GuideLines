@@ -1,12 +1,18 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
 
 
 from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm
 from .models import Guide
+
+
+class DeleteGuideView(DeleteView):
+    """Удаление Руководства"""
+    model = Guide
+    success_url = reverse_lazy('guides:home_page')
 
 
 class UpdateGuideView(UpdateView):

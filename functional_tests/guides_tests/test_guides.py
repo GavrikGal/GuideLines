@@ -270,6 +270,3 @@ class GuidesTest(FunctionalTest):
             detail_guide_page.page_title,
             'Руководство не удалено. Всё еще можно зайти на страницу Руководства'
         )
-
-        self.fail("Доделать")
-
