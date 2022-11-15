@@ -18,6 +18,7 @@ class GuidesTest(FunctionalTest):
     def test_can_create_new_guide_without_cover_and_description(self) -> None:
         """тест: можно создать Руководство без обложки и описания"""
 
+
         # Гал создал руководство без обложки
         user = self.create_user_and_pre_authenticated_session()
         guide = self.create_guide(user, cover_path=None, description=None)
