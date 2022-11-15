@@ -15,6 +15,28 @@ from functional_tests.const import (
 class GuidesTest(FunctionalTest):
     """тесты Руководств"""
 
+    def test_can_create_new_guide_without_cover_and_description(self) -> None:
+        """тест: можно создать Руководство без обложки и описания"""
+
+        # Гал создал руководство без обложки
+        user = self.create_user_and_pre_authenticated_session()
+        guide = self.create_guide(user, cover_path=None, description=None)
+
+        # и посещает страницу Руководства
+        detail_guide_page = DetailGuidePage(self, guide.pk)
+        detail_guide_page.go_to_page()
+
+    def test_can_edit_guide_without_cover_and_description(self) -> None:
+        """тест: можно редактировать Руководство без обложки и описания"""
+
+        # Гал создал руководство без обложки
+        user = self.create_user_and_pre_authenticated_session()
+        guide = self.create_guide(user, cover_path=None, description=None)
+
+        # и посещает страницу редактирования Руководства
+        edit_guide_page = EditGuidePage(self, guide.pk)
+        edit_guide_page.go_to_page()
+
     def test_tooltip_with_bootstrap_javascript_work(self) -> None:
         """тест: всплывающая подсказка tooltip из script.js и bootstrap загружена и работает"""
         # Гал имеет созданное руководство
