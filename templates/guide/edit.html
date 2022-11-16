@@ -17,22 +17,23 @@
                 <img src="{% static 'img/default-guide-cover.jpg' %}" class="card-img" alt="">
             {% endif %}
             <div class="card-body py-4">
-            <form method="post" class="form pt-2" enctype="multipart/form-data">
-            <div class="card-body py-4">
+                <form method="post" class="form pt-2" enctype="multipart/form-data">
+                <div class="card-body py-4">
 
-                {% csrf_token %}
-                {% bootstrap_field  form.name layout='horizontal' show_label='skip' size='medium' field_class='col-md-9 col-10'%}
-                {% bootstrap_field  form.description layout='horizontal' show_label='skip' size='medium' field_class='col pt-3'%}
-                {% bootstrap_field  form.cover layout='horizontal' show_label='skip' size='medium' field_class='col pt-3'%}
+                    {% csrf_token %}
+                    {% bootstrap_field  form.name layout='horizontal' show_label='skip' size='medium' field_class='col-md-9 col-10'%}
+                    {% bootstrap_field  form.description layout='horizontal' show_label='skip' size='medium' field_class='col pt-3'%}
+                    {% bootstrap_field  form.cover layout='horizontal' show_label='skip' size='medium' field_class='col pt-3'%}
 
+                </div>
+                <div class="card-footer border-light py-3">
+                    {% buttons %}
+                        <button type="submit" class="btn btn-primary float-start">Сохранить</button>
+                    {% endbuttons %}
+                    <p class="card-text text-end ">{{ guide.author.first_name }} {{ guide.author.last_name }}</p>
+                </div>
+                </form>
             </div>
-            <div class="card-footer border-light py-3">
-                {% buttons %}
-                    <button type="submit" class="btn btn-primary float-start">Сохранить</button>
-                {% endbuttons %}
-                <p class="card-text text-end ">{{ guide.author.first_name }} {{ guide.author.last_name }}</p>
-            </div>
-            </form>
         </div>
     </div>
 </div>
