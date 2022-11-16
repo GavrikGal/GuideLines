@@ -54,6 +54,27 @@ class Guide(models.Model):
         verbose_name_plural = 'Гайды'
 
 
+class Article(models.Model):
+    """Модель статьи"""
+
+    name = models.CharField(max_length=200, verbose_name='Название')
+    text = models.TextField(null=True, blank=True, verbose_name='Текст')
+
+    guide = models.ForeignKey(Guide, on_delete=models.PROTECT,
+                              verbose_name='Руководство')
+    author = models.ForeignKey(CustomUser, on_delete=models.PROTECT,
+                               verbose_name='Автор')
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        verbose_name = 'Статья'
+        verbose_name_plural = 'Статьи'
+
+    REQUIRED_FIELDS = ['name']
+
+
 @receiver(pre_delete, sender=CustomUser)
 def delete_user_root_dir(sender, instance, **kwargs):
     username = instance.username

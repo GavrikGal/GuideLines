@@ -5,8 +5,31 @@ from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
 
 
-from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm
+from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm, CreationArticleForm
 from .models import Guide
+
+
+class NewArticleView(CreateView):
+    """Создание новой Статьи"""
+    form_class = CreationArticleForm
+    template_name = 'article/new.html'
+
+    def __init__(self):
+        super().__init__()
+        print('Создаем объект Статьи ')
+        print(self.__dir__())
+        print(self.get_form_kwargs())
+        self.guide_pk = self.kwargs.get('guide_pk')
+        print(self.guide_pk)
+
+    def form_valid(self, form):
+        """добавить автора и Руководство перед сохранением, если форма валидна"""
+        form.instance.author = self.request.user
+        form.instance.guide = Guide.objects.get(pk=self.kwargs.get('guide_pk'))
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('guides:detail_guide', kwargs={'pk': self.kwargs.get('guide_pk')})
 
 
 class DeleteGuideView(DeleteView):
@@ -59,7 +82,7 @@ class DetailGuideView(DetailView):
     template_name = 'guide/detail.html'
 
 
-def edit_guide_view(request):
+def new_article_view(request):
     """Заглушка"""
     pass
 

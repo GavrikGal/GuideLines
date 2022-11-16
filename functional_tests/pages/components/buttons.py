@@ -57,8 +57,7 @@ class BaseButton(object):
     def hover(self) -> None:
         """Навести курсор на кнопку"""
         if self._btn:
-            btn_block = self._btn.find_element(By.TAG_NAME, 'div')
-            hover = ActionChains(self._browser).move_to_element(btn_block)
+            hover = ActionChains(self._browser).move_to_element(self._btn)
             hover.perform()
 
     def is_displayed(self) -> bool:

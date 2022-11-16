@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import RegistrationView, HomePageView, NewGuideView, DetailGuideView, UpdateGuideView, DeleteGuideView
+from .views import RegistrationView, HomePageView, NewGuideView, DetailGuideView, UpdateGuideView, DeleteGuideView, \
+    NewArticleView
 
 
 app_name = 'guides'
@@ -10,5 +11,6 @@ urlpatterns = [
     path('guide/<int:pk>', DetailGuideView.as_view(), name='detail_guide'),
     path('guide/edit/<int:pk>', UpdateGuideView.as_view(), name='edit_guide'),
     path('guide/delete/<int:pk>', DeleteGuideView.as_view(), name='delete_guide'),
+    path('guide/<int:guide_pk>/article/new/', NewArticleView.as_view(), name='new_article'),
     path('', HomePageView.as_view(), name='home_page'),
 ]

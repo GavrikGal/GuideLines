@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .forms import CreationGuideForm
-from .models import CustomUser, Guide
+from .forms import CreationGuideForm, CreationArticleForm
+from .models import CustomUser, Guide, Article
 
 
 class CustomUserAdmin(UserAdmin):
@@ -19,8 +19,12 @@ class GuideAdmin(admin.ModelAdmin):
     list_display = ['name', 'description', 'cover', 'author']
 
 
+class ArticleAdmin(admin.ModelAdmin):
+    add_form = CreationArticleForm
+    model = Article
+    list_display = ['name', 'text', 'guide', 'author']
+
+
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Guide, GuideAdmin)
-
-
-
+admin.site.register(Article, ArticleAdmin)
