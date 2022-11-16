@@ -20,6 +20,6 @@
 	top: 0;
 }
 
-#articles .card-body {
+#articles .card {
 	aspect-ratio: 210 / 297;
 }

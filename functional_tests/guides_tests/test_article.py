@@ -58,5 +58,3 @@ class ArticleTest(FunctionalTest):
         self.assertTrue(detail_guide_page.find_text(TEST_ARTICLE_TEXT))
 
         # Гал рад, что все получилось
-
-        self.fail("Доделать")
