@@ -14,14 +14,6 @@ class NewArticleView(CreateView):
     form_class = CreationArticleForm
     template_name = 'article/new.html'
 
-    def __init__(self):
-        super().__init__()
-        print('Создаем объект Статьи ')
-        print(self.__dir__())
-        print(self.get_form_kwargs())
-        self.guide_pk = self.kwargs.get('guide_pk')
-        print(self.guide_pk)
-
     def form_valid(self, form):
         """добавить автора и Руководство перед сохранением, если форма валидна"""
         form.instance.author = self.request.user
