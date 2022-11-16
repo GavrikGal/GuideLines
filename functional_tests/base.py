@@ -60,6 +60,8 @@ class FunctionalTest(StaticLiveServerTestCase):
             options.add_argument('--headless')
             options.add_argument('--disable-gpu')
         self.browser = webdriver.Firefox(options=options)
+        # if self.used_headless_driver:
+        #     self.browser.set_window_size(1920, 1080)
         self.user = None
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
@@ -73,7 +75,7 @@ class FunctionalTest(StaticLiveServerTestCase):
                     os.makedirs(SCREEN_DUMP_LOCATION)
                 for ix, handle in enumerate(self.browser.window_handles):
                     self._windowid = ix
-                    self.browser.switch_to_window(handle)
+                    self.browser.switch_to.window(handle)
                     self.take_screenshot()
                     self.dump_html()
         self.browser.quit()

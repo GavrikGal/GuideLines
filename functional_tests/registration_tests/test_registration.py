@@ -1,3 +1,7 @@
+import time
+
+from selenium.webdriver.common.by import By
+
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.registration_page import RegistrationPage
 from functional_tests.pages.login_page import LoginPage
@@ -5,6 +9,10 @@ from functional_tests.pages.home_page import HomePage
 from functional_tests.const import (
     TEST_USERNAME, TEST_LAST_NAME, TEST_FIRST_NAME, TEST_PASSWORD, TEST_AVATAR_IMG_PATH
 )
+
+from selenium.webdriver.common.action_chains import ActionChains
+
+
 
 
 class RegistrationTest(FunctionalTest):
@@ -79,6 +87,8 @@ class RegistrationTest(FunctionalTest):
         registration_page.set_avatar_img(TEST_AVATAR_IMG_PATH)
 
         # Нажимает кнопку регистрации
+        last_height = self.browser.execute_script("return document.body.scrollHeight")
+        self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         registration_page.registration_to_system_btn.click()
 
         # Его редиректит на главную страницу
