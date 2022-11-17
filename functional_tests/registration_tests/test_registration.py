@@ -1,6 +1,9 @@
 import time
 
+from selenium.common import MoveTargetOutOfBoundsException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.registration_page import RegistrationPage
@@ -87,8 +90,7 @@ class RegistrationTest(FunctionalTest):
         registration_page.set_avatar_img(TEST_AVATAR_IMG_PATH)
 
         # Нажимает кнопку регистрации
-        last_height = self.browser.execute_script("return document.body.scrollHeight")
-        self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        self.browser.set_window_size(1920, 1080)    # Фикс недостаточной высоты окна
         registration_page.registration_to_system_btn.click()
 
         # Его редиректит на главную страницу

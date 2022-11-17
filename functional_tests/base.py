@@ -55,13 +55,12 @@ class FunctionalTest(StaticLiveServerTestCase):
         """Установка параметров тестовой среды"""
         options = Options()
         # использовать для тестов драйвер без окна или с окном
+        options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
         self.used_headless_driver = os.environ.get("HEADLESS_DRIVER", False)
         if self.used_headless_driver:
             options.add_argument('--headless')
             options.add_argument('--disable-gpu')
         self.browser = webdriver.Firefox(options=options)
-        # if self.used_headless_driver:
-        #     self.browser.set_window_size(1920, 1080)
         self.user = None
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
