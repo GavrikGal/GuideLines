@@ -14,7 +14,7 @@ from django.contrib.auth import (
     SESSION_KEY, BACKEND_SESSION_KEY, HASH_SESSION_KEY,
     get_user_model
 )
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 import time
 
 from functional_tests.const import (
@@ -22,7 +22,7 @@ from functional_tests.const import (
     TEST_GUIDE_NAME, TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH,
 )
 
-from guides.models import Guide
+from guides.models import Guide, CustomUser
 
 MAX_WAIT = 3
 SCREEN_DUMP_LOCATION = settings.BASE_DIR / 'logs' / 'screendumps'
@@ -117,7 +117,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     @staticmethod
     def create_user(username: str = TEST_USERNAME, password: str = TEST_PASSWORD,
                     first_name: str = TEST_FIRST_NAME, last_name: str = TEST_LAST_NAME,
-                    is_superuser: bool = False) -> User:
+                    is_superuser: bool = False) -> CustomUser:
         """
         Создать пользователя.
            Все аргументы могут быть опущены. Что приведет к созданию тестового пользователя по-умолчанию
@@ -135,7 +135,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     def create_user_and_pre_authenticated_session(self, username: str = TEST_USERNAME,
                                                   password: str = TEST_PASSWORD,
                                                   first_name: str = TEST_FIRST_NAME,
-                                                  last_name: str = TEST_LAST_NAME, ) -> User:
+                                                  last_name: str = TEST_LAST_NAME, ) -> CustomUser:
         """
         Создать пользователя и аутентифицированную сессию
             Все аргументы могут быть опущены. Что приведет к созданию тестового пользователя по-умолчанию
@@ -165,7 +165,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
         return user
 
-    def create_guide(self, author: User, name: str = TEST_GUIDE_NAME,
+    def create_guide(self, author: CustomUser, name: str = TEST_GUIDE_NAME,
                      description: Optional[str] = TEST_GUIDE_DESCRIPTION,
                      cover_path: Optional[str] = TEST_GUIDE_COVER_IMG_PATH) -> Guide:
         """Создает Руководство с автором author, названием name, описанием description и обложкой, расположенной
