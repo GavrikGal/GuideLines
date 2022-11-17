@@ -154,43 +154,46 @@ class GuidesTest(FunctionalTest):
         """тест: можно редактировать свое Руководство"""
 
         # Гал хочет отредактировать свое первое Руководство.
-        # Он зарегестрированный пользователь и залогиненый пользователь
-        user = self.create_user_and_pre_authenticated_session()
+        # Он сразу переходит на страницу Руководства
+        guide_page, _, _ = self.create_user_guide_and_go_to_guide_page()
 
-        # Оно у него уже есть
-        guide = self.create_guide(user)
-
-        # Он заходит на страницу Руководства
-        detail_guide_page = DetailGuidePage(self, guide.pk)
-        detail_guide_page.go_to_page()
+        # # Он зарегестрированный пользователь и залогиненый пользователь
+        # user = self.create_user_and_pre_authenticated_session()
+        #
+        # # Оно у него уже есть
+        # guide = self.create_guide(user)
+        #
+        # # Он заходит на страницу Руководства
+        # detail_guide_page = DetailGuidePage(self, guide.pk)
+        # detail_guide_page.go_to_page()
         self.assertIn(
             TEST_GUIDE_NAME,
-            detail_guide_page.page_title,
+            guide_page.page_title,
             'Невозможно зайти на страницу Руководства'
         )
 
         # На обложке Руководства Гал видит три точечки
         self.assertTrue(
-            detail_guide_page.guide_menu_btn.is_displayed(),
+            guide_page.guide_menu_btn.is_displayed(),
             'Не отображается кнопка меню Руководства'
         )
 
         # Он нажимает на них.
-        detail_guide_page.guide_menu_btn.click()
+        guide_page.guide_menu_btn.click()
         # И вниз выпадает меню
         self.assertTrue(
-            detail_guide_page.guide_menu.is_displayed(),
+            guide_page.guide_menu.is_displayed(),
             'Не отображается выпадающее меню Руководства'
         )
 
         # Гал находит там кнопку редактировать
         self.assertTrue(
-            detail_guide_page.edit_guide_btn.is_displayed(),
+            guide_page.edit_guide_btn.is_displayed(),
             'Не отображается кнопка редактирования'
         )
 
         # Нажимает
-        detail_guide_page.edit_guide_btn.click()
+        guide_page.edit_guide_btn.click()
 
         # И попадает на страницу редактирования Руководства
         edit_guide_page = EditGuidePage(self)
@@ -233,7 +236,7 @@ class GuidesTest(FunctionalTest):
         # Страница обновляется и он возвращается на страницу детального просмотра Руководства
         self.assertIn(
             'Обновленное ' + TEST_GUIDE_NAME,
-            detail_guide_page.page_title,
+            guide_page.page_title,
             'Невозможно зайти на страницу Руководства'
         )
 
