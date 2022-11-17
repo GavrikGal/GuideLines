@@ -1,4 +1,5 @@
 from os.path import splitext, basename
+from typing import Optional
 
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
@@ -20,19 +21,24 @@ class GuidesTest(FunctionalTest):
         """тест: можно создать Руководство без обложки и описания"""
 
         # Гал создал руководство без обложки
-        user = self.create_user_and_pre_authenticated_session()
-        guide = self.create_guide(user, cover_path=None, description=None)
+        # Он сразу переходит на страницу Руководства
+        self.create_user_guide_and_go_to_guide_page(cover_path=None, description=None)
 
-        # и посещает страницу Руководства
-        detail_guide_page = DetailGuidePage(self, guide.pk)
-        detail_guide_page.go_to_page()
+        # user = self.create_user_and_pre_authenticated_session()
+        # guide = self.create_guide(user, cover_path=None, description=None)
+        #
+        # # и посещает страницу Руководства
+        # detail_guide_page = DetailGuidePage(self, guide.pk)
+        # detail_guide_page.go_to_page()
 
     def test_can_edit_guide_without_cover_and_description(self) -> None:
         """тест: можно редактировать Руководство без обложки и описания"""
 
         # Гал создал руководство без обложки
-        user = self.create_user_and_pre_authenticated_session()
-        guide = self.create_guide(user, cover_path=None, description=None)
+        _, guide, _ = self.create_user_guide_and_go_to_guide_page(cover_path=None, description=None)
+        #
+        # user = self.create_user_and_pre_authenticated_session()
+        # guide = self.create_guide(user, cover_path=None, description=None)
 
         # и посещает страницу редактирования Руководства
         edit_guide_page = EditGuidePage(self, guide.pk)
@@ -41,19 +47,23 @@ class GuidesTest(FunctionalTest):
     def test_tooltip_with_bootstrap_javascript_work(self) -> None:
         """тест: всплывающая подсказка tooltip из script.js и bootstrap загружена и работает"""
         # Гал имеет созданное руководство
-        user = self.create_user_and_pre_authenticated_session()
-        guide = self.create_guide(user)
+        # Он сразу переходит на страницу Руководства
+        guide_page, _, _ = self.create_user_guide_and_go_to_guide_page()
 
-        # Он заходит на страницу руководства
-        detail_guide_page = DetailGuidePage(self, guide.pk)
-        detail_guide_page.go_to_page()
+
+        # user = self.create_user_and_pre_authenticated_session()
+        # guide = self.create_guide(user)
+        #
+        # # Он заходит на страницу руководства
+        # detail_guide_page = DetailGuidePage(self, guide.pk)
+        # detail_guide_page.go_to_page()
 
         # Наводит мышку на кнопку добавления Сататьи
-        detail_guide_page.new_article_btn.hover()
+        guide_page.new_article_btn.hover()
 
         # И видит, что выскакивает подсказка. Это означает javascript отработал как надо
         self.assertTrue(
-            detail_guide_page.tooltip.is_displayed()
+            guide_page.tooltip.is_displayed()
         )
 
     def test_can_create_new_guide(self) -> None:
@@ -292,13 +302,3 @@ class GuidesTest(FunctionalTest):
             guide_page.page_title,
             'Руководство не удалено. Всё еще можно зайти на страницу Руководства'
         )
-
-    def create_user_guide_and_go_to_guide_page(self) -> tuple[DetailGuidePage, CustomUser, Guide]:
-        """Создает залогиненогого пользователя CustomUser, Руководство Guide
-         и переходит настраницу Руководства. Возвращает кортеж из тест-страницы DetailGuidePage, пользователя
-         CustomUser, Руководства Guide"""
-        user = self.create_user_and_pre_authenticated_session()
-        guide = self.create_guide(user)
-        detail_guide_page = DetailGuidePage(self, guide.pk)
-        detail_guide_page.go_to_page()
-        return detail_guide_page, user, guide

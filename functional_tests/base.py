@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from shutil import rmtree
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.sessions.backends.db import SessionStore
@@ -21,6 +21,8 @@ from functional_tests.const import (
     TEST_USERNAME, TEST_LAST_NAME, TEST_FIRST_NAME, TEST_PASSWORD,
     TEST_GUIDE_NAME, TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH,
 )
+
+from functional_tests.pages.detail_guide_page import DetailGuidePage
 
 from guides.models import Guide, CustomUser
 
@@ -180,3 +182,22 @@ class FunctionalTest(StaticLiveServerTestCase):
                                              content_type='image/jpeg')
             guide.save()
         return guide
+
+    def create_user_guide_and_go_to_guide_page(self, description: Optional[str] =
+                                               TEST_GUIDE_DESCRIPTION,
+                                               cover_path: Optional[str] =
+                                               TEST_GUIDE_COVER_IMG_PATH) -> tuple[DetailGuidePage, Guide, CustomUser]:
+        """
+        Создает залогиненогого пользователя CustomUser, Руководство Guide
+        и переходит настраницу Руководства.
+        :param description: Добавить описание. Опциональный. По умолчанию const.TEST_GUIDE_DESCRIPTION.
+        При None - без описания
+        :param cover_path: Путь к обложке Руководства. Опциональный. По умолчанию const.TEST_GUIDE_COVER_IMG_PATH.
+        При None - без обложки
+        :return: кортеж из тест-страницы Руководства DetailGuidePage, Руководства Guide, пользователя CustomUser
+        """
+        user = self.create_user_and_pre_authenticated_session()
+        guide = self.create_guide(user, description=description, cover_path=cover_path)
+        detail_guide_page = DetailGuidePage(self, guide.pk)
+        detail_guide_page.go_to_page()
+        return detail_guide_page, guide, user

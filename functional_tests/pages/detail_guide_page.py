@@ -1,12 +1,14 @@
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from django.urls import reverse
 import selenium.common.exceptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebElement
 
-from functional_tests.base import FunctionalTest
 from functional_tests.pages.components.base_page import BasePage
 from functional_tests.pages.components.buttons import BaseButton
+
+if TYPE_CHECKING:
+    from functional_tests.base import FunctionalTest
 
 
 class DetailGuidePage(BasePage):
