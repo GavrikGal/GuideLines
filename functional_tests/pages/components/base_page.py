@@ -43,6 +43,6 @@ class BasePage(object):
         )
         return self
 
-    def is_text_on_page(self, text) -> str:
+    def is_text_present(self, text) -> str:
         """Найти текст на странице"""
         return self._browser.find_element(By.XPATH, f"//*[text()='{text}']").text

@@ -46,7 +46,7 @@ class ArticleTest(FunctionalTest):
         )
 
         # Где он видит созданную им статью
-        self.assertTrue(guide_page.is_text_on_page(TEST_ARTICLE_NAME))
-        self.assertTrue(guide_page.is_text_on_page(TEST_ARTICLE_TEXT))
+        self.assertTrue(guide_page.is_text_present(TEST_ARTICLE_NAME))
+        self.assertTrue(guide_page.is_text_present(TEST_ARTICLE_TEXT))
 
         # Гал рад, что все получилось
