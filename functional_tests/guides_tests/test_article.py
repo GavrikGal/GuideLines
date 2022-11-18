@@ -1,7 +1,7 @@
 from functional_tests.base import FunctionalTest
-from functional_tests.pages.detail_guide_page import DetailGuidePage
 from functional_tests.pages.new_article_page import NewArticlePage
 from functional_tests.const import (TEST_ARTICLE_NAME, TEST_ARTICLE_TEXT)
+from functional_tests.utils.services import create_user_guide_and_go_to_guide_page
 
 
 class ArticleTest(FunctionalTest):
@@ -11,13 +11,10 @@ class ArticleTest(FunctionalTest):
         """тест можно создать новую статью"""
 
         # Гал заходит на страницу своего руководства
-        user = self.create_user_and_pre_authenticated_session()
-        guide = self.create_guide(user)
-        detail_guide_page = DetailGuidePage(self, guide.pk)
-        detail_guide_page.go_to_page()
+        guide_page, guide, _ = create_user_guide_and_go_to_guide_page(self)
 
         # Нажимает кнопку добавить Статью
-        detail_guide_page.new_article_btn.click()
+        guide_page.new_article_btn.click()
 
         # Попадает на страницу добавления Статьи
         new_article_page = NewArticlePage(self, guide.pk)
@@ -44,12 +41,12 @@ class ArticleTest(FunctionalTest):
         # Гал попадает на страницу текущего Руководства
         self.assertIn(
             guide.name,
-            detail_guide_page.page_title,
+            guide_page.page_title,
             'Не перешло на страницу текущего Руководства'
         )
 
         # Где он видит созданную им статью
-        self.assertTrue(detail_guide_page.is_text_on_page(TEST_ARTICLE_NAME))
-        self.assertTrue(detail_guide_page.is_text_on_page(TEST_ARTICLE_TEXT))
+        self.assertTrue(guide_page.is_text_on_page(TEST_ARTICLE_NAME))
+        self.assertTrue(guide_page.is_text_on_page(TEST_ARTICLE_TEXT))
 
         # Гал рад, что все получилось
