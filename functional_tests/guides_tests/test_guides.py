@@ -1,5 +1,4 @@
 from os.path import splitext, basename
-from typing import Optional
 
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
@@ -21,23 +20,24 @@ class GuidesTest(FunctionalTest):
 
         # Гал создал руководство без обложки
         # Он сразу переходит на страницу Руководства
-        create_user_guide_and_go_to_guide_page(self, cover_path=None, description=None)
+        create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url, cover_path=None, description=None)
+        # todo: assert
 
     def test_can_edit_guide_without_cover_and_description(self) -> None:
         """тест: можно редактировать Руководство без обложки и описания"""
 
         # Гал создал руководство без обложки
-        _, guide, _ = create_user_guide_and_go_to_guide_page(self, cover_path=None, description=None)
+        _, guide, _ = create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url, cover_path=None, description=None)
 
         # и посещает страницу редактирования Руководства
-        edit_guide_page = EditGuidePage(self, guide.pk)
+        edit_guide_page = EditGuidePage(self.browser, self.live_server_url, guide.pk)
         edit_guide_page.go_to_page()
 
     def test_tooltip_with_bootstrap_javascript_work(self) -> None:
         """тест: всплывающая подсказка tooltip из script.js и bootstrap загружена и работает"""
         # Гал имеет созданное руководство
         # Он сразу переходит на страницу Руководства
-        guide_page, _, _ = create_user_guide_and_go_to_guide_page(self)
+        guide_page, _, _ = create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url)
 
         # Наводит мышку на кнопку добавления Сататьи
         guide_page.new_article_btn.hover()
@@ -54,7 +54,7 @@ class GuidesTest(FunctionalTest):
         self.create_user_and_pre_authenticated_session()
 
         # Он открывает главную страницу
-        home_page = HomePage(self)
+        home_page = HomePage(self.browser, self.live_server_url)
         home_page.go_to_page()
 
         # Находит кнопку добавления нового руководства
@@ -66,7 +66,7 @@ class GuidesTest(FunctionalTest):
         home_page.new_guide_btn.click()
 
         # Попадает на страницу создания нового Руководства
-        new_guide_page = NewGuidePage(self)
+        new_guide_page = NewGuidePage(self.browser, self.live_server_url)
         self.assertIn(
             "Новое Руководство",
             new_guide_page.page_title
@@ -99,7 +99,7 @@ class GuidesTest(FunctionalTest):
 
         # И его чудесным образом переносит на страницу
         # только что созданного Руководста
-        detail_guide_page = DetailGuidePage(self)
+        detail_guide_page = DetailGuidePage(self.browser, self.live_server_url)
         self.assertIn(
             TEST_GUIDE_NAME,
             detail_guide_page.page_title
@@ -146,7 +146,7 @@ class GuidesTest(FunctionalTest):
 
         # Гал хочет отредактировать свое первое Руководство.
         # Он сразу переходит на страницу Руководства
-        guide_page, _, _ = create_user_guide_and_go_to_guide_page(self)
+        guide_page, _, _ = create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url)
 
         self.assertIn(
             TEST_GUIDE_NAME,
@@ -178,7 +178,7 @@ class GuidesTest(FunctionalTest):
         guide_page.edit_guide_btn.click()
 
         # И попадает на страницу редактирования Руководства
-        edit_guide_page = EditGuidePage(self)
+        edit_guide_page = EditGuidePage(self.browser, self.live_server_url)
         self.assertIn(
             'Редактировать',
             edit_guide_page.page_title,
@@ -227,7 +227,7 @@ class GuidesTest(FunctionalTest):
 
         # Гал имеет написанное руководство, но он не хочет чтобы оно было, а хочет его удалить
         # Сразу переходит на страницу Руководства
-        guide_page, _, _ = create_user_guide_and_go_to_guide_page(self)
+        guide_page, _, _ = create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url)
 
         # Нажимает на кнопку с тремя точками
         guide_page.guide_menu_btn.click()
@@ -261,7 +261,7 @@ class GuidesTest(FunctionalTest):
         guide_page.confirm_delete_guide_btn.click()
 
         # Его перекидывает на главную страницу
-        home_page = HomePage(self)
+        home_page = HomePage(self.browser, self.live_server_url)
         self.assertIn(
             'Главная',
             home_page.page_title,

@@ -1,19 +1,22 @@
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.remote.webdriver import WebElement
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
-from functional_tests.base import FunctionalTest
 from functional_tests.pages.components.buttons import LogoutButton, LoginButton
 
 
 class BasePage(object):
     """Общие элементы для всех страниц"""
 
-    def __init__(self, test: FunctionalTest, page_url: str = ''):
-        self._test = test
-        self._browser = test.browser
+    def __init__(self, browser: WebDriver, live_server_url: str, page_url: str = ''):
+        self._browser = browser
         self.page_url = page_url
-        self.login_btn = LoginButton(self._test)
-        self.logout_btn = LogoutButton(self._test)
+        self.live_server_url = live_server_url
+        self.login_btn = LoginButton(self._browser)
+        self.logout_btn = LogoutButton(self._browser)
 
     @property
     def page_title(self) -> str:
@@ -34,13 +37,17 @@ class BasePage(object):
 
     def go_to_page(self) -> 'BasePage':
         """перейти на страницу"""
-        self._browser.get(self._test.live_server_url + self.page_url)
-        # Подождать пока загрузится тайтл страницы
-        self._test.assertIn(
-            'GuideLines',
-            self.page_title,
-            'Невозможно зайти на страницу. Текущий Title страницы: ' + self.page_title
-        )
+        self._browser.get(self.live_server_url + self.page_url)
+        # Подождать пока загрузится страница
+        timeout = 2
+        try:
+            element_present = EC.presence_of_element_located((By.ID, 'content'))
+            WebDriverWait(self._browser, timeout).until(element_present)
+        except TimeoutException as err:
+            msg = 'Не могу загрузить страницу [' + self.live_server_url + self.page_url + ']'
+            err.msg = msg
+            raise
+
         return self
 
     def is_text_present(self, text) -> str:

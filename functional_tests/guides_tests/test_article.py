@@ -11,13 +11,13 @@ class ArticleTest(FunctionalTest):
         """тест можно создать новую статью"""
 
         # Гал заходит на страницу своего руководства
-        guide_page, guide, _ = create_user_guide_and_go_to_guide_page(self)
+        guide_page, guide, _ = create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url)
 
         # Нажимает кнопку добавить Статью
         guide_page.new_article_btn.click()
 
         # Попадает на страницу добавления Статьи
-        new_article_page = NewArticlePage(self, guide.pk)
+        new_article_page = NewArticlePage(self.browser, self.live_server_url, guide.pk)
         self.assertIn(
             'Новая статья',
             new_article_page.page_title,

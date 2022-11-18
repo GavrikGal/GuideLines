@@ -1,18 +1,17 @@
 from typing import Optional
 import selenium.common.exceptions
 from selenium.webdriver import ActionChains
+from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebElement
-
-from functional_tests.base import FunctionalTest
 
 
 class BaseButton(object):
     """Базовая кнопка"""
 
-    def __init__(self, test: FunctionalTest, type_: str = None,
+    def __init__(self, browser: WebDriver, type_: str = None,
                  section: str = '#content', class_: str = 'btn', id_: str = '', name: str = None):
-        self._browser = test.browser
+        self._browser = browser
         self._type = type_
         self._section = section
         self._class = class_
@@ -75,19 +74,19 @@ class BaseButton(object):
 class SubmitButton(BaseButton):
     """Основная кнопка (отправка формы)"""
 
-    def __init__(self, test: FunctionalTest):
-        super().__init__(test, type_='submit')
+    def __init__(self, browser: WebDriver):
+        super().__init__(browser, type_='submit')
 
 
 class LogoutButton(BaseButton):
     """Копка выхода из системы"""
 
-    def __init__(self, test: FunctionalTest):
-        super().__init__(test, type_='submit', id_='logout-btn', section='header')
+    def __init__(self, browser: WebDriver):
+        super().__init__(browser, type_='submit', id_='logout-btn', section='header')
 
 
 class LoginButton(BaseButton):
     """Копка выхода из системы"""
 
-    def __init__(self, test: FunctionalTest):
-        super().__init__(test, type_='submit', id_='login-btn', section='header')
+    def __init__(self, browser: WebDriver):
+        super().__init__(browser, type_='submit', id_='login-btn', section='header')

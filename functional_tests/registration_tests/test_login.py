@@ -18,7 +18,7 @@ class LoginTest(FunctionalTest):
         user = self.create_user(username='Gal', password='Password123')
 
         # Гал заходит на страницу логина
-        login_page = LoginPage(self)
+        login_page = LoginPage(self.browser, self.live_server_url)
         login_page.go_to_page()
         self.assertIn(
             'Вход',
@@ -36,7 +36,7 @@ class LoginTest(FunctionalTest):
         login_page.login_to_system_btn.click()
 
         # Гал редиректится на главную страницу
-        home_page = HomePage(self)
+        home_page = HomePage(self.browser, self.live_server_url)
         self.assertIn(
             'Главная',
             home_page.page_title

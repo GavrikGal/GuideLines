@@ -1,10 +1,3 @@
-import time
-
-from selenium.common import MoveTargetOutOfBoundsException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.registration_page import RegistrationPage
 from functional_tests.pages.login_page import LoginPage
@@ -12,10 +5,6 @@ from functional_tests.pages.home_page import HomePage
 from functional_tests.const import (
     TEST_USERNAME, TEST_LAST_NAME, TEST_FIRST_NAME, TEST_PASSWORD, TEST_AVATAR_IMG_PATH
 )
-
-from selenium.webdriver.common.action_chains import ActionChains
-
-
 
 
 class RegistrationTest(FunctionalTest):
@@ -25,7 +14,7 @@ class RegistrationTest(FunctionalTest):
         """Можно перейти на страницу регистрации"""
 
         # Гал открывает страницу логина
-        login_page = LoginPage(self)
+        login_page = LoginPage(self.browser, self.live_server_url)
         login_page.go_to_page()
 
         # И видит там кнопку "зарегистрироваваться"
@@ -37,7 +26,7 @@ class RegistrationTest(FunctionalTest):
         login_page.registration_btn.click()
 
         # И попадает на страницу регистрации нового пользователя
-        registration_page = RegistrationPage(self)
+        registration_page = RegistrationPage(self.browser, self.live_server_url)
         self.assertIn(
             'Регистрация',
             registration_page.page_title
@@ -47,7 +36,7 @@ class RegistrationTest(FunctionalTest):
         """Можно зарегистрироваться в системе"""
 
         # Гал открывает страницу регистрации
-        registration_page = RegistrationPage(self)
+        registration_page = RegistrationPage(self.browser, self.live_server_url)
         registration_page.go_to_page()
 
         # На ней видит поля для ввода логина
@@ -94,7 +83,7 @@ class RegistrationTest(FunctionalTest):
         registration_page.registration_to_system_btn.click()
 
         # Его редиректит на главную страницу
-        home_page = HomePage(self)
+        home_page = HomePage(self.browser, self.live_server_url)
         self.assertTrue(
             'Главная',
             home_page.page_title
@@ -102,7 +91,7 @@ class RegistrationTest(FunctionalTest):
 
         # Теперь он может выполнить вход систему
         # Так он перейдет на страницу логина
-        login_page = LoginPage(self)
+        login_page = LoginPage(self.browser, self.live_server_url)
         login_page.go_to_page()
 
         # Где введя логин и пароль, и нажав "вход"

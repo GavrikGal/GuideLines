@@ -9,7 +9,7 @@ class HomePageTest(FunctionalTest):
         """тест макета и стилевого оформления"""
 
         # Гал заходит на главную страницу
-        home_page = HomePage(self)
+        home_page = HomePage(self.browser, self.live_server_url)
         home_page.go_to_page()
         self.browser.set_window_size(1024, 768)
 

@@ -1,16 +1,16 @@
-from typing import Optional
-from selenium.webdriver.common.by import By
 import selenium.common.exceptions
 
-from functional_tests.base import FunctionalTest
+from typing import Optional
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.remote.webdriver import WebElement
 
 
 class InputField(object):
     """Поле ввода"""
 
-    def __init__(self, test: FunctionalTest, _field_id: str):
-        self._browser = test.browser
+    def __init__(self, browser: WebDriver, _field_id: str):
+        self._browser = browser
         self._field_id = _field_id
 
     @property
