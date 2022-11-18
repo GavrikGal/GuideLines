@@ -10,8 +10,7 @@ from functional_tests.const import (
     TEST_LAST_NAME, TEST_GUIDE_NAME, TEST_FIRST_NAME,
     TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH, TEST_GUIDE_NEW_COVER_IMG_PATH
 )
-
-from guides.models import Guide, CustomUser
+from functional_tests.utils.services import create_user_guide_and_go_to_guide_page
 
 
 class GuidesTest(FunctionalTest):
@@ -22,23 +21,13 @@ class GuidesTest(FunctionalTest):
 
         # Гал создал руководство без обложки
         # Он сразу переходит на страницу Руководства
-        self.create_user_guide_and_go_to_guide_page(cover_path=None, description=None)
-
-        # user = self.create_user_and_pre_authenticated_session()
-        # guide = self.create_guide(user, cover_path=None, description=None)
-        #
-        # # и посещает страницу Руководства
-        # detail_guide_page = DetailGuidePage(self, guide.pk)
-        # detail_guide_page.go_to_page()
+        create_user_guide_and_go_to_guide_page(self, cover_path=None, description=None)
 
     def test_can_edit_guide_without_cover_and_description(self) -> None:
         """тест: можно редактировать Руководство без обложки и описания"""
 
         # Гал создал руководство без обложки
-        _, guide, _ = self.create_user_guide_and_go_to_guide_page(cover_path=None, description=None)
-        #
-        # user = self.create_user_and_pre_authenticated_session()
-        # guide = self.create_guide(user, cover_path=None, description=None)
+        _, guide, _ = create_user_guide_and_go_to_guide_page(self, cover_path=None, description=None)
 
         # и посещает страницу редактирования Руководства
         edit_guide_page = EditGuidePage(self, guide.pk)
@@ -48,15 +37,7 @@ class GuidesTest(FunctionalTest):
         """тест: всплывающая подсказка tooltip из script.js и bootstrap загружена и работает"""
         # Гал имеет созданное руководство
         # Он сразу переходит на страницу Руководства
-        guide_page, _, _ = self.create_user_guide_and_go_to_guide_page()
-
-
-        # user = self.create_user_and_pre_authenticated_session()
-        # guide = self.create_guide(user)
-        #
-        # # Он заходит на страницу руководства
-        # detail_guide_page = DetailGuidePage(self, guide.pk)
-        # detail_guide_page.go_to_page()
+        guide_page, _, _ = create_user_guide_and_go_to_guide_page(self)
 
         # Наводит мышку на кнопку добавления Сататьи
         guide_page.new_article_btn.hover()
@@ -165,17 +146,8 @@ class GuidesTest(FunctionalTest):
 
         # Гал хочет отредактировать свое первое Руководство.
         # Он сразу переходит на страницу Руководства
-        guide_page, _, _ = self.create_user_guide_and_go_to_guide_page()
+        guide_page, _, _ = create_user_guide_and_go_to_guide_page(self)
 
-        # # Он зарегестрированный пользователь и залогиненый пользователь
-        # user = self.create_user_and_pre_authenticated_session()
-        #
-        # # Оно у него уже есть
-        # guide = self.create_guide(user)
-        #
-        # # Он заходит на страницу Руководства
-        # detail_guide_page = DetailGuidePage(self, guide.pk)
-        # detail_guide_page.go_to_page()
         self.assertIn(
             TEST_GUIDE_NAME,
             guide_page.page_title,
@@ -255,7 +227,7 @@ class GuidesTest(FunctionalTest):
 
         # Гал имеет написанное руководство, но он не хочет чтобы оно было, а хочет его удалить
         # Сразу переходит на страницу Руководства
-        guide_page, _, _ = self.create_user_guide_and_go_to_guide_page()
+        guide_page, _, _ = create_user_guide_and_go_to_guide_page(self)
 
         # Нажимает на кнопку с тремя точками
         guide_page.guide_menu_btn.click()
