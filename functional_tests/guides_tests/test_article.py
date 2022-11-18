@@ -57,4 +57,6 @@ class ArticleTest(FunctionalTest):
         self.assertTrue(detail_guide_page.find_text(TEST_ARTICLE_NAME))
         self.assertTrue(detail_guide_page.find_text(TEST_ARTICLE_TEXT))
 
+        print('Меняю master')
+
         # Гал рад, что все получилось
