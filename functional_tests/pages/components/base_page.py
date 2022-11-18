@@ -42,3 +42,7 @@ class BasePage(object):
             'Невозможно зайти на страницу. Текущий Title страницы: ' + self.page_title
         )
         return self
+
+    def is_text_on_page(self, text) -> str:
+        """Найти текст на странице"""
+        return self._browser.find_element(By.XPATH, f"//*[text()='{text}']").text

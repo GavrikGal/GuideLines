@@ -1,8 +1,3 @@
-import time
-from unittest import skip
-
-from selenium.webdriver.common.by import By
-
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.detail_guide_page import DetailGuidePage
 from functional_tests.pages.new_article_page import NewArticlePage
@@ -54,7 +49,7 @@ class ArticleTest(FunctionalTest):
         )
 
         # Где он видит созданную им статью
-        self.assertTrue(detail_guide_page.find_text(TEST_ARTICLE_NAME))
-        self.assertTrue(detail_guide_page.find_text(TEST_ARTICLE_TEXT))
+        self.assertTrue(detail_guide_page.is_text_on_page(TEST_ARTICLE_NAME))
+        self.assertTrue(detail_guide_page.is_text_on_page(TEST_ARTICLE_TEXT))
 
         # Гал рад, что все получилось

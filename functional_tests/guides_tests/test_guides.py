@@ -117,12 +117,12 @@ class GuidesTest(FunctionalTest):
         # А на ней красуется название Руководства
         self.assertEqual(
             TEST_GUIDE_NAME,
-            detail_guide_page.find_text(TEST_GUIDE_NAME)
+            detail_guide_page.is_text_on_page(TEST_GUIDE_NAME)
         )
         # и описание
         self.assertEqual(
             TEST_GUIDE_DESCRIPTION,
-            detail_guide_page.find_text(TEST_GUIDE_DESCRIPTION)
+            detail_guide_page.is_text_on_page(TEST_GUIDE_DESCRIPTION)
         )
 
         # И Гал видит, что автором руководства является он Сам. Красавчик!

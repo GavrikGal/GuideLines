@@ -29,9 +29,9 @@ class DetailGuidePage(BasePage):
         """Обложка Руководства"""
         return self._browser.find_element(By.ID, 'guide').find_element(By.TAG_NAME, 'img')
 
-    def find_text(self, text) -> str:
-        """Найти текст на странице"""
-        return self._browser.find_element(By.XPATH, f"//*[text()='{text}']").text
+    # def find_text(self, text) -> str:
+    #     """Найти текст на странице"""
+    #     return self._browser.find_element(By.XPATH, f"//*[text()='{text}']").text
 
     @property
     def guide_author(self) -> str:
