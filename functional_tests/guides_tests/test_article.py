@@ -57,15 +57,4 @@ class ArticleTest(FunctionalTest):
         self.assertTrue(detail_guide_page.find_text(TEST_ARTICLE_NAME))
         self.assertTrue(detail_guide_page.find_text(TEST_ARTICLE_TEXT))
 
-        print('_______Меняю master___________')
-        print('Это экспериментальная ветка 1')
-        print('Мне понадобилось переключиться на еще одну экспериментальную ветку №2')
-
-        print('Новая ветка 2')
-        print('Работаем работу')
-        print('Все сделали в ветке-2')
-        print('Пробуем смерджить с мастером и вернуться к ветке-1')
-
-        print('Вернулся на ветку 1 после мерджа ветки 2 с мастером')
-
         # Гал рад, что все получилось
