@@ -1,20 +1,67 @@
+from os.path import splitext, basename
+
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
-
+from functional_tests.const import (
+    TEST_LAST_NAME, TEST_GUIDE_NAME, TEST_FIRST_NAME,
+    TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH
+)
+from functional_tests.utils.services import create_user_guide_and_go_to_guide_page
 
 
 class HomePageTest(FunctionalTest):
     """тест главной страницы"""
 
-    def test_guides_are_present_on_home_page(self) -> None:
+    def test_guides_are_present(self) -> None:
         """Тест. Созданное руководство видно на главной странице"""
 
         # Гал зареганный пользователь, который создал Руководство
+        _, guide, _ = create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url)
 
         # Он переходит на главную страницу Системы
+        home_page = HomePage(self.browser, self.live_server_url)
+        home_page.go_to_page()
 
-        # И видит обложку своего Руководства
+        # И там видит название своего Руководства
+        self.assertEqual(
+            TEST_GUIDE_NAME,
+            home_page.is_text_present(TEST_GUIDE_NAME),
+            'Нет названия Руководства'
+        )
+        print(TEST_GUIDE_NAME)
 
+        # Описание Руководства
+        self.assertEqual(
+            TEST_GUIDE_DESCRIPTION,
+            home_page.is_text_present(TEST_GUIDE_DESCRIPTION),
+            'Нет описания Руководства'
+        )
+
+        # То, что он автор руководства
+        self.assertIn(
+            TEST_FIRST_NAME,
+            home_page.get_guide_author(guide.pk),
+            'Нет имени автора Руководства'
+        )
+        self.assertIn(
+            TEST_LAST_NAME,
+            home_page.get_guide_author(guide.pk),
+            'Нет фамилии автора Руководства'
+        )
+
+        # И видит картинку обложки своего Руководства
+        cover_img = home_page.get_guide_cover_img(guide.pk)
+        self.assertTrue(
+            cover_img.is_displayed(),
+            'Картинка обложки Руководства не отображается'
+        )
+        self.assertIn(
+            splitext(basename(TEST_GUIDE_COVER_IMG_PATH))[0],
+            cover_img.get_attribute('src'),
+            'Не та картинка Руководства'
+        )
+
+        self.fail('Доделать')
 
     def test_layout_and_CSS_styling(self) -> None:
         """тест макета и стилевого оформления"""
