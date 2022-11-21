@@ -15,7 +15,6 @@ from functional_tests.const import (
     TEST_LAST_NAME,
 )
 from functional_tests.pages.detail_guide_page import DetailGuidePage
-from functional_tests.base import FunctionalTest
 from guides.models import Guide, CustomUser
 
 

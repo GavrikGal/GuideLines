@@ -9,7 +9,8 @@ from functional_tests.const import (
     TEST_LAST_NAME, TEST_GUIDE_NAME, TEST_FIRST_NAME,
     TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH, TEST_GUIDE_NEW_COVER_IMG_PATH
 )
-from functional_tests.utils.services import create_user_guide_and_go_to_guide_page
+from functional_tests.utils.services import create_user_guide_and_go_to_guide_page, \
+    create_user_and_pre_authenticated_session
 
 
 class GuidesTest(FunctionalTest):
@@ -51,7 +52,7 @@ class GuidesTest(FunctionalTest):
         """тест можно создать новое руководство"""
         # Гал хочет создать свое первое Руководство.
         # Он зарегестрированный пользователь и залогиненый пользователь
-        self.create_user_and_pre_authenticated_session()
+        create_user_and_pre_authenticated_session(self.browser, self.live_server_url)
 
         # Он открывает главную страницу
         home_page = HomePage(self.browser, self.live_server_url)
