@@ -23,16 +23,14 @@ class HomePageTest(FunctionalTest):
         home_page.go_to_page()
 
         # И там видит название своего Руководства
-        self.assertEqual(
-            TEST_GUIDE_NAME,
+        self.assertTrue(
             home_page.is_text_present(TEST_GUIDE_NAME),
             'Нет названия Руководства'
         )
         print(TEST_GUIDE_NAME)
 
         # Описание Руководства
-        self.assertEqual(
-            TEST_GUIDE_DESCRIPTION,
+        self.assertTrue(
             home_page.is_text_present(TEST_GUIDE_DESCRIPTION),
             'Нет описания Руководства'
         )

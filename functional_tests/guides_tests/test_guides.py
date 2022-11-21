@@ -116,13 +116,11 @@ class GuidesTest(FunctionalTest):
         )
 
         # А на ней красуется название Руководства
-        self.assertEqual(
-            TEST_GUIDE_NAME,
+        self.assertTrue(
             detail_guide_page.is_text_present(TEST_GUIDE_NAME)
         )
         # и описание
-        self.assertEqual(
-            TEST_GUIDE_DESCRIPTION,
+        self.assertTrue(
             detail_guide_page.is_text_present(TEST_GUIDE_DESCRIPTION)
         )
 

@@ -1,4 +1,4 @@
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.remote.webdriver import WebElement
@@ -50,6 +50,12 @@ class BasePage(object):
 
         return self
 
-    def is_text_present(self, text) -> str:
+    def is_text_present(self, text) -> bool:
         """Найти текст на странице"""
-        return self._browser.find_element(By.XPATH, f"//*[text()='{text}']").text
+        try:
+            if text in self._browser.find_element(By.XPATH, f"//*[text()='{text}']").text:
+                return True
+            else:
+                return False
+        except NoSuchElementException:
+            return False
