@@ -17,7 +17,7 @@
 <div class="row mb-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 g-4" id="guides">
     {% for guide in guides %}
     <div class="col">
-        <a href="#"
+        <a href="{% url 'guides:detail_guide' pk=guide.pk %}"
            id="id_guide_{{ guide.pk }}"
            class="btn w-100 p-0">
             <div class="card bg-dark text-light text-start" >

@@ -13,6 +13,10 @@ class HomePage(BasePage):
         super().__init__(browser, live_server_url, '/')  # установка адреса страницы
         self.new_guide_btn = BaseButton(self._browser, name="new_guide_btn")
 
+    def get_guide(self, pk: int) -> WebElement:
+        """Руководство с соответствующим pk"""
+        return self._browser.find_element(By.ID, f'id_guide_{pk}')
+
     def get_guide_cover_img(self, pk: int) -> WebElement:
         """Картинка обложки Руководства"""
         return self._browser.find_element(By.ID, f'id_guide_{pk}').find_element(By.TAG_NAME, 'img')

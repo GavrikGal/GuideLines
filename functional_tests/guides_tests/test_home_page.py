@@ -12,6 +12,29 @@ from functional_tests.utils.services import create_user_guide_and_go_to_guide_pa
 class HomePageTest(FunctionalTest):
     """тест главной страницы"""
 
+    def test_guide_can_be_opened(self) -> None:
+        """Тестирует можно ли перейти на страницу Руководства с главной"""
+
+        # Гал зарезанный пользователь, имеющий своё Руководство
+        guide_page, guide, _ = create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url)
+
+        # Он заходит на главную
+        home_page = HomePage(self.browser, self.live_server_url)
+        home_page.go_to_page()
+
+        # Нажимает на своё руководство
+        guide_btn = home_page.get_guide(guide.pk)
+        guide_btn.click()
+
+        # И его переносит на страницу Руководства
+        self.assertIn(
+            guide.name,
+            guide_page.page_title,
+            'Не перешло на страницу руководства'
+        )
+
+        self.fail('Доделать')
+
     def test_guides_are_present(self) -> None:
         """Тест. Созданное руководство видно на главной странице"""
 
