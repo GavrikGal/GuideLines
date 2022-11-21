@@ -21,13 +21,15 @@ class NewArticleView(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('guides:detail_guide', kwargs={'pk': self.kwargs.get('guide_pk')})
+        return reverse_lazy('guides:detail_guide', kwargs={'guide_pk': self.kwargs.get('guide_pk')})
 
 
 class DeleteGuideView(DeleteView):
     """Удаление Руководства"""
     model = Guide
     success_url = reverse_lazy('guides:home_page')
+    slug_field = 'pk'
+    slug_url_kwarg = 'guide_pk'
 
 
 class UpdateGuideView(UpdateView):
@@ -35,9 +37,11 @@ class UpdateGuideView(UpdateView):
     model = Guide
     form_class = UpdateGuideForm
     template_name = 'guide/edit.html'
+    slug_field = 'pk'
+    slug_url_kwarg = 'guide_pk'
 
     def get_success_url(self):
-        return reverse_lazy('guides:detail_guide', kwargs={'pk': self.object.pk})
+        return reverse_lazy('guides:detail_guide', kwargs={'guide_pk': self.object.pk})
 
 
 class RegistrationView(CreateView):
@@ -70,7 +74,7 @@ class NewGuideView(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('guides:detail_guide', kwargs={'pk': self.object.pk})
+        return reverse_lazy('guides:detail_guide', kwargs={'guide_pk': self.object.pk})
 
 
 class DetailGuideView(DetailView):
@@ -78,6 +82,8 @@ class DetailGuideView(DetailView):
     model = Guide
     context_object_name = 'guide'
     template_name = 'guide/detail.html'
+    slug_field = 'pk'
+    slug_url_kwarg = 'guide_pk'
 
 
 def new_article_view(request):

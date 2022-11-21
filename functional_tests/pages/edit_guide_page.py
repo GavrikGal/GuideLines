@@ -14,7 +14,7 @@ class EditGuidePage(BasePage):
 
     def __init__(self, browser: WebDriver, live_server_url: str, pk: int = 1) -> None:
         # установка адреса страницы, тестовый pk=1
-        super().__init__(browser, live_server_url, reverse('guides:edit_guide', kwargs={'pk': pk}))
+        super().__init__(browser, live_server_url, reverse('guides:edit_guide', kwargs={'guide_pk': pk}))
         self.guide_name_field = InputField(browser, 'id_name')
         self.description_field = InputField(browser, 'id_description')
         self.save_guide_btn = SubmitButton(browser)

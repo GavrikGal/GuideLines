@@ -13,7 +13,7 @@ class DetailGuidePage(BasePage):
 
     def __init__(self, browser: WebDriver, live_server_url: str, pk: int = 1) -> None:
         # установка адреса страницы, тестовый pk=1
-        super().__init__(browser, live_server_url, reverse('guides:detail_guide', kwargs={'pk': pk}))
+        super().__init__(browser, live_server_url, reverse('guides:detail_guide', kwargs={'guide_pk': pk}))
         self.edit_guide_btn = BaseButton(browser, id_="id_edit_guide_btn")
         self.delete_guide_btn = BaseButton(browser, id_="id_delete_guide_btn")
         self.confirm_delete_guide_btn = BaseButton(browser, id_='id_confirm_delete_guide_btn')

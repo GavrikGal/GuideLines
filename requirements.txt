@@ -6,11 +6,13 @@ certifi==2022.9.24
 cffi==1.15.1
 Django==4.1.1
 django-bootstrap-v5==1.0.11
+django-cleanup==6.0.0
 exceptiongroup==1.0.0rc9
 h11==0.14.0
 idna==3.4
 outcome==1.2.0
 Pillow==9.2.0
+psycopg2==2.9.5
 pycparser==2.21
 PySocks==1.7.1
 selenium==4.5.0

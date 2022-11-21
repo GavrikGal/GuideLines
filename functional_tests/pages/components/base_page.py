@@ -38,6 +38,7 @@ class BasePage(object):
     def go_to_page(self) -> 'BasePage':
         """перейти на страницу"""
         self._browser.get(self.live_server_url + self.page_url)
+
         # Подождать пока загрузится страница
         timeout = 2
         try:
