@@ -5,9 +5,12 @@ from shutil import rmtree
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import signals
+from django.db.models.query import QuerySet
 from django.test import TestCase
 
+
 import guides.models
+from .views import HomePageView
 from .models import CustomUser, Guide
 
 
@@ -23,12 +26,37 @@ TEST_GUIDE_DESCRIPTION = 'Моё описание к первому тестов
 TEST_GUIDE_COVER_IMG_NAME = 'gal-guide-cover-12345.jpg'
 
 
-class ReadyUnitTest(TestCase):
-    """Модульное тестирование"""
+class HomePageViewTest(TestCase):
+    """Тестирования вьюхи главной страницы"""
 
-    def test_can_start_test(self) -> None:
-        """тесты могут запускаться"""
-        self.assertEqual(1 + 2, 3)
+    def test_guides_is_in_context_data(self) -> None:
+        """Тестирует есть ли в context_data главной страницы Руководства Guides"""
+        view = HomePageView()
+
+        self.assertIn(
+            'guides',
+            view.get_context_data()
+        )
+
+    def test_guides_in_context_data_is_set(self) -> None:
+        """Тестирует есть ли в context_data главной страницы Руководства Guides"""
+        view = HomePageView()
+
+        self.assertIsInstance(
+            view.get_context_data()['guides'],
+            QuerySet
+        )
+
+    def test_guides_in_context_data_is_present(self) -> None:
+        """Тестирует чтоб ключ guides в context_data возвращал не пустой Set"""
+        view = HomePageView()
+        Guide.objects.create(name=TEST_GUIDE_NAME,
+                             author=CustomUser.objects.create(username=TEST_USERNAME))
+
+        self.assertIsNot(
+            0,
+            len(view.get_context_data()['guides'])
+        )
 
 
 class CustomUserModelTest(TestCase):
@@ -88,3 +116,12 @@ class GuideModelTest(TestCase):
             user.username + '/' + splitext(TEST_GUIDE_COVER_IMG_NAME)[0],
             upload_path
         )
+
+
+
+class ReadyUnitTest(TestCase):
+    """Модульное тестирование"""
+
+    def test_can_start_test(self) -> None:
+        """тесты могут запускаться"""
+        self.assertEqual(1 + 2, 3)

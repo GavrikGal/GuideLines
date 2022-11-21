@@ -27,7 +27,6 @@ class HomePageTest(FunctionalTest):
             home_page.is_text_present(TEST_GUIDE_NAME),
             'Нет названия Руководства'
         )
-        print(TEST_GUIDE_NAME)
 
         # Описание Руководства
         self.assertTrue(

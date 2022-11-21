@@ -51,6 +51,12 @@ class HomePageView(TemplateView):
     """Главная страница"""
     template_name = 'main.html'
 
+    def get_context_data(self, **kwargs):
+        """Добавляет Руководства в контекст страницы"""
+        context = super().get_context_data(**kwargs)
+        context['guides'] = Guide.objects.all()
+        return context
+
 
 class NewGuideView(CreateView):
     """Создание нового Руководства"""
