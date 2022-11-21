@@ -2,8 +2,19 @@ from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
 
 
+
 class HomePageTest(FunctionalTest):
     """тест главной страницы"""
+
+    def test_guides_are_present_on_home_page(self) -> None:
+        """Тест. Созданное руководство видно на главной странице"""
+
+        # Гал зареганный пользователь, который создал Руководство
+
+        # Он переходит на главную страницу Системы
+
+        # И видит обложку своего Руководства
+
 
     def test_layout_and_CSS_styling(self) -> None:
         """тест макета и стилевого оформления"""
