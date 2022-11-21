@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load bootstrap5 %}
+{% load static %}
 
 {% block title %}
     Главная
@@ -11,14 +12,32 @@
         <a href="{% url 'guides:new_guide' %}">
             {% bootstrap_button content='Новое Руководство' name='new_guide_btn'%}
         </a>
-    {% else %}
-        <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut consectetur, consequuntur corporis deserunt
-            error ex exercitationem libero maiores molestiae nam omnis, porro quaerat quam quidem recusandae rem
-            repellat voluptatum? Impedit.
-        </div>
-        <div>Ad consequuntur culpa cupiditate eligendi laudantium magni obcaecati officiis quia, quidem sit. Accusantium
-            exercitationem hic ipsa laudantium ut. A aliquam aperiam aut corporis debitis, dolor facere id illum
-            provident unde?
-        </div>
     {% endif %}
+
+<div class="row mb-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 g-4" id="guides">
+    {% for guide in guides %}
+    <div class="col">
+        <a href="#"
+           id="id_guide_{{ guide.pk }}"
+           class="btn w-100 p-0">
+            <div class="card bg-dark text-light text-start" >
+                {% if guide.cover %}
+                    <img src="{{ guide.cover.url }}" class="card-img" alt="">
+                {% else %}
+                    <img src="{% static 'img/default-guide-cover.jpg' %}" class="card-img" alt="">
+                {% endif %}
+
+
+                <div class="card-body">
+                    <h2 class="h3 card-title mb-4">{{ guide.name }}</h2>
+                    <p class="card-text">{{ guide.description }}</p>
+                </div>
+                <div class="card-footer border-light">
+                    <p class="card-text text-end ">{{ guide.author.first_name }} {{ guide.author.last_name }}</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

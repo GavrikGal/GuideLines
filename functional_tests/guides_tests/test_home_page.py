@@ -58,8 +58,6 @@ class HomePageTest(FunctionalTest):
             'Не та картинка Руководства'
         )
 
-        self.fail('Доделать')
-
     def test_layout_and_CSS_styling(self) -> None:
         """тест макета и стилевого оформления"""
 
