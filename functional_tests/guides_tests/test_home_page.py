@@ -33,8 +33,6 @@ class HomePageTest(FunctionalTest):
             'Не перешло на страницу руководства'
         )
 
-        self.fail('Доделать')
-
     def test_guides_are_present(self) -> None:
         """Тест. Созданное руководство видно на главной странице"""
 
