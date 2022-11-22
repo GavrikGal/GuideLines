@@ -42,3 +42,13 @@
 #guides .card-footer {
 	position: relative;
 }
+
+#article {
+	position: relative;
+}
+
+#article .dropdown {
+	position: absolute;
+	right: 0;
+	top: 0;
+}

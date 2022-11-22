@@ -4,6 +4,16 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CustomUser, Guide, Article
 
 
+class UpdateArticleForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['text'].widget.attrs.update(rows='4')
+
+    class Meta:
+        model = Article
+        fields = ['name', 'text']
+
+
 class CreationArticleForm(ModelForm):
 
     class Meta:

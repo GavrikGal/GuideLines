@@ -5,8 +5,18 @@ from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
 
 
-from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm, CreationArticleForm
+from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm, CreationArticleForm, UpdateArticleForm
 from .models import Guide, Article
+
+
+class UpdateArticleView(UpdateView):
+    """Обновление (редактирование) Статьи"""
+    model = Article
+    form_class = UpdateArticleForm
+    template_name = 'article/edit.html'
+
+    def get_success_url(self):
+        return self.success_url
 
 
 class DetailArticleView(DetailView):

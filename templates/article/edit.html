@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% load bootstrap5 %}
+{% load static %}
+
+{% block title %}
+    Редактировать
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center pt-5">
+    <div class="col-md-8">
+        <form method="post" class="form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form form show_label='skip' field_class='mb-4' layout='horizontal'%}
+            <div class="row mt-4">
+
+            {% buttons %}
+                <button type="submit" class="btn btn-primary float-end">Сохранить Статью</button>
+            {% endbuttons %}
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

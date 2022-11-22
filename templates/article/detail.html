@@ -8,6 +8,20 @@
 {% endblock %}
 
 {% block content %}
-<h2 class="text-center">{{ article.name }}</h2>
-    <p class="text">{{ article.text }}</p>
+    <article id="article">
+        <h2 class="text-center">{{ article.name }}</h2>
+        <div class="dropdown">
+            <a href="#" class="btn rounded-circle text-dark my-1 mx-4 p-1" id="id_article_menu_btn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                  <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                </svg>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="article_menu_btn" id="id_article_menu">
+                <li><a class="dropdown-item" href="{% url 'guides:edit_article' guide_pk=article.guide.pk pk=article.pk %}" id="id_edit_article_btn">Редактировать</a></li>
+                <li><a class="dropdown-item text-danger" href="#" id="id_delete_article_btn" data-bs-toggle="modal" data-bs-target="#id_modal_delete_panel">Удалить</a></li>
+            </ul>
+        </div>
+
+        <p class="text">{{ article.text }}</p>
+    </article>
 {% endblock %}

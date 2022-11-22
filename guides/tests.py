@@ -10,7 +10,7 @@ from django.test import TestCase
 
 
 import guides.models
-from .views import HomePageView
+from .views import HomePageView, UpdateArticleView
 from .models import CustomUser, Guide
 
 
@@ -24,6 +24,20 @@ TEST_GUIDE_NAME = 'Моё первое тестовое руководство'
 TEST_GUIDE_DESCRIPTION = 'Моё описание к первому тестовому руководству. Должно быть много букф, но ' \
                          'надо немного сократиться. Пока. Это было круто'
 TEST_GUIDE_COVER_IMG_NAME = 'gal-guide-cover-12345.jpg'
+
+
+class ArticleViewTest(TestCase):
+    """Тестирование вьюхи Статьи"""
+
+    def test_update_success_url(self) -> None:
+        """Тестирует правильно ли сформирован success_url"""
+        view = UpdateArticleView()
+
+
+        print(view.get_success_url())
+        print(view.kwargs)
+
+        self.fail('Доделать')
 
 
 class HomePageViewTest(TestCase):

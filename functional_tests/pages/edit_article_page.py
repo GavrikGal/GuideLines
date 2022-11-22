@@ -17,5 +17,5 @@ class EditArticlePage(BasePage):
         super().__init__(browser, live_server_url, reverse('guides:edit_article', kwargs={'guide_pk': guide_pk,
                                                                                           'pk': pk}))
         self.article_name_field = InputField(browser, 'id_name')
-        self.text_field = InputField(browser, 'id_description')
+        self.text_field = InputField(browser, 'id_text')
         self.save_article_btn = SubmitButton(browser)
