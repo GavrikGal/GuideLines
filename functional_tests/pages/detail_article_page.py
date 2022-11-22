@@ -15,11 +15,11 @@ class DetailArticlePage(BasePage):
         # установка адреса страницы, тестовый pk=1
         super().__init__(browser, live_server_url, reverse('guides:detail_article', kwargs={'guide_pk': guide_pk,
                                                                                             'pk': pk}))
-        # self.edit_guide_btn = BaseButton(browser, id_="id_edit_guide_btn")
+        self.edit_article_btn = BaseButton(browser, id_="id_edit_article_btn")
         # self.delete_guide_btn = BaseButton(browser, id_="id_delete_guide_btn")
         # self.confirm_delete_guide_btn = BaseButton(browser, id_='id_confirm_delete_guide_btn')
-        # self.guide_menu_btn = BaseButton(browser, id_='id_guide_menu_btn')
-        # self.guide_menu = BasePanel(browser, _panel_id='id_guide_menu')
+        self.article_menu_btn = BaseButton(browser, id_='id_article_menu_btn')
+        self.article_menu = BasePanel(browser, _panel_id='id_article_menu')
         # self.modal_delete_panel = BasePanel(browser, _panel_id='id_modal_delete_panel')
 
     # @property

@@ -12,10 +12,37 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 
 from functional_tests.const import (
     TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH, TEST_GUIDE_NAME, TEST_USERNAME, TEST_PASSWORD, TEST_FIRST_NAME,
-    TEST_LAST_NAME,
+    TEST_LAST_NAME, TEST_ARTICLE_NAME, TEST_ARTICLE_TEXT,
 )
 from functional_tests.pages.detail_guide_page import DetailGuidePage
-from guides.models import Guide, CustomUser
+from guides.models import Guide, CustomUser, Article
+
+
+def create_user_guide_article_then_go_to_guide_page(
+        browser: WebDriver,
+        live_server_url: str,
+        description: Optional[str] = TEST_GUIDE_DESCRIPTION,
+        cover_path: Optional[str] = TEST_GUIDE_COVER_IMG_PATH) -> tuple[DetailGuidePage, Guide, CustomUser, Article]:
+    """
+    Создает залогиненогого пользователя CustomUser, Руководство Guide
+    и переходит настраницу Руководства.
+    :param browser: Драйвер вэб-браузера
+    :param live_server_url: корневой адрес веб-приложения
+    :param description: Добавить описание. Опциональный. По умолчанию const.TEST_GUIDE_DESCRIPTION.
+    При None - без описания
+    :param cover_path: Путь к обложке Руководства. Опциональный. По умолчанию const.TEST_GUIDE_COVER_IMG_PATH.
+    При None - без обложки
+    :return: кортеж из тест-страницы Руководства DetailGuidePage, Руководства Guide, пользователя CustomUser
+    """
+    user = create_user_and_pre_authenticated_session(browser, live_server_url)
+    guide = create_guide(user, description=description, cover_path=cover_path)
+    article = Article.objects.create(name=TEST_ARTICLE_NAME,
+                                     text=TEST_ARTICLE_TEXT,
+                                     author=user,
+                                     guide=guide)
+    detail_guide_page = DetailGuidePage(browser, live_server_url, guide.pk)
+    detail_guide_page.go_to_page()
+    return detail_guide_page, guide, user, article
 
 
 def create_user_guide_and_go_to_guide_page(
