@@ -11,7 +11,7 @@ from django.test import TestCase
 
 import guides.models
 from .views import HomePageView, UpdateArticleView
-from .models import CustomUser, Guide
+from .models import CustomUser, Guide, Article
 
 
 TEST_USERNAME = 'username_gal_test'
@@ -24,6 +24,7 @@ TEST_GUIDE_NAME = 'Моё первое тестовое руководство'
 TEST_GUIDE_DESCRIPTION = 'Моё описание к первому тестовому руководству. Должно быть много букф, но ' \
                          'надо немного сократиться. Пока. Это было круто'
 TEST_GUIDE_COVER_IMG_NAME = 'gal-guide-cover-12345.jpg'
+TEST_ARTICLE_NAME = 'Моя первая тестовая статья'
 
 
 class ArticleViewTest(TestCase):
@@ -31,11 +32,24 @@ class ArticleViewTest(TestCase):
 
     def test_update_success_url(self) -> None:
         """Тестирует правильно ли сформирован success_url"""
-        view = UpdateArticleView()
 
+        # todo: переделать article-объект на mock-объект
+
+        user = CustomUser(username=TEST_USERNAME)
+        user.save()
+        guide = Guide(name=TEST_GUIDE_NAME, author=user)
+        guide.save()
+        article = Article(name=TEST_ARTICLE_NAME, guide=guide, author=user)
+        article.save()
+        view = UpdateArticleView()
+        view.object = article
 
         print(view.get_success_url())
-        print(view.kwargs)
+
+        self.assertEqual(
+            f'/guides/{guide.pk}/articles/{article.pk}/',
+            view.get_success_url()
+        )
 
         self.fail('Доделать')
 

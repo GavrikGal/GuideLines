@@ -84,8 +84,6 @@ class ArticleTest(FunctionalTest):
             'Невозможно зайти на страницу Руководства'
         )
 
-        self.fail('Доделать')
-
     def test_can_open_article(self) -> None:
         """тестирует можно ли открыть страницу Статьи"""
 

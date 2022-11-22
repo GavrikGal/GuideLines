@@ -16,7 +16,8 @@ class UpdateArticleView(UpdateView):
     template_name = 'article/edit.html'
 
     def get_success_url(self):
-        return self.success_url
+        return reverse_lazy('guides:detail_article', kwargs={'guide_pk': self.object.guide.pk,
+                                                             'pk': self.object.pk})
 
 
 class DetailArticleView(DetailView):
