@@ -7,6 +7,22 @@ from functional_tests.utils.services import create_user_guide_and_go_to_guide_pa
 class ArticleTest(FunctionalTest):
     """тесты Статей"""
 
+    def test_can_open_article(self) -> None:
+        """тестирует можно ли открыть страницу Статьи"""
+
+        # Гал заходит на страницу своего Руководства
+
+        # у него уже есть созданная Статья
+
+        # Видит там созданную им Статью
+
+        # Нажимает на нее
+
+        # Его перемещает на страницу Статьи
+
+        # Гал рад
+        self.fail("Доделать")
+
     def test_can_create_new_article(self) -> None:
         """тест можно создать новую статью"""
 
