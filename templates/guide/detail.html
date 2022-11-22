@@ -43,8 +43,8 @@
 <div class="row mb-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 g-4" id="articles">
     {% for article in guide.article_set.all %}
     <div class="col">
-        <a href="#"
-           id="id_article_{{ article.pk }}_btn"
+        <a href="{% url 'guides:detail_article' guide_pk=guide.pk pk=article.pk%}"
+           id="id_article_{{ article.pk }}"
            class="btn w-100 p-0">
             <div class="card bg-dark text-light text-start" >
                 <div class="card-body">

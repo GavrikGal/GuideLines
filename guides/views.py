@@ -6,7 +6,14 @@ from django.views.generic import TemplateView
 
 
 from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm, CreationArticleForm
-from .models import Guide
+from .models import Guide, Article
+
+
+class DetailArticleView(DetailView):
+    """Детальный просмотр Статьи"""
+    model = Article
+    context_object_name = 'article'
+    template_name = 'article/detail.html'
 
 
 class NewArticleView(CreateView):
@@ -86,7 +93,7 @@ class DetailGuideView(DetailView):
     slug_url_kwarg = 'guide_pk'
 
 
-def new_article_view(request):
+def detail_article_view(request):
     """Заглушка"""
     pass
 

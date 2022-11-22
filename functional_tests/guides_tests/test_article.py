@@ -1,7 +1,10 @@
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.new_article_page import NewArticlePage
+from functional_tests.pages.detail_article_page import DetailArticlePage
 from functional_tests.const import (TEST_ARTICLE_NAME, TEST_ARTICLE_TEXT)
 from functional_tests.utils.services import create_user_guide_and_go_to_guide_page
+
+from guides.models import Article
 
 
 class ArticleTest(FunctionalTest):
@@ -10,18 +13,30 @@ class ArticleTest(FunctionalTest):
     def test_can_open_article(self) -> None:
         """тестирует можно ли открыть страницу Статьи"""
 
-        # Гал заходит на страницу своего Руководства
+        # У Гала есть Руководсто
+        guides_page, guide, user = create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url)
 
-        # у него уже есть созданная Статья
+        # Также у него уже есть созданная Статья
+        article = Article.objects.create(name=TEST_ARTICLE_NAME,
+                                         text=TEST_ARTICLE_TEXT,
+                                         author=user,
+                                         guide=guide)
+
+        # Гал заходит на страницу Руководства
+        guides_page.go_to_page()
 
         # Видит там созданную им Статью
+        article_btn = guides_page.get_article(article.pk)
 
         # Нажимает на нее
+        article_btn.click()
 
         # Его перемещает на страницу Статьи
-
-        # Гал рад
-        self.fail("Доделать")
+        article_page = DetailArticlePage(self.browser, self.live_server_url, guide.pk, article.pk)
+        self.assertIn(
+            TEST_ARTICLE_NAME,
+            article_page.page_title
+        )
 
     def test_can_create_new_article(self) -> None:
         """тест можно создать новую статью"""

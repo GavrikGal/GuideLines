@@ -31,3 +31,7 @@ class DetailGuidePage(BasePage):
     def guide_author(self) -> str:
         """Имя автора Руководства"""
         return self._browser.find_element(By.ID, 'guide').find_element(By.CLASS_NAME, 'card-footer').text
+
+    def get_article(self, pk: int) -> WebElement:
+        """Статья с соответствующим pk"""
+        return self._browser.find_element(By.ID, f'id_article_{pk}')
