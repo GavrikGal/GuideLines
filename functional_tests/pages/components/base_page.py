@@ -51,6 +51,10 @@ class BasePage(object):
 
         return self
 
+    def go_to_page_without_wait(self) -> None:
+        """переходит на страницу не ожидая её загрузки"""
+        self._browser.get(self.live_server_url + self.page_url)
+
     def is_text_present(self, text) -> bool:
         """Найти текст на странице"""
         try:

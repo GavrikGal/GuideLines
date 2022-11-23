@@ -1,9 +1,8 @@
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
-
+from django.urls import reverse_lazy
 
 from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm, CreationArticleForm, UpdateArticleForm
 from .models import Guide, Article
@@ -88,10 +87,10 @@ class HomePageView(TemplateView):
         return context
 
 
-class NewGuideView(CreateView):
+class NewGuideView(LoginRequiredMixin, CreateView):
     """Создание нового Руководства"""
+    login_url = reverse_lazy('login')
     form_class = CreationGuideForm
-    # success_url = reverse_lazy('guides:detail_guide', kwargs={'pk': self.pk})
     template_name = 'guide/new.html'
 
     def form_valid(self, form):
