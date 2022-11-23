@@ -1,13 +1,14 @@
 from os.path import exists
 from os.path import splitext
 from shutil import rmtree
+from unittest.mock import Mock
 
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import signals
 from django.db.models.query import QuerySet
 from django.test import TestCase
-
+from django.urls import reverse_lazy
 
 import guides.models
 from .views import HomePageView, UpdateArticleView
@@ -31,27 +32,22 @@ class ArticleViewTest(TestCase):
     """Тестирование вьюхи Статьи"""
 
     def test_update_success_url(self) -> None:
-        """Тестирует правильно ли сформирован success_url"""
+        """Тестирует правильно ли формируется success_url методом get_success_url"""
 
-        # todo: переделать article-объект на mock-объект
+        test_guide_pk = 1
+        test_article_pk = 1
 
-        user = CustomUser(username=TEST_USERNAME)
-        user.save()
-        guide = Guide(name=TEST_GUIDE_NAME, author=user)
-        guide.save()
-        article = Article(name=TEST_ARTICLE_NAME, guide=guide, author=user)
-        article.save()
+        mock_article = Mock()
+        mock_article.pk = test_article_pk
+        mock_article.guide.pk = test_guide_pk
+
         view = UpdateArticleView()
-        view.object = article
-
-        print(view.get_success_url())
+        view.object = mock_article
 
         self.assertEqual(
-            f'/guides/{guide.pk}/articles/{article.pk}/',
+            reverse_lazy('guides:detail_article', kwargs={'guide_pk': test_guide_pk, 'pk': test_article_pk}),
             view.get_success_url()
         )
-
-        self.fail('Доделать')
 
 
 class HomePageViewTest(TestCase):
