@@ -24,4 +24,27 @@
 
         <p class="text">{{ article.text }}</p>
     </article>
+
+     <!-- Modal -->
+<div class="modal fade" id="id_modal_delete_panel" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Удаление Статьи</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <p>Вы точно хотите удалить: <span class="fw-bold">{{ article.name }}</span>?</p>
+          <p>Восстановлени будет невозможно</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <form method="POST" action="{% url "guides:delete_article" guide_pk=article.guide.pk pk=article.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" id="id_confirm_delete_article_btn" >Удалить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

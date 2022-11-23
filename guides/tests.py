@@ -11,7 +11,7 @@ from django.test import TestCase
 from django.urls import reverse_lazy
 
 import guides.models
-from .views import HomePageView, UpdateArticleView
+from .views import HomePageView, UpdateArticleView, DeleteArticleView
 from .models import CustomUser, Guide, Article
 
 
@@ -30,6 +30,22 @@ TEST_ARTICLE_NAME = 'Моя первая тестовая статья'
 
 class ArticleViewTest(TestCase):
     """Тестирование вьюхи Статьи"""
+
+    def test_delete_success_url(self) -> None:
+        """Тестирует правильно ли формируется success_url методом get_success_url"""
+
+        test_guide_pk = 1
+
+        mock_article = Mock()
+        mock_article.guide.pk = test_guide_pk
+
+        view = DeleteArticleView()
+        view.object = mock_article
+
+        self.assertEqual(
+            reverse_lazy('guides:detail_guide', kwargs={'guide_pk': test_guide_pk}),
+            view.get_success_url()
+        )
 
     def test_update_success_url(self) -> None:
         """Тестирует правильно ли формируется success_url методом get_success_url"""

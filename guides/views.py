@@ -9,6 +9,14 @@ from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm, C
 from .models import Guide, Article
 
 
+class DeleteArticleView(DeleteView):
+    """Удаление Руководства"""
+    model = Article
+
+    def get_success_url(self):
+        return reverse_lazy('guides:detail_guide', kwargs={'guide_pk': self.object.guide.pk})
+
+
 class UpdateArticleView(UpdateView):
     """Обновление (редактирование) Статьи"""
     model = Article
@@ -104,7 +112,7 @@ class DetailGuideView(DetailView):
     slug_url_kwarg = 'guide_pk'
 
 
-def detail_article_view(request):
+def delete_article_view(request):
     """Заглушка"""
     pass
 

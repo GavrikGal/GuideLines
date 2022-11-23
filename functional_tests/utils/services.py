@@ -15,14 +15,24 @@ from functional_tests.const import (
     TEST_LAST_NAME, TEST_ARTICLE_NAME, TEST_ARTICLE_TEXT,
 )
 from functional_tests.pages.detail_guide_page import DetailGuidePage
+from functional_tests.pages.detail_article_page import DetailArticlePage
 from guides.models import Guide, CustomUser, Article
 
 
-def create_user_guide_article_then_go_to_guide_page(
+def create_article(author: CustomUser, guide:Guide, name: str = TEST_ARTICLE_NAME,
+                   text: Optional[str] = TEST_ARTICLE_TEXT) -> Article:
+    """Создает Статью в Руководстве Guide с автором author, названием name и текстом text.
+    Если не задавать параметры name, text то будут испозованы тестовые
+    значения поумолчанию"""
+    article = Article.objects.create(author=author, guide=guide, name=name, text=text)
+    return article
+
+
+def create_user_guide_article_then_go_to_article_page(
         browser: WebDriver,
         live_server_url: str,
         description: Optional[str] = TEST_GUIDE_DESCRIPTION,
-        cover_path: Optional[str] = TEST_GUIDE_COVER_IMG_PATH) -> tuple[DetailGuidePage, Guide, CustomUser, Article]:
+        cover_path: Optional[str] = TEST_GUIDE_COVER_IMG_PATH) -> tuple[DetailArticlePage, Guide, CustomUser, Article]:
     """
     Создает залогиненогого пользователя CustomUser, Руководство Guide
     и переходит настраницу Руководства.
@@ -40,9 +50,9 @@ def create_user_guide_article_then_go_to_guide_page(
                                      text=TEST_ARTICLE_TEXT,
                                      author=user,
                                      guide=guide)
-    detail_guide_page = DetailGuidePage(browser, live_server_url, guide.pk)
-    detail_guide_page.go_to_page()
-    return detail_guide_page, guide, user, article
+    article_page = DetailArticlePage(browser, live_server_url, guide.pk, article.pk)
+    article_page.go_to_page()
+    return article_page, guide, user, article
 
 
 def create_user_guide_and_go_to_guide_page(

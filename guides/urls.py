@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import RegistrationView, HomePageView, NewGuideView, DetailGuideView, UpdateGuideView, DeleteGuideView, \
-    NewArticleView, DetailArticleView, UpdateArticleView
+    NewArticleView, DetailArticleView, UpdateArticleView, DeleteArticleView
 
 
 app_name = 'guides'
@@ -14,5 +14,6 @@ urlpatterns = [
     path('guides/<int:guide_pk>/articles/new/', NewArticleView.as_view(), name='new_article'),
     path('guides/<int:guide_pk>/articles/<int:pk>/', DetailArticleView.as_view(), name='detail_article'),
     path('guides/<int:guide_pk>/articles/<int:pk>/edit/', UpdateArticleView.as_view(), name='edit_article'),
+    path('guides/<int:guide_pk>/articles/<int:pk>/delete/', DeleteArticleView.as_view(), name='delete_article'),
     path('', HomePageView.as_view(), name='home_page'),
 ]

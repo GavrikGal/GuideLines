@@ -16,11 +16,11 @@ class DetailArticlePage(BasePage):
         super().__init__(browser, live_server_url, reverse('guides:detail_article', kwargs={'guide_pk': guide_pk,
                                                                                             'pk': pk}))
         self.edit_article_btn = BaseButton(browser, id_="id_edit_article_btn")
-        # self.delete_guide_btn = BaseButton(browser, id_="id_delete_guide_btn")
-        # self.confirm_delete_guide_btn = BaseButton(browser, id_='id_confirm_delete_guide_btn')
+        self.delete_article_btn = BaseButton(browser, id_="id_delete_article_btn")
+        self.confirm_delete_article_btn = BaseButton(browser, id_='id_confirm_delete_article_btn')
         self.article_menu_btn = BaseButton(browser, id_='id_article_menu_btn')
         self.article_menu = BasePanel(browser, _panel_id='id_article_menu')
-        # self.modal_delete_panel = BasePanel(browser, _panel_id='id_modal_delete_panel')
+        self.modal_delete_panel = BasePanel(browser, _panel_id='id_modal_delete_panel')
 
     # @property
     # def guide_author(self) -> str:
