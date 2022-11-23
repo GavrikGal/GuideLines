@@ -55,6 +55,7 @@
         </a>
     </div>
     {% endfor %}
+    {% if user.is_authenticated %}
     <div class="col">
         <a href="{% url 'guides:new_article' guide_pk=guide.pk %}"
            id="id_new_article_btn"
@@ -71,6 +72,7 @@
             </div>
         </a>
     </div>
+    {% endif %}
 </div>
 
     <!-- Modal -->

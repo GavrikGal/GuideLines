@@ -34,10 +34,11 @@ class DetailArticleView(DetailView):
     template_name = 'article/detail.html'
 
 
-class NewArticleView(CreateView):
+class NewArticleView(LoginRequiredMixin, CreateView):
     """Создание новой Статьи"""
     form_class = CreationArticleForm
     template_name = 'article/new.html'
+    login_url = reverse_lazy('login')
 
     def form_valid(self, form):
         """добавить автора и Руководство перед сохранением, если форма валидна"""
