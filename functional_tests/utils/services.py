@@ -10,7 +10,7 @@ from django.contrib.auth import (
 
 from selenium.webdriver.firefox.webdriver import WebDriver
 
-from functional_tests.const import (
+from functional_tests.utils.const import (
     TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH, TEST_GUIDE_NAME, TEST_USERNAME, TEST_PASSWORD, TEST_FIRST_NAME,
     TEST_LAST_NAME, TEST_ARTICLE_NAME, TEST_ARTICLE_TEXT,
 )

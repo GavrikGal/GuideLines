@@ -2,7 +2,7 @@ from os.path import splitext, basename
 
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
-from functional_tests.const import (
+from functional_tests.utils.const import (
     TEST_LAST_NAME, TEST_GUIDE_NAME, TEST_FIRST_NAME,
     TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH
 )

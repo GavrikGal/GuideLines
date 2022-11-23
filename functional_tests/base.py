@@ -10,7 +10,7 @@ from django.conf import settings
 
 import time
 
-from functional_tests.const import (
+from functional_tests.utils.const import (
     TEST_USERNAME
 )
 

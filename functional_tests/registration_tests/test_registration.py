@@ -2,7 +2,7 @@ from functional_tests.base import FunctionalTest
 from functional_tests.pages.registration_page import RegistrationPage
 from functional_tests.pages.login_page import LoginPage
 from functional_tests.pages.home_page import HomePage
-from functional_tests.const import (
+from functional_tests.utils.const import (
     TEST_USERNAME, TEST_LAST_NAME, TEST_FIRST_NAME, TEST_PASSWORD, TEST_AVATAR_IMG_PATH
 )
 

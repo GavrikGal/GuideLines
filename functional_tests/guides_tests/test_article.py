@@ -6,7 +6,7 @@ from functional_tests.pages.detail_guide_page import DetailGuidePage
 from functional_tests.pages.new_article_page import NewArticlePage
 from functional_tests.pages.detail_article_page import DetailArticlePage
 from functional_tests.pages.edit_article_page import EditArticlePage
-from functional_tests.const import (TEST_ARTICLE_NAME, TEST_ARTICLE_TEXT)
+from functional_tests.utils.const import (TEST_ARTICLE_NAME, TEST_ARTICLE_TEXT)
 from functional_tests.utils.services import (
     create_user_guide_and_go_to_guide_page,
     create_user_guide_article_then_go_to_article_page,
