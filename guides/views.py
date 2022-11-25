@@ -1,4 +1,6 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from abc import ABC
+
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
@@ -58,16 +60,21 @@ class DeleteGuideView(DeleteView):
     slug_url_kwarg = 'guide_pk'
 
 
-class UpdateGuideView(UpdateView):
+class UpdateGuideView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """Обновление (редактирование) Руководства"""
+
     model = Guide
     form_class = UpdateGuideForm
     template_name = 'guide/edit.html'
+    login_url = reverse_lazy('login')
     slug_field = 'pk'
     slug_url_kwarg = 'guide_pk'
 
     def get_success_url(self):
         return reverse_lazy('guides:detail_guide', kwargs={'guide_pk': self.object.pk})
+
+    def test_func(self):
+        return self.object.author == self.request.user
 
 
 class RegistrationView(CreateView):

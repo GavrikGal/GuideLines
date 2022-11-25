@@ -1,7 +1,9 @@
+import guides.views
+
 from os.path import exists
 from os.path import splitext
 from shutil import rmtree
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -11,7 +13,7 @@ from django.test import TestCase
 from django.urls import reverse_lazy
 
 import guides.models
-from .views import HomePageView, UpdateArticleView, DeleteArticleView
+from .views import HomePageView, UpdateArticleView, DeleteArticleView, UpdateGuideView
 from .models import CustomUser, Guide, Article
 
 
@@ -26,6 +28,36 @@ TEST_GUIDE_DESCRIPTION = 'Моё описание к первому тестов
                          'надо немного сократиться. Пока. Это было круто'
 TEST_GUIDE_COVER_IMG_NAME = 'gal-guide-cover-12345.jpg'
 TEST_ARTICLE_NAME = 'Моя первая тестовая статья'
+
+
+class UpdateGuideViewTest(TestCase):
+    """Тестирует вьюху обновления Руководства"""
+
+
+    def test_user_passes_test_mixin_test_func_passed(self) -> None:
+        """Функция test_func миксина UserPassesTestMixin разрешает доступ к вьюхе"""
+
+        author = CustomUser(username=TEST_USERNAME)
+        mock_guide = Mock()
+        mock_guide.author = author
+        mock_request = Mock()
+        mock_request.user = author
+
+        view = UpdateGuideView()
+        view.object = mock_guide
+        view.request = mock_request
+
+        self.assertTrue(
+            view.test_func()
+        )
+
+    def test_user_passes_test_mixin_test_func_denied(self) -> None:
+        """Функция test_func миксина UserPassesTestMixin НЕ разрешает доступ к вьюхе"""
+        view = UpdateGuideView()
+
+        self.assertFalse(
+            view.test_func()
+        )
 
 
 class ArticleViewTest(TestCase):
@@ -156,7 +188,6 @@ class GuideModelTest(TestCase):
             user.username + '/' + splitext(TEST_GUIDE_COVER_IMG_NAME)[0],
             upload_path
         )
-
 
 
 class ReadyUnitTest(TestCase):
