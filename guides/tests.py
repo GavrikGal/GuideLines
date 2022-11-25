@@ -1,3 +1,5 @@
+from django.http import HttpRequest
+
 import guides.views
 
 from os.path import exists
@@ -32,6 +34,22 @@ TEST_ARTICLE_NAME = 'Моя первая тестовая статья'
 
 class UpdateGuideViewTest(TestCase):
     """Тестирует вьюху обновления Руководства"""
+
+    def test_user_passes_test_mixin_test_func_called(self) -> None:
+        """Функция test_func миксина UserPassesTestMixin вызывается"""
+
+        guides.views.UpdateGuideView.test_func = Mock(return_value=True)
+
+        view = UpdateGuideView.as_view()
+
+        request = HttpRequest()
+        request.user = Mock()
+        request.method = 'get'
+        print(view(request))
+
+        self.assertTrue(
+            view.test_func.called
+        )
 
     def test_user_passes_test_mixin_test_func_passed(self) -> None:
         """Функция test_func миксина UserPassesTestMixin разрешает доступ к вьюхе"""
