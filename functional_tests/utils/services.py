@@ -19,6 +19,24 @@ from functional_tests.pages.detail_article_page import DetailArticlePage
 from guides.models import Guide, CustomUser, Article
 
 
+def create_guide_and_user_without_authenticated(
+        description: Optional[str] = TEST_GUIDE_DESCRIPTION,
+        cover_path: Optional[str] = TEST_GUIDE_COVER_IMG_PATH) -> tuple[Guide, CustomUser]:
+    """
+    Создает НЕ залогиненогого пользователя CustomUser, Руководство Guide
+    :param browser: Драйвер вэб-браузера
+    :param live_server_url: корневой адрес веб-приложения
+    :param description: Добавить описание. Опциональный. По умолчанию const.TEST_GUIDE_DESCRIPTION.
+    При None - без описания
+    :param cover_path: Путь к обложке Руководства. Опциональный. По умолчанию const.TEST_GUIDE_COVER_IMG_PATH.
+    При None - без обложки
+    :return: кортеж из Руководства Guide и пользователя CustomUser
+    """
+    user = create_user()
+    guide = create_guide(user, description=description, cover_path=cover_path)
+    return guide, user
+
+
 def create_article(author: CustomUser, guide:Guide, name: str = TEST_ARTICLE_NAME,
                    text: Optional[str] = TEST_ARTICLE_TEXT) -> Article:
     """Создает Статью в Руководстве Guide с автором author, названием name и текстом text.

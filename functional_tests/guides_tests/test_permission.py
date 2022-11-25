@@ -1,15 +1,55 @@
+import time
+
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
 from functional_tests.pages.new_guide_page import NewGuidePage
 from functional_tests.pages.detail_guide_page import DetailGuidePage
 from functional_tests.pages.new_article_page import NewArticlePage
-from functional_tests.utils.services import create_user, create_user_and_pre_authenticated_session, create_guide
+from functional_tests.utils.services import (
+    create_user, create_user_and_pre_authenticated_session, create_guide,
+    create_user_guide_and_go_to_guide_page, create_guide_and_user_without_authenticated
+)
 
 
 class GuidesTest(FunctionalTest):
     """тесты прав доступа к Руководствам"""
 
-    def test_can_not_see_new_guide_button_without_signing_in(self) -> None:
+    def test_must_not_see_edit_guide_button_if_no_author(self) -> None:
+        """Тестирует: НЕ должна быть видна кнопка редактирования Руководства
+        пользователю НЕ являющимуся автором этого Руководства"""
+
+        # Гал пользователь, который написал Руководсто
+        guide, _ = create_guide_and_user_without_authenticated()
+
+        # Шайтан просто идентифициированный в системе пользователь
+        create_user_and_pre_authenticated_session(self.browser, self.live_server_url, username='Shaitan')
+
+        # Он заходит на страницу Руководства
+        guide_page = DetailGuidePage(self.browser, self.live_server_url, guide.pk)
+        guide_page.go_to_page()
+
+        # И НЕ видит там кнопки выпадающего меню на Руководстве
+        self.assertFalse(
+            guide_page.new_article_btn.is_displayed(),
+            'Видна кнопка выпадающего меню Руководства'
+        )
+        self.fail('Доделать')
+
+    def test_can_see_edit_guide_button_if_author(self) -> None:
+        """Тестирует: должна быть видна кнопка редактирования Руководства
+        пользователю являющимуся автором этого Руководства"""
+
+        # Гал пользователь, который написал Руководсто
+        # Он заходит на страницу Руководства
+        guide_page, guide, user = create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url)
+
+        # И видит там кнопки выпадающего меню на Руководстве
+        self.assertTrue(
+            guide_page.guide_menu_btn.is_displayed(),
+            'Не видна кнопка выпадающего меню Руководства'
+        )
+
+    def test_must_not_see_new_guide_button_without_signing_in(self) -> None:
         """Тестирует: НЕ должна быть видна кнопка добавления нового Руководства
         пользователю НЕ вошедшему в систему"""
 
@@ -43,7 +83,7 @@ class GuidesTest(FunctionalTest):
             'Не видна кнопка добавления нового Руководства'
         )
 
-    def test_can_not_open_new_guide_page_without_signing_in(self) -> None:
+    def test_must_not_open_new_guide_page_without_signing_in(self) -> None:
         """Тестирует: НЕ должна быть возможность перейти на страницу добавления нового Руководства
         пользователю НЕ вошедшему в систему"""
 
@@ -83,7 +123,7 @@ class GuidesTest(FunctionalTest):
 class ArticleTest(FunctionalTest):
     """тесты прав доступа к Статьям"""
 
-    def test_can_not_see_new_article_button_without_signing_in(self) -> None:
+    def test_must_not_see_new_article_button_without_signing_in(self) -> None:
         """Тестирует: НЕ должна быть видна кнопка добавления новой Статьи
         пользователю НЕ вошедшему в систему"""
 
@@ -123,7 +163,7 @@ class ArticleTest(FunctionalTest):
             'Не видна кнопка добавления новой Статьи'
         )
 
-    def test_can_not_open_new_article_page_without_signing_in(self) -> None:
+    def test_must_not_open_new_article_page_without_signing_in(self) -> None:
         """Тестирует: НЕ должна быть возможность перейти на страницу добавления новой Статьи
         пользователю НЕ вошедшему в систему"""
 
