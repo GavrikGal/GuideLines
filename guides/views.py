@@ -74,7 +74,7 @@ class UpdateGuideView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse_lazy('guides:detail_guide', kwargs={'guide_pk': self.object.pk})
 
     def test_func(self):
-        return self.object.author == self.request.user
+        return self.get_object().author == self.request.user
 
 
 class RegistrationView(CreateView):

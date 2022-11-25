@@ -33,7 +33,6 @@ TEST_ARTICLE_NAME = 'Моя первая тестовая статья'
 class UpdateGuideViewTest(TestCase):
     """Тестирует вьюху обновления Руководства"""
 
-
     def test_user_passes_test_mixin_test_func_passed(self) -> None:
         """Функция test_func миксина UserPassesTestMixin разрешает доступ к вьюхе"""
 
@@ -44,7 +43,7 @@ class UpdateGuideViewTest(TestCase):
         mock_request.user = author
 
         view = UpdateGuideView()
-        view.object = mock_guide
+        view.get_object = Mock(return_value=mock_guide)
         view.request = mock_request
 
         self.assertTrue(
@@ -53,7 +52,17 @@ class UpdateGuideViewTest(TestCase):
 
     def test_user_passes_test_mixin_test_func_denied(self) -> None:
         """Функция test_func миксина UserPassesTestMixin НЕ разрешает доступ к вьюхе"""
+
+        author = CustomUser(username=TEST_USERNAME)
+        user = CustomUser(username='Another_test_user')
+        mock_guide = Mock()
+        mock_guide.author = author
+        mock_request = Mock()
+        mock_request.user = user
+
         view = UpdateGuideView()
+        view.get_object = Mock(return_value=mock_guide)
+        view.request = mock_request
 
         self.assertFalse(
             view.test_func()

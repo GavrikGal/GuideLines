@@ -45,7 +45,7 @@ class GuidesTest(FunctionalTest):
 
         # Он заходит на страницу редактирования Руководства
         edit_guide_page = EditGuidePage(self.browser, self.live_server_url, guide.pk)
-        edit_guide_page.go_to_page()
+        edit_guide_page.go_to_page_without_wait()
 
         # И он должен туда попасть
         self.assertIn(
