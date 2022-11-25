@@ -18,17 +18,19 @@
                 <img src="{% static 'img/default-guide-cover.jpg' %}" class="card-img" alt="">
             {% endif %}
             <div class="card-body py-4">
-                <div class="dropdown">
-                    <a href="#" class="btn rounded-circle text-light my-4 mx-3 p-2" id="id_guide_menu_btn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                          <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                        </svg>
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="guide_menu_btn" id="id_guide_menu">
-                        <li><a class="dropdown-item" href="{% url 'guides:edit_guide' guide_pk=guide.pk%}" id="id_edit_guide_btn">Редактировать</a></li>
-                        <li><a class="dropdown-item text-danger" href="#" id="id_delete_guide_btn" data-bs-toggle="modal" data-bs-target="#id_modal_delete_panel">Удалить</a></li>
-                    </ul>
-                </div>
+                {% if guide.author == user %}
+                    <div class="dropdown">
+                        <a href="#" class="btn rounded-circle text-light my-4 mx-3 p-2" id="id_guide_menu_btn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                              <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                            </svg>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="guide_menu_btn" id="id_guide_menu">
+                            <li><a class="dropdown-item" href="{% url 'guides:edit_guide' guide_pk=guide.pk%}" id="id_edit_guide_btn">Редактировать</a></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="id_delete_guide_btn" data-bs-toggle="modal" data-bs-target="#id_modal_delete_panel">Удалить</a></li>
+                        </ul>
+                    </div>
+                {% endif %}
                 <h1 class="card-title mb-5">{{ guide.name }}</h1>
                 <p class="card-text">{{ guide.description }}</p>
             </div>
@@ -76,6 +78,7 @@
 </div>
 
     <!-- Modal -->
+{% if guide.author == user %}
 <div class="modal fade" id="id_modal_delete_panel" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -97,4 +100,5 @@
     </div>
   </div>
 </div>
+{% endif %}
 {% endblock %}

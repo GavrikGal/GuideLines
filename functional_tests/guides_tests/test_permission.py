@@ -30,10 +30,9 @@ class GuidesTest(FunctionalTest):
 
         # И НЕ видит там кнопки выпадающего меню на Руководстве
         self.assertFalse(
-            guide_page.new_article_btn.is_displayed(),
+            guide_page.guide_menu_btn.is_displayed(),
             'Видна кнопка выпадающего меню Руководства'
         )
-        self.fail('Доделать')
 
     def test_can_see_edit_guide_button_if_author(self) -> None:
         """Тестирует: должна быть видна кнопка редактирования Руководства
