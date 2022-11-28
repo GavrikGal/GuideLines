@@ -19,7 +19,7 @@ class GuidesTest(FunctionalTest):
     def test_can_create_new_guide_without_cover_and_description(self) -> None:
         """тест: можно создать Руководство без обложки и описания"""
 
-        # Гал создал руководство без обложки
+        # Гал создал руководство без обложки Обновлено
         # Он сразу переходит на страницу Руководства
         create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url, cover_path=None, description=None)
         # todo: assert
