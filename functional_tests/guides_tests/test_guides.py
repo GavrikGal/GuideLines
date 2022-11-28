@@ -5,7 +5,7 @@ from functional_tests.pages.home_page import HomePage
 from functional_tests.pages.new_guide_page import NewGuidePage
 from functional_tests.pages.detail_guide_page import DetailGuidePage
 from functional_tests.pages.edit_guide_page import EditGuidePage
-from functional_tests.const import (
+from functional_tests.utils.const import (
     TEST_LAST_NAME, TEST_GUIDE_NAME, TEST_FIRST_NAME,
     TEST_GUIDE_DESCRIPTION, TEST_GUIDE_COVER_IMG_PATH, TEST_GUIDE_NEW_COVER_IMG_PATH
 )
@@ -21,18 +21,29 @@ class GuidesTest(FunctionalTest):
 
         # Гал создал руководство без обложки
         # Он сразу переходит на страницу Руководства
-        create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url, cover_path=None, description=None)
-        # todo: assert
+        guide_page, _, _ = create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url,
+                                                                  cover_path=None, description=None)
+        self.assertIn(
+            TEST_GUIDE_NAME,
+            guide_page.page_title,
+            'Не переходит на страницу руководства'
+        )
 
     def test_can_edit_guide_without_cover_and_description(self) -> None:
         """тест: можно редактировать Руководство без обложки и описания"""
 
         # Гал создал руководство без обложки
-        _, guide, _ = create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url, cover_path=None, description=None)
+        _, guide, _ = create_user_guide_and_go_to_guide_page(self.browser, self.live_server_url,
+                                                             cover_path=None, description=None)
 
         # и посещает страницу редактирования Руководства
         edit_guide_page = EditGuidePage(self.browser, self.live_server_url, guide.pk)
         edit_guide_page.go_to_page()
+        self.assertIn(
+            'Редактировать',
+            edit_guide_page.page_title,
+            'Не переходит на страницу редактирования Руководства'
+        )
 
     def test_tooltip_with_bootstrap_javascript_work(self) -> None:
         """тест: всплывающая подсказка tooltip из script.js и bootstrap загружена и работает"""
