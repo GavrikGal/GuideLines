@@ -1,11 +1,8 @@
-from django.contrib.auth import get_user_model
-
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.login_page import LoginPage
 from functional_tests.pages.home_page import HomePage
 
-
-User = get_user_model()
+from functional_tests.utils.services import create_user
 
 
 class LoginTest(FunctionalTest):
@@ -14,8 +11,8 @@ class LoginTest(FunctionalTest):
     def test_can_login_and_logout(self) -> None:
         """Можно войти в систему и выйти из нее"""
 
-        # Гал когда-то уже регался в системе
-        user = self.create_user(username='Gal', password='Password123')
+        # Гал когда-то уже регался в системе Обноволено
+        user = create_user(username='Gal', password='Password123')
 
         # Гал заходит на страницу логина
         login_page = LoginPage(self.browser, self.live_server_url)
