@@ -34,7 +34,6 @@ class GuidesTest(FunctionalTest):
             edit_guide_page.page_title,
             'Есть возможность перейти на страницу редактирования Руководства'
         )
-        self.fail('Доделать!!')
 
     def test_can_open_edit_guide_page_if_author(self) -> None:
         """Тестирует: должна быть возможность перейти на страницу редактирования Руководства
