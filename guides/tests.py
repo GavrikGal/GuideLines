@@ -1,8 +1,3 @@
-from django.contrib.auth import get_user_model
-from django.http import HttpRequest
-
-import guides.views
-
 from os.path import exists
 from os.path import splitext
 from shutil import rmtree
@@ -36,21 +31,19 @@ TEST_ARTICLE_NAME = 'Моя первая тестовая статья'
 class UpdateGuideViewTest(TestCase):
     """Тестирует вьюху обновления Руководства"""
 
-    def test_user_passes_test_mixin_func_called(self) -> None:
+    @patch('guides.views.UpdateGuideView.test_func', return_value=True)
+    def test_user_passes_test_mixin_func_called(self, mock_test_func) -> None:
         """Функция test_func миксина UserPassesTestMixin вызывается"""
 
-        with patch('guides.views.UpdateGuideView.test_func', return_value=True) as mock_test_func:
-            author = CustomUser.objects.create(username=TEST_USERNAME,
-                                               first_name=TEST_FIRST_NAME,
-                                               last_name=TEST_LAST_NAME)
-            guide = Guide.objects.create(name=TEST_GUIDE_NAME,
-                                         author=author)
-            self.client.force_login(author)
-            self.client.get(reverse_lazy('guides:edit_guide', kwargs={'guide_pk': guide.pk}))
+        author = CustomUser.objects.create(username=TEST_USERNAME,
+                                           first_name=TEST_FIRST_NAME,
+                                           last_name=TEST_LAST_NAME)
+        self.client.force_login(author)
+        self.client.get(reverse_lazy('guides:edit_guide', kwargs={'guide_pk': 1}))
 
-            self.assertTrue(
-                mock_test_func.called
-            )
+        self.assertTrue(
+            mock_test_func.called
+        )
 
     def test_user_passes_test_mixin_test_func_passed(self) -> None:
         """Функция test_func миксина UserPassesTestMixin разрешает доступ к вьюхе"""
