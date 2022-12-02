@@ -1,9 +1,10 @@
 from os.path import exists
 from os.path import splitext
 from shutil import rmtree
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import signals
 from django.db.models.query import QuerySet
@@ -35,9 +36,7 @@ class UpdateGuideViewTest(TestCase):
     def test_user_passes_test_mixin_func_called(self, mock_test_func) -> None:
         """Функция test_func миксина UserPassesTestMixin вызывается"""
 
-        author = CustomUser.objects.create(username=TEST_USERNAME,
-                                           first_name=TEST_FIRST_NAME,
-                                           last_name=TEST_LAST_NAME)
+        author = CustomUser.objects.create()
         self.client.force_login(author)
         self.client.get(reverse_lazy('guides:edit_guide', kwargs={'guide_pk': 1}))
 
