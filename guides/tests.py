@@ -1,10 +1,9 @@
 from os.path import exists
 from os.path import splitext
 from shutil import rmtree
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import signals
 from django.db.models.query import QuerySet
@@ -13,7 +12,7 @@ from django.urls import reverse_lazy
 
 import guides.models
 from .views import HomePageView, UpdateArticleView, DeleteArticleView, UpdateGuideView
-from .models import CustomUser, Guide, Article
+from .models import CustomUser, Guide
 
 
 TEST_USERNAME = 'username_gal_test'
