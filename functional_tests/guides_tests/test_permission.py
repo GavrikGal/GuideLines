@@ -6,6 +6,7 @@ from functional_tests.pages.new_guide_page import NewGuidePage
 from functional_tests.pages.detail_article_page import DetailArticlePage
 from functional_tests.pages.detail_guide_page import DetailGuidePage
 from functional_tests.pages.new_article_page import NewArticlePage
+from functional_tests.pages.edit_article_page import EditArticlePage
 from functional_tests.pages.edit_guide_page import EditGuidePage
 from functional_tests.utils.services import (
     create_user, create_user_and_pre_authenticated_session, create_guide,
@@ -52,7 +53,7 @@ class GuidesTest(FunctionalTest):
         self.assertIn(
             'Редактировать',
             edit_guide_page.page_title,
-            'Не может на страницу редактирования Руководства'
+            'Не может перейти на страницу редактирования Руководства'
         )
 
     def test_must_not_see_edit_guide_button_if_no_author(self) -> None:
@@ -171,6 +172,44 @@ class GuidesTest(FunctionalTest):
 
 class ArticleTest(FunctionalTest):
     """тесты прав доступа к Статьям"""
+
+    # def test_must_not_open_edit_guide_page_if_no_author(self) -> None:
+    #     """Тестирует: НЕ должна быть возможность перейти на страницу редактирования Руководства
+    #     пользователю, НЕ являющемуся автором данного Руководства"""
+    #
+    #     # Гал создал Руководствао
+    #     guide, _ = create_guide_and_user_without_authenticated()
+    #
+    #     # Шайтан просто зареганный пользователь
+    #     create_user_and_pre_authenticated_session(self.browser, self.live_server_url, username='Shaitan')
+    #
+    #     # Он пытается перейти на страницу редактирования Руководства
+    #     edit_guide_page = EditGuidePage(self.browser, self.live_server_url, guide.pk)
+    #     edit_guide_page.go_to_page_without_wait()
+    #     # И он НЕ должен туда попасть
+    #     self.assertNotIn(
+    #         'Редактировать',
+    #         edit_guide_page.page_title,
+    #         'Есть возможность перейти на страницу редактирования Руководства'
+    #     )
+
+    def test_can_open_edit_article_page_if_author(self) -> None:
+        """Тестирует: должна быть возможность перейти на страницу редактирования Статьи
+        пользователю, являющемуся автором данной Статьи"""
+
+        # Гал идентифицированный в системе пользователь со своей Статьёй
+        _, guide, _, article = create_user_guide_article_then_go_to_article_page(self.browser, self.live_server_url)
+
+        # Он заходит на страницу редактирования Статьи
+        edit_article_page = EditArticlePage(self.browser, self.live_server_url, guide.pk, article.pk)
+        edit_article_page.go_to_page_without_wait()
+
+        # И он должен туда попасть
+        self.assertIn(
+            'Редактировать',
+            edit_article_page.page_title,
+            'Не может перейти на страницу редактирования Статьи'
+        )
 
     def test_must_not_see_edit_article_button_if_no_author(self) -> None:
         """Тестирует: НЕ должна быть видна кнопка редактирования Статьи
