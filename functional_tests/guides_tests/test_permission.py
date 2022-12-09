@@ -186,7 +186,7 @@ class ArticleTest(FunctionalTest):
         # И видит там кнопки выпадающего меню Статьи
         self.assertTrue(
             article_page.article_menu_btn.is_displayed(),
-            'Не видна кнопка выпадающего меню Статьи'
+            'Не видна кнопка выпадающего меню Статьи1'
         )
 
         # Гал нажимает ее
