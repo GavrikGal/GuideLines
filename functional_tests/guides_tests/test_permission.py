@@ -1,7 +1,3 @@
-import time
-
-from django.urls import reverse
-
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
 from functional_tests.pages.new_guide_page import NewGuidePage
@@ -186,7 +182,7 @@ class ArticleTest(FunctionalTest):
         # И видит там кнопки выпадающего меню Статьи
         self.assertTrue(
             article_page.article_menu_btn.is_displayed(),
-            'Не видна кнопка выпадающего меню Статьи1'
+            'Не видна кнопка выпадающего меню Статьи'
         )
 
         # Гал нажимает ее
