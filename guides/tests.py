@@ -28,6 +28,58 @@ TEST_GUIDE_COVER_IMG_NAME = 'gal-guide-cover-12345.jpg'
 TEST_ARTICLE_NAME = 'Моя первая тестовая статья'
 
 
+class UpdateArticleViewTest(TestCase):
+    """Тестирует вьюху обновления Статьи"""
+
+    @patch('guides.views.UpdateArticleView.test_func', return_value=True)
+    def test_user_passes_test_mixin_func_called(self, mock_test_func) -> None:
+        """Функция test_func миксина UserPassesTestMixin вызывается"""
+
+        author = CustomUser.objects.create()
+        self.client.force_login(author)
+        self.client.get(reverse_lazy('guides:edit_article', kwargs={'guide_pk': 1,
+                                                                    'pk': 1}))
+
+        self.assertTrue(
+            mock_test_func.called
+        )
+
+    def test_user_passes_test_func_passed(self) -> None:
+        """Функция test_func миксина UserPassesTestMixin разрешает доступ к вьюхе"""
+
+        author = CustomUser(username=TEST_USERNAME)
+        mock_article = Mock()
+        mock_article.author = author
+        mock_request = Mock()
+        mock_request.user = author
+
+        view = UpdateArticleView()
+        view.get_object = Mock(return_value=mock_article)
+        view.request = mock_request
+
+        self.assertTrue(
+            view.test_func()
+        )
+
+    def test_user_passes_test_mixin_test_func_denied(self) -> None:
+        """Функция test_func миксина UserPassesTestMixin НЕ разрешает доступ к вьюхе"""
+
+        author = CustomUser(username=TEST_USERNAME)
+        user = CustomUser(username='Another_test_user')
+        mock_article = Mock()
+        mock_article.author = author
+        mock_request = Mock()
+        mock_request.user = user
+
+        view = UpdateArticleView()
+        view.get_object = Mock(return_value=mock_article)
+        view.request = mock_request
+
+        self.assertFalse(
+            view.test_func()
+        )
+
+
 class UpdateGuideViewTest(TestCase):
     """Тестирует вьюху обновления Руководства"""
 

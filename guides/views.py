@@ -18,15 +18,19 @@ class DeleteArticleView(DeleteView):
         return reverse_lazy('guides:detail_guide', kwargs={'guide_pk': self.object.guide.pk})
 
 
-class UpdateArticleView(UpdateView):
+class UpdateArticleView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """Обновление (редактирование) Статьи"""
     model = Article
     form_class = UpdateArticleForm
     template_name = 'article/edit.html'
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse_lazy('guides:detail_article', kwargs={'guide_pk': self.object.guide.pk,
                                                              'pk': self.object.pk})
+
+    def test_func(self):
+        return self.get_object().author == self.request.user
 
 
 class DetailArticleView(DetailView):
