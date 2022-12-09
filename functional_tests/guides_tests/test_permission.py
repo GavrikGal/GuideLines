@@ -3,12 +3,14 @@ import time
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
 from functional_tests.pages.new_guide_page import NewGuidePage
+from functional_tests.pages.detail_article_page import DetailArticlePage
 from functional_tests.pages.detail_guide_page import DetailGuidePage
 from functional_tests.pages.new_article_page import NewArticlePage
 from functional_tests.pages.edit_guide_page import EditGuidePage
 from functional_tests.utils.services import (
     create_user, create_user_and_pre_authenticated_session, create_guide,
-    create_user_guide_and_go_to_guide_page, create_guide_and_user_without_authenticated
+    create_user_guide_and_go_to_guide_page, create_guide_and_user_without_authenticated,
+    create_user_guide_article_then_go_to_article_page, create_article_and_guide_and_user_without_authenticated
 )
 
 
@@ -87,6 +89,15 @@ class GuidesTest(FunctionalTest):
             'Не видна кнопка выпадающего меню Руководства'
         )
 
+        # Нажимает на нее
+        guide_page.guide_menu_btn.click()
+
+        # И видит там кнопку редактирования Руководтсва
+        self.assertTrue(
+            guide_page.guide_menu_btn.is_displayed(),
+            'Не видна кнопка редактирования Руководства'
+        )
+
     def test_must_not_see_new_guide_button_without_signing_in(self) -> None:
         """Тестирует: НЕ должна быть видна кнопка добавления нового Руководства
         пользователю НЕ вошедшему в систему"""
@@ -160,6 +171,50 @@ class GuidesTest(FunctionalTest):
 
 class ArticleTest(FunctionalTest):
     """тесты прав доступа к Статьям"""
+
+    def test_must_not_see_edit_article_button_if_no_author(self) -> None:
+        """Тестирует: НЕ должна быть видна кнопка редактирования Статьи
+        пользователю НЕ являющимуся автором этой Статьи"""
+
+        # Гал пользователь, который написал Статью
+        article, guide, _ = create_article_and_guide_and_user_without_authenticated()
+
+        # Шайтан просто идентифициированный в системе пользователь
+        create_user_and_pre_authenticated_session(self.browser, self.live_server_url, username='Shaitan')
+
+        # Он заходит на страницу Статьи
+        article_page = DetailArticlePage(self.browser, self.live_server_url, guide.pk, article.pk)
+        article_page.go_to_page()
+
+        # И НЕ видит там кнопки выпадающего меню Статьи
+        self.assertFalse(
+            article_page.article_menu_btn.is_displayed(),
+            'Видна кнопка выпадающего меню Статьи'
+        )
+
+    def test_can_see_edit_article_button_if_author(self) -> None:
+        """Тестирует: должна быть видна кнопка редактирования Статьи
+        пользователю являющимуся автором этой Статьи"""
+
+        # Гал пользователь, который написал Статью
+        # Он заходит на страницу Статьи
+        article_page, guide, user, article = create_user_guide_article_then_go_to_article_page(self.browser,
+                                                                                               self.live_server_url)
+
+        # И видит там кнопки выпадающего меню Статьи
+        self.assertTrue(
+            article_page.article_menu_btn.is_displayed(),
+            'Не видна кнопка выпадающего меню Статьи'
+        )
+
+        # Гал нажимает ее
+        article_page.article_menu_btn.click()
+
+        # И видит кнопку редактирования Статьи
+        self.assertTrue(
+            article_page.edit_article_btn.is_displayed(),
+            'Не видна кнопка редактирования Статьи'
+        )
 
     def test_must_not_see_new_article_button_without_signing_in(self) -> None:
         """Тестирует: НЕ должна быть видна кнопка добавления новой Статьи

@@ -10,6 +10,8 @@
 {% block content %}
     <article id="article">
         <h2 class="text-center">{{ article.name }}</h2>
+
+        {% if article.author == user %}
         <div class="dropdown">
             <a href="#" class="btn rounded-circle text-dark my-1 mx-4 p-1" id="id_article_menu_btn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
@@ -21,11 +23,13 @@
                 <li><a class="dropdown-item text-danger" href="#" id="id_delete_article_btn" data-bs-toggle="modal" data-bs-target="#id_modal_delete_panel">Удалить</a></li>
             </ul>
         </div>
+        {% endif %}
 
         <p class="text">{{ article.text }}</p>
     </article>
 
      <!-- Modal -->
+{% if article.author == user %}
 <div class="modal fade" id="id_modal_delete_panel" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -47,4 +51,5 @@
     </div>
   </div>
 </div>
+{% endif %}
 {% endblock %}

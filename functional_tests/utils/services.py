@@ -19,6 +19,16 @@ from functional_tests.pages.detail_article_page import DetailArticlePage
 from guides.models import Guide, CustomUser, Article
 
 
+def create_article_and_guide_and_user_without_authenticated() -> tuple[Article, Guide, CustomUser]:
+    """
+    Создает НЕ залогиненого пользоватея CustomUser, Руководство Guide и Статью Article
+    :return: кортеж из Статьи, Руководства и Пользователя
+    """
+    guide, user = create_guide_and_user_without_authenticated()
+    article = create_article(user, guide)
+    return article, guide, user
+
+
 def create_guide_and_user_without_authenticated(
         description: Optional[str] = TEST_GUIDE_DESCRIPTION,
         cover_path: Optional[str] = TEST_GUIDE_COVER_IMG_PATH) -> tuple[Guide, CustomUser]:
