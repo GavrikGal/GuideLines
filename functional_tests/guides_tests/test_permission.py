@@ -1,5 +1,7 @@
 import time
 
+from django.urls import reverse
+
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.home_page import HomePage
 from functional_tests.pages.new_guide_page import NewGuidePage
@@ -173,6 +175,29 @@ class GuidesTest(FunctionalTest):
 class ArticleTest(FunctionalTest):
     """тесты прав доступа к Статьям"""
 
+    def test_can_see_delete_article_button_if_author(self) -> None:
+        """Тестирует видна ли автору кнопка удаления Статьи"""
+
+        # Гал пользователь, который написал Статью
+        # Он заходит на страницу Статьи
+        article_page, guide, user, article = create_user_guide_article_then_go_to_article_page(self.browser,
+                                                                                               self.live_server_url)
+
+        # И видит там кнопки выпадающего меню Статьи
+        self.assertTrue(
+            article_page.article_menu_btn.is_displayed(),
+            'Не видна кнопка выпадающего меню Статьи'
+        )
+
+        # Гал нажимает ее
+        article_page.article_menu_btn.click()
+
+        # И видит кнопку удаления Статьи
+        self.assertTrue(
+            article_page.delete_article_btn.is_displayed(),
+            'Не видна кнопка удаления Статьи'
+        )
+
     def test_must_not_open_edit_article_page_if_no_author(self) -> None:
         """Тестирует: НЕ должна быть возможность перейти на страницу редактирования Статьи
         пользователю, НЕ являющемуся автором данной Статьи"""
@@ -211,8 +236,8 @@ class ArticleTest(FunctionalTest):
             'Не может перейти на страницу редактирования Статьи'
         )
 
-    def test_must_not_see_edit_article_button_if_no_author(self) -> None:
-        """Тестирует: НЕ должна быть видна кнопка редактирования Статьи
+    def test_must_not_see_article_menu_button_if_no_author(self) -> None:
+        """Тестирует: НЕ должна быть видно меню редактирования и удаления Статьи
         пользователю НЕ являющимуся автором этой Статьи"""
 
         # Гал пользователь, который написал Статью
