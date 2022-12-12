@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 
 import guides.models
 from .views import HomePageView, UpdateArticleView, DeleteArticleView, UpdateGuideView
-from .models import CustomUser, Guide
+from .models import CustomUser, Guide, Article
 
 
 TEST_USERNAME = 'username_gal_test'
@@ -26,6 +26,106 @@ TEST_GUIDE_DESCRIPTION = 'Моё описание к первому тестов
                          'надо немного сократиться. Пока. Это было круто'
 TEST_GUIDE_COVER_IMG_NAME = 'gal-guide-cover-12345.jpg'
 TEST_ARTICLE_NAME = 'Моя первая тестовая статья'
+
+
+class DeleteArticleViewTest(TestCase):
+    """Тестирует вьюху удаления Статьи"""
+
+    def test_user_passes_test_func_passed(self) -> None:
+        """Функция test_func миксина UserPassesTestMixin разрешает доступ к вьюхе"""
+
+        author = Mock()
+        mock_article = Mock()
+        mock_article.author = author
+        mock_request = Mock()
+        mock_request.user = author
+
+        view = DeleteArticleView()
+        view.get_object = Mock(return_value=mock_article)
+        view.request = mock_request
+
+        self.assertTrue(
+            view.test_func()
+        )
+
+    def test_user_passes_test_mixin_test_func_denied(self) -> None:
+        """Функция test_func миксина UserPassesTestMixin НЕ разрешает доступ к вьюхе"""
+
+        author = Mock()
+        user = Mock()
+        mock_article = Mock()
+        mock_article.author = author
+        mock_request = Mock()
+        mock_request.user = user
+
+        view = DeleteArticleView()
+        view.get_object = Mock(return_value=mock_article)
+        view.request = mock_request
+
+        self.assertFalse(
+            view.test_func()
+        )
+
+    @patch('guides.views.DeleteArticleView.test_func', return_value=True)
+    def test_user_passes_test_mixin_func_called(self, mock_test_func) -> None:
+        """Функция test_func миксина UserPassesTestMixin вызывается"""
+
+        author = CustomUser.objects.create()
+        self.client.force_login(author)
+        self.client.post(reverse_lazy('guides:delete_article', kwargs={'guide_pk': 1,
+                                                                       'pk': 1}))
+
+        self.assertTrue(
+            mock_test_func.called
+        )
+
+    def test_only_authenticated_author_can_delete_article(self):
+        """Тестирует может ли не автор удалять свою Статью"""
+
+        author = CustomUser.objects.create()
+        guide = Guide.objects.create(author=author)
+        article = Article.objects.create(guide=guide, author=author)
+
+        self.client.post(reverse_lazy('guides:delete_article', kwargs={'guide_pk': guide.pk,
+                                                                       'pk': article.pk}))
+        self.assertNotEqual(
+            len(Article.objects.all()),
+            0,
+            'Объекты были удалены из базы'
+        )
+
+    def test_no_author_can_not_delete_article(self):
+        """Тестирует может ли не автор удалять свою Статью"""
+
+        author = CustomUser.objects.create()
+        guide = Guide.objects.create(author=author)
+        article = Article.objects.create(guide=guide, author=author)
+        shaitan = CustomUser.objects.create(username='Shaitan')
+
+        self.client.force_login(shaitan)
+        self.client.post(reverse_lazy('guides:delete_article', kwargs={'guide_pk': guide.pk,
+                                                                       'pk': article.pk}))
+        self.assertNotEqual(
+            len(Article.objects.all()),
+            0,
+            'Объекты были удалены из базы'
+        )
+
+    def test_author_can_delete_article(self):
+        """Тестирует может ли автор удалять свою Статью"""
+
+        author = CustomUser.objects.create()
+        guide = Guide.objects.create(author=author)
+        article = Article.objects.create(guide=guide, author=author)
+
+        self.client.force_login(author)
+        self.client.post(reverse_lazy('guides:delete_article', kwargs={'guide_pk': guide.pk,
+                                                                       'pk': article.pk}))
+        self.assertEqual(
+            len(Article.objects.all()),
+            0,
+            'Объектов Статьи больше нуля'
+        )
 
 
 class UpdateArticleViewTest(TestCase):

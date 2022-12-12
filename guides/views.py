@@ -10,12 +10,16 @@ from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm, C
 from .models import Guide, Article
 
 
-class DeleteArticleView(DeleteView):
+class DeleteArticleView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     """Удаление Руководства"""
     model = Article
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse_lazy('guides:detail_guide', kwargs={'guide_pk': self.object.guide.pk})
+
+    def test_func(self):
+        return self.get_object().author == self.request.user
 
 
 class UpdateArticleView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
