@@ -3,8 +3,8 @@ from django.urls import reverse_lazy
 from unittest.mock import Mock, patch
 
 from ..views import UpdateArticleView, DeleteArticleView
-from ..models import CustomUser, Guide, Article
-from .utils.const import TEST_USERNAME
+from ..models import CustomUser, Article
+from .utils.services import create_default_article
 
 
 class DeleteArticleViewTest(TestCase):
@@ -13,11 +13,10 @@ class DeleteArticleViewTest(TestCase):
     def test_user_passes_test_func_passed(self) -> None:
         """Функция test_func миксина UserPassesTestMixin разрешает доступ к вьюхе"""
 
-        author = Mock()
         mock_article = Mock()
-        mock_article.author = author
         mock_request = Mock()
-        mock_request.user = author
+
+        mock_request.user = mock_article.author     # Пользователь - это автор
 
         view = DeleteArticleView()
         view.get_object = Mock(return_value=mock_article)
@@ -30,12 +29,8 @@ class DeleteArticleViewTest(TestCase):
     def test_user_passes_test_mixin_test_func_denied(self) -> None:
         """Функция test_func миксина UserPassesTestMixin НЕ разрешает доступ к вьюхе"""
 
-        author = Mock()
-        user = Mock()
         mock_article = Mock()
-        mock_article.author = author
         mock_request = Mock()
-        mock_request.user = user
 
         view = DeleteArticleView()
         view.get_object = Mock(return_value=mock_article)
@@ -61,11 +56,9 @@ class DeleteArticleViewTest(TestCase):
     def test_only_authenticated_author_can_delete_article(self):
         """Тестирует может ли не автор удалять свою Статью"""
 
-        author = CustomUser.objects.create()
-        guide = Guide.objects.create(author=author)
-        article = Article.objects.create(guide=guide, author=author)
+        article = create_default_article()
 
-        self.client.post(reverse_lazy('guides:delete_article', kwargs={'guide_pk': guide.pk,
+        self.client.post(reverse_lazy('guides:delete_article', kwargs={'guide_pk': article.guide.pk,
                                                                        'pk': article.pk}))
         self.assertNotEqual(
             len(Article.objects.all()),
@@ -76,13 +69,11 @@ class DeleteArticleViewTest(TestCase):
     def test_no_author_can_not_delete_article(self):
         """Тестирует может ли не автор удалять свою Статью"""
 
-        author = CustomUser.objects.create()
-        guide = Guide.objects.create(author=author)
-        article = Article.objects.create(guide=guide, author=author)
+        article = create_default_article()
         shaitan = CustomUser.objects.create(username='Shaitan')
 
         self.client.force_login(shaitan)
-        self.client.post(reverse_lazy('guides:delete_article', kwargs={'guide_pk': guide.pk,
+        self.client.post(reverse_lazy('guides:delete_article', kwargs={'guide_pk': article.guide.pk,
                                                                        'pk': article.pk}))
         self.assertNotEqual(
             len(Article.objects.all()),
@@ -93,12 +84,10 @@ class DeleteArticleViewTest(TestCase):
     def test_author_can_delete_article(self):
         """Тестирует может ли автор удалять свою Статью"""
 
-        author = CustomUser.objects.create()
-        guide = Guide.objects.create(author=author)
-        article = Article.objects.create(guide=guide, author=author)
+        article = create_default_article()
 
-        self.client.force_login(author)
-        self.client.post(reverse_lazy('guides:delete_article', kwargs={'guide_pk': guide.pk,
+        self.client.force_login(article.author)
+        self.client.post(reverse_lazy('guides:delete_article', kwargs={'guide_pk': article.guide.pk,
                                                                        'pk': article.pk}))
         self.assertEqual(
             len(Article.objects.all()),
@@ -142,11 +131,9 @@ class UpdateArticleViewTest(TestCase):
     def test_user_passes_test_func_passed(self) -> None:
         """Функция test_func миксина UserPassesTestMixin разрешает доступ к вьюхе"""
 
-        author = CustomUser(username=TEST_USERNAME)
         mock_article = Mock()
-        mock_article.author = author
         mock_request = Mock()
-        mock_request.user = author
+        mock_request.user = mock_article.author     # Пользователь - это автор
 
         view = UpdateArticleView()
         view.get_object = Mock(return_value=mock_article)
@@ -159,12 +146,8 @@ class UpdateArticleViewTest(TestCase):
     def test_user_passes_test_mixin_test_func_denied(self) -> None:
         """Функция test_func миксина UserPassesTestMixin НЕ разрешает доступ к вьюхе"""
 
-        author = CustomUser(username=TEST_USERNAME)
-        user = CustomUser(username='Another_test_user')
         mock_article = Mock()
-        mock_article.author = author
         mock_request = Mock()
-        mock_request.user = user
 
         view = UpdateArticleView()
         view.get_object = Mock(return_value=mock_article)
