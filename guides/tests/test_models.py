@@ -6,13 +6,14 @@ from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import signals
 
-from ..models import CustomUser, Guide
+from ..models import CustomUser
 
 import guides.models
 
 from .utils.const import (
     TEST_USERNAME, TEST_AVATAR_IMG_NAME, TEST_GUIDE_COVER_IMG_NAME
 )
+from .utils.services import create_default_guide
 
 
 class CustomUserModelTest(TestCase):
@@ -64,11 +65,10 @@ class GuideModelTest(TestCase):
     def test_guide_cover_upload_path(self) -> None:
         """тест пути загрузки обложки Руководства"""
 
-        user = CustomUser(username=TEST_USERNAME)
-        guide = Guide(author=user)
+        guide = create_default_guide()
         upload_path = guide.get_upload_path(TEST_GUIDE_COVER_IMG_NAME)
 
         self.assertIn(
-            user.username + '/' + splitext(TEST_GUIDE_COVER_IMG_NAME)[0],
+            guide.author.username + '/' + splitext(TEST_GUIDE_COVER_IMG_NAME)[0],
             upload_path
         )

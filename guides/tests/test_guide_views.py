@@ -3,8 +3,8 @@ from django.urls import reverse_lazy
 from unittest.mock import Mock, patch
 
 from ..views import UpdateGuideView, DeleteGuideView
-from ..models import CustomUser, Guide, Article
-from .utils.const import TEST_USERNAME
+from ..models import CustomUser, Guide
+from .utils.services import create_default_article, create_default_guide
 
 
 class DeleteGuideViewTest(TestCase):
@@ -12,11 +12,10 @@ class DeleteGuideViewTest(TestCase):
 
     def test_can_not_delete_guide_it_has_any_article(self):
         """Тестирует: нельзя удалить Руководство, если в нем есть хотя бы одна Статья"""
-        author = CustomUser.objects.create()
-        guide = Guide.objects.create(author=author)
-        Article.objects.create(guide=guide, author=author)
 
-        self.client.post(reverse_lazy('guides:delete_guide', kwargs={'guide_pk': guide.pk}))
+        article = create_default_article()
+
+        self.client.post(reverse_lazy('guides:delete_guide', kwargs={'guide_pk': article.guide.pk}))
         self.assertNotEqual(
             len(Guide.objects.all()),
             0,
@@ -26,11 +25,9 @@ class DeleteGuideViewTest(TestCase):
     def test_user_passes_test_func_passed(self) -> None:
         """Функция test_func миксина UserPassesTestMixin разрешает доступ к вьюхе"""
 
-        author = Mock()
         mock_guide = Mock()
-        mock_guide.author = author
         mock_request = Mock()
-        mock_request.user = author
+        mock_request.user = mock_guide.author       # Пользователь - это автор
 
         view = DeleteGuideView()
         view.get_object = Mock(return_value=mock_guide)
@@ -43,12 +40,8 @@ class DeleteGuideViewTest(TestCase):
     def test_user_passes_test_mixin_test_func_denied(self) -> None:
         """Функция test_func миксина UserPassesTestMixin НЕ разрешает доступ к вьюхе"""
 
-        author = Mock()
-        user = Mock()
         mock_guide = Mock()
-        mock_guide.author = author
         mock_request = Mock()
-        mock_request.user = user
 
         view = DeleteGuideView()
         view.get_object = Mock(return_value=mock_guide)
@@ -73,8 +66,7 @@ class DeleteGuideViewTest(TestCase):
     def test_only_authenticated_author_can_delete_guide(self):
         """Тестирует может ли не автор удалять своё Руководство"""
 
-        author = CustomUser.objects.create()
-        guide = Guide.objects.create(author=author)
+        guide = create_default_guide()
         self.client.post(reverse_lazy('guides:delete_guide', kwargs={'guide_pk': guide.pk}))
         self.assertNotEqual(
             len(Guide.objects.all()),
@@ -85,8 +77,7 @@ class DeleteGuideViewTest(TestCase):
     def test_no_author_can_not_delete_guide(self):
         """Тестирует может ли не автор удалять своё Руководство"""
 
-        author = CustomUser.objects.create()
-        guide = Guide.objects.create(author=author)
+        guide = create_default_guide()
         shaitan = CustomUser.objects.create(username='Shaitan')
 
         self.client.force_login(shaitan)
@@ -100,10 +91,9 @@ class DeleteGuideViewTest(TestCase):
     def test_author_can_delete_guide(self):
         """Тестирует может ли автор удалять своё Руководство"""
 
-        author = CustomUser.objects.create()
-        guide = Guide.objects.create(author=author)
+        guide = create_default_guide()
 
-        self.client.force_login(author)
+        self.client.force_login(guide.author)
         self.client.post(reverse_lazy('guides:delete_guide', kwargs={'guide_pk': guide.pk}))
         self.assertEqual(
             len(Guide.objects.all()),
@@ -130,11 +120,9 @@ class UpdateGuideViewTest(TestCase):
     def test_user_passes_test_mixin_test_func_passed(self) -> None:
         """Функция test_func миксина UserPassesTestMixin разрешает доступ к вьюхе"""
 
-        author = CustomUser(username=TEST_USERNAME)
         mock_guide = Mock()
-        mock_guide.author = author
         mock_request = Mock()
-        mock_request.user = author
+        mock_request.user = mock_guide.author        # Пользователь - это автор
 
         view = UpdateGuideView()
         view.get_object = Mock(return_value=mock_guide)
@@ -147,12 +135,8 @@ class UpdateGuideViewTest(TestCase):
     def test_user_passes_test_mixin_test_func_denied(self) -> None:
         """Функция test_func миксина UserPassesTestMixin НЕ разрешает доступ к вьюхе"""
 
-        author = CustomUser(username=TEST_USERNAME)
-        user = CustomUser(username='Another_test_user')
         mock_guide = Mock()
-        mock_guide.author = author
         mock_request = Mock()
-        mock_request.user = user
 
         view = UpdateGuideView()
         view.get_object = Mock(return_value=mock_guide)

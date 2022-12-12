@@ -12,3 +12,13 @@ def create_default_article() -> Article:
     guide = Guide.objects.create(author=author)
     article = Article.objects.create(guide=guide, author=author)
     return article
+
+
+def create_default_guide() -> Guide:
+    """
+    Создаёт стандартных автора CustomUser и Руководство Guide
+    :return: Руководство Guide с корретным автором
+    """
+    author = CustomUser.objects.create(username=TEST_USERNAME)
+    guide = Guide.objects.create(author=author)
+    return guide

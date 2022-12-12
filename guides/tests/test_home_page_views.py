@@ -2,11 +2,7 @@ from django.db.models.query import QuerySet
 from django.test import TestCase
 
 from ..views import HomePageView
-from ..models import CustomUser, Guide
-
-from .utils.const import (
-    TEST_USERNAME, TEST_GUIDE_NAME
-)
+from .utils.services import create_default_guide
 
 
 class HomePageViewTest(TestCase):
@@ -33,8 +29,7 @@ class HomePageViewTest(TestCase):
     def test_guides_in_context_data_is_present(self) -> None:
         """Тестирует чтоб ключ guides в context_data возвращал не пустой Set"""
         view = HomePageView()
-        Guide.objects.create(name=TEST_GUIDE_NAME,
-                             author=CustomUser.objects.create(username=TEST_USERNAME))
+        create_default_guide()
 
         self.assertIsNot(
             0,
