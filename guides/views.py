@@ -60,12 +60,16 @@ class NewArticleView(LoginRequiredMixin, CreateView):
         return reverse_lazy('guides:detail_guide', kwargs={'guide_pk': self.kwargs.get('guide_pk')})
 
 
-class DeleteGuideView(DeleteView):
+class DeleteGuideView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     """Удаление Руководства"""
     model = Guide
     success_url = reverse_lazy('guides:home_page')
+    login_url = reverse_lazy('login')
     slug_field = 'pk'
     slug_url_kwarg = 'guide_pk'
+
+    def test_func(self):
+        return self.get_object().author == self.request.user
 
 
 class UpdateGuideView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):

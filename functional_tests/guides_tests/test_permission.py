@@ -16,6 +16,29 @@ from functional_tests.utils.services import (
 class GuidesTest(FunctionalTest):
     """тесты прав доступа к Руководствам"""
 
+    def test_can_see_delete_guide_button_if_author(self) -> None:
+        """Тестирует видна ли автору кнопка удаления Статьи"""
+
+        # Гал пользователь, который написал Руководство
+        # Он заходит на страницу Руководства
+        guide_page, guide, user = create_user_guide_and_go_to_guide_page(self.browser,
+                                                                         self.live_server_url)
+
+        # И видит там кнопки выпадающего меню Руководства
+        self.assertTrue(
+            guide_page.guide_menu_btn.is_displayed(),
+            'Не видна кнопка выпадающего меню Руководства'
+        )
+
+        # Гал нажимает ее
+        guide_page.guide_menu_btn.click()
+
+        # И видит кнопку удаления Руководства
+        self.assertTrue(
+            guide_page.delete_guide_btn.is_displayed(),
+            'Не видна кнопка удаления Руководства'
+        )
+
     def test_must_not_open_edit_guide_page_if_no_author(self) -> None:
         """Тестирует: НЕ должна быть возможность перейти на страницу редактирования Руководства
         пользователю, НЕ являющемуся автором данного Руководства"""
@@ -54,8 +77,8 @@ class GuidesTest(FunctionalTest):
             'Не может перейти на страницу редактирования Руководства'
         )
 
-    def test_must_not_see_edit_guide_button_if_no_author(self) -> None:
-        """Тестирует: НЕ должна быть видна кнопка редактирования Руководства
+    def test_must_not_see_edit_menu_button_if_no_author(self) -> None:
+        """Тестирует: НЕ должна быть видна кнопка редактирования и удаления Руководства
         пользователю НЕ являющимуся автором этого Руководства"""
 
         # Гал пользователь, который написал Руководсто
