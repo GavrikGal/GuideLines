@@ -1,16 +1,17 @@
 import time
 from django.urls import reverse
+from selenium.webdriver.common.by import By
 
 from functional_tests.base import FunctionalTest
 from functional_tests.pages.detail_guide_page import DetailGuidePage
 from functional_tests.pages.new_article_page import NewArticlePage
 from functional_tests.pages.detail_article_page import DetailArticlePage
 from functional_tests.pages.edit_article_page import EditArticlePage
-from functional_tests.utils.const import (TEST_ARTICLE_NAME, TEST_ARTICLE_TEXT)
+from functional_tests.utils.const import (TEST_ARTICLE_NAME, TEST_ARTICLE_TEXT, ARTICLE_DRAFT_LABEL)
 from functional_tests.utils.services import (
     create_user_guide_and_go_to_guide_page,
     create_user_guide_article_then_go_to_article_page,
-    create_article
+    create_article, create_user
 )
 
 
@@ -22,37 +23,96 @@ class ArticleTest(FunctionalTest):
         Автор может опубликовать Статью. Тогда она станет доступна всем"""
 
         # Гал имеет написанную Статью.
+        article_page, guide, _, article = create_user_guide_article_then_go_to_article_page(self.browser,
+                                                                                            self.live_server_url)
         # Он заходит на страницу Руководства
+        guide_page = DetailGuidePage(self.browser, self.live_server_url, guide.pk)
+        guide_page.go_to_page()
 
         # Где он видит обложку своей Статьи
+        article_card = guide_page.get_article(article.pk)
+        self.assertTrue(
+            article_card.is_displayed(),
+            'Не видна обложка Статьи'
+        )
 
         # На ней он также видит красную надпись "Черновик"
+        self.assertIn(
+            ARTICLE_DRAFT_LABEL,
+            article_card.find_element(By.XPATH, f"//*[text()='{ARTICLE_DRAFT_LABEL}']").text,
+            'Нет надписи Черновик на обложке Статьи'
+        )
 
         # Гал нажимает на обложку
+        article_card.click()
 
         # И попадает на станицу Статьи
-
         # Где он видит надпись, что эта статья "Черновик"
+        self.assertIn(
+            article_page.is_text_present(ARTICLE_DRAFT_LABEL),
+            'Нет надписи Черновик на странице Статьи'
+        )
 
         # Гал выходит из системы
+        article_page.logout_btn.click()
 
         # Приходит незалогиненый пользователь Анонимст
         # И заходит на страницу Руководства
+        guide_page.go_to_page()
 
         # Где он не видит обложки Черновика, созданного Галом
+        self.assertFalse(
+            article_card.is_displayed(),
+            'Видна обложка Статьи Анонимсту'
+        )
 
         # Анонимст знает id статьи-черновика, и пытается зайти прямо на станицу Статьи
+        article_page.go_to_page_without_wait()
 
         # У него это не выходит
+        self.assertNotIn(
+            article.name,
+            article_page.page_title,
+            'Анонимст может зайти на страницу Статьи-черновика'
+        )
 
         # Приходит Шайтан, и так же
+        create_user('Shaitan')
+
         # Заходит на страницу Руководства
+        guide_page.go_to_page()
 
         # Где он не видит обложки Черновика, созданного Галом
+        self.assertFalse(
+            article_card.is_displayed(),
+            'Видна обложка Статьи Шайтану'
+        )
 
         # Шайтан так же пытается зайти прямо на станицу Статьи
+        article_page.go_to_page_without_wait()
 
         # У него это не выходит
+        self.assertNotIn(
+            article.name,
+            article_page.page_title,
+            'Шайтан может зайти на чужую страницу Статьи-черновика'
+        )
+
+        # Шайтан выходит из системы
+
+        # Возвращается Гал
+
+        # Он заходит на страницу Сататьи
+
+        # Находит там кнопку "опубликовать Статью"
+
+        # Нажимает на нее
+
+        # Его переносит на страницу Руководства
+        # Где он больше не видит надписи "Черновик" на обложке Статьи
+
+        # Анонимст и Шайтан теперь могут видеть и зайти на страницу Статьи
+
         self.fail("Доделать")
 
     def test_can_delete_article(self) -> None:

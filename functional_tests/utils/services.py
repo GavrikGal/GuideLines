@@ -47,7 +47,7 @@ def create_guide_and_user_without_authenticated(
     return guide, user
 
 
-def create_article(author: CustomUser, guide:Guide, name: str = TEST_ARTICLE_NAME,
+def create_article(author: CustomUser, guide: Guide, name: str = TEST_ARTICLE_NAME,
                    text: Optional[str] = TEST_ARTICLE_TEXT) -> Article:
     """Создает Статью в Руководстве Guide с автором author, названием name и текстом text.
     Если не задавать параметры name, text то будут испозованы тестовые
