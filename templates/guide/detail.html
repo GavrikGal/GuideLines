@@ -51,7 +51,11 @@
             <div class="card bg-dark text-light text-start" >
                 <div class="card-body">
                     <h2 class="card-title mb-5">{{ article.name }}</h2>
-                   <p class="card-text">{{ article.text }}</p>
+                    <p class="card-text">{{ article.text }}</p>
+                </div>
+                <div class="card-footer border-light row">
+                    <p class="text-warning text-start col mb-0">Черновик</p>
+                    <p class="text-end col mb-0">{{ article.author.first_name }} {{ article.author.last_name }}</p>
                 </div>
             </div>
         </a>
