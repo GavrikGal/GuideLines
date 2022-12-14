@@ -64,6 +64,7 @@ class Article(models.Model):
                               verbose_name='Руководство')
     author = models.ForeignKey(CustomUser, on_delete=models.PROTECT,
                                verbose_name='Автор')
+    draft = models.BooleanField(default=True, verbose_name='Черновик')
 
     def __str__(self) -> str:
         return self.name

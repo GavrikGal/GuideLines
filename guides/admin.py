@@ -22,7 +22,7 @@ class GuideAdmin(admin.ModelAdmin):
 class ArticleAdmin(admin.ModelAdmin):
     add_form = CreationArticleForm
     model = Article
-    list_display = ['name', 'text', 'guide', 'author']
+    list_display = ['name', 'text', 'guide', 'author', 'draft']
 
 
 admin.site.register(CustomUser, CustomUserAdmin)

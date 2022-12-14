@@ -2,6 +2,7 @@
 
 {% load bootstrap5 %}
 {% load static %}
+{% load filters %}
 
 {% block title %}
     {{ guide.name }}
@@ -44,6 +45,7 @@
 
 <div class="row mb-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 g-4" id="articles">
     {% for article in guide.article_set.all %}
+{#        {% if article.author == user or not article.draft %}#}
     <div class="col">
         <a href="{% url 'guides:detail_article' guide_pk=guide.pk pk=article.pk%}"
            id="id_article_{{ article.pk }}"
@@ -61,6 +63,7 @@
             </div>
         </a>
     </div>
+{#        {% endif %}#}
     {% endfor %}
     {% if user.is_authenticated %}
     <div class="col">

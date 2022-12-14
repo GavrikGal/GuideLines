@@ -1,10 +1,12 @@
 from abc import ABC
 
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy
+
 
 from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm, CreationArticleForm, UpdateArticleForm
 from .models import Guide, Article
@@ -129,6 +131,10 @@ class DetailGuideView(DetailView):
     template_name = 'guide/detail.html'
     slug_field = 'pk'
     slug_url_kwarg = 'guide_pk'
+
+    def get_queryset(self):
+        print(1234)
+        return Guide.objects.all()
 
 
 def delete_article_view(request):
