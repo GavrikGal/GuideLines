@@ -154,6 +154,34 @@ def create_user_and_pre_authenticated_session(browser: WebDriver,
     # First, create a new test user
     user = create_user(username, password, first_name, last_name)
 
+    user = create_pre_authenticated_session(browser, live_server_url, user)
+
+    # # Then create the authenticated session using the new user credentials
+    # session = SessionStore()
+    # session[SESSION_KEY] = user.pk
+    # session[BACKEND_SESSION_KEY] = settings.AUTHENTICATION_BACKENDS[0]
+    # session[HASH_SESSION_KEY] = user.get_session_auth_hash()
+    # session.save()
+    #
+    # browser.get(live_server_url + '/404_no_such_url/')
+    #
+    # cookie = {
+    #     'name': settings.SESSION_COOKIE_NAME,
+    #     'value': session.session_key,
+    #     'secure': False,
+    #     'path': '/',
+    # }
+    #
+    # browser.add_cookie(cookie)
+
+    return user
+
+
+def create_pre_authenticated_session(browser: WebDriver,
+                                     live_server_url: str,
+                                     user: CustomUser) -> CustomUser:
+    """Создаёт аутентифицированную сессию для пользователя user"""
+
     # Then create the authenticated session using the new user credentials
     session = SessionStore()
     session[SESSION_KEY] = user.pk

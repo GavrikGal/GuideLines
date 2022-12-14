@@ -11,7 +11,7 @@ from functional_tests.utils.const import (TEST_ARTICLE_NAME, TEST_ARTICLE_TEXT, 
 from functional_tests.utils.services import (
     create_user_guide_and_go_to_guide_page,
     create_user_guide_article_then_go_to_article_page,
-    create_article, create_user_and_pre_authenticated_session
+    create_article, create_user_and_pre_authenticated_session, create_pre_authenticated_session
 )
 
 
@@ -35,7 +35,7 @@ class ArticleTest(FunctionalTest):
             article_card.is_displayed(),
             'Не видна обложка Статьи'
         )
-        time.sleep(2)
+
         # На ней он также видит красную надпись "Черновик"
         self.assertTrue(
             article_card.is_draft(),
@@ -51,14 +51,14 @@ class ArticleTest(FunctionalTest):
             article_page.is_text_present(ARTICLE_DRAFT_LABEL),
             'Нет надписи "Черновик" на странице Статьи'
         )
-        time.sleep(2)
+
         # Гал выходит из системы
         article_page.logout_btn.click()
-        time.sleep(2)
+
         # Приходит незалогиненый пользователь Анонимст
         # И заходит на страницу Руководства
         guide_page.go_to_page()
-        time.sleep(2)
+
         # Где он не видит обложки Черновика, созданного Галом
         self.assertFalse(
             article_card.is_displayed(),
@@ -67,7 +67,7 @@ class ArticleTest(FunctionalTest):
 
         # Анонимст знает id статьи-черновика, и пытается зайти прямо на станицу Статьи
         article_page.go_to_page_without_wait()
-        time.sleep(2)
+
         # У него это не выходит
         self.assertNotIn(
             article.name,
@@ -81,7 +81,7 @@ class ArticleTest(FunctionalTest):
 
         # Заходит на страницу Руководства
         guide_page.go_to_page()
-        time.sleep(2)
+
         # Где он не видит обложки Черновика, созданного Галом
         self.assertFalse(
             article_card.is_displayed(),
@@ -90,7 +90,7 @@ class ArticleTest(FunctionalTest):
 
         # Шайтан так же пытается зайти прямо на станицу Статьи
         article_page.go_to_page_without_wait()
-        time.sleep(2)
+
         # У него это не выходит
         self.assertNotIn(
             article.name,
@@ -100,10 +100,12 @@ class ArticleTest(FunctionalTest):
 
         # Шайтан выходит из системы
         article_page.logout_btn.click()
-        time.sleep(2)
+
         # Возвращается Гал
+        create_pre_authenticated_session(self.browser, self.live_server_url, author)
 
         # Он заходит на страницу Сататьи
+        article_page.go_to_page()
 
         # Находит там кнопку "Опубликовать Статью"
 
