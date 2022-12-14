@@ -11,7 +11,7 @@ from functional_tests.utils.const import (TEST_ARTICLE_NAME, TEST_ARTICLE_TEXT, 
 from functional_tests.utils.services import (
     create_user_guide_and_go_to_guide_page,
     create_user_guide_article_then_go_to_article_page,
-    create_article, create_user
+    create_article, create_user_and_pre_authenticated_session
 )
 
 
@@ -23,8 +23,8 @@ class ArticleTest(FunctionalTest):
         Автор может опубликовать Статью. Тогда она станет доступна всем"""
 
         # Гал имеет написанную Статью.
-        article_page, guide, _, article = create_user_guide_article_then_go_to_article_page(self.browser,
-                                                                                            self.live_server_url)
+        article_page, guide, author, article = create_user_guide_article_then_go_to_article_page(self.browser,
+                                                                                                 self.live_server_url)
         # Он заходит на страницу Руководства
         guide_page = DetailGuidePage(self.browser, self.live_server_url, guide.pk)
         guide_page.go_to_page()
@@ -35,31 +35,30 @@ class ArticleTest(FunctionalTest):
             article_card.is_displayed(),
             'Не видна обложка Статьи'
         )
-
+        time.sleep(2)
         # На ней он также видит красную надпись "Черновик"
-        self.assertIn(
-            ARTICLE_DRAFT_LABEL,
-            article_card.find_element(By.XPATH, f"//*[text()='{ARTICLE_DRAFT_LABEL}']").text,
-            'Нет надписи Черновик на обложке Статьи'
+        self.assertTrue(
+            article_card.is_draft(),
+            'Нет отметки "Черновик"'
         )
 
-        # Гал нажимает на обложку
+        # Гал нажимает на обложку карточки Статьи
         article_card.click()
 
         # И попадает на станицу Статьи
         # Где он видит надпись, что эта статья "Черновик"
-        self.assertIn(
+        self.assertTrue(
             article_page.is_text_present(ARTICLE_DRAFT_LABEL),
-            'Нет надписи Черновик на странице Статьи'
+            'Нет надписи "Черновик" на странице Статьи'
         )
-
+        time.sleep(2)
         # Гал выходит из системы
         article_page.logout_btn.click()
-
+        time.sleep(2)
         # Приходит незалогиненый пользователь Анонимст
         # И заходит на страницу Руководства
         guide_page.go_to_page()
-
+        time.sleep(2)
         # Где он не видит обложки Черновика, созданного Галом
         self.assertFalse(
             article_card.is_displayed(),
@@ -68,7 +67,7 @@ class ArticleTest(FunctionalTest):
 
         # Анонимст знает id статьи-черновика, и пытается зайти прямо на станицу Статьи
         article_page.go_to_page_without_wait()
-
+        time.sleep(2)
         # У него это не выходит
         self.assertNotIn(
             article.name,
@@ -77,11 +76,12 @@ class ArticleTest(FunctionalTest):
         )
 
         # Приходит Шайтан, и так же
-        create_user('Shaitan')
+        create_user_and_pre_authenticated_session(self.browser, self.live_server_url, username='Shaitan',
+                                                  first_name='Шайтан', last_name='Лох')
 
         # Заходит на страницу Руководства
         guide_page.go_to_page()
-
+        time.sleep(2)
         # Где он не видит обложки Черновика, созданного Галом
         self.assertFalse(
             article_card.is_displayed(),
@@ -90,7 +90,7 @@ class ArticleTest(FunctionalTest):
 
         # Шайтан так же пытается зайти прямо на станицу Статьи
         article_page.go_to_page_without_wait()
-
+        time.sleep(2)
         # У него это не выходит
         self.assertNotIn(
             article.name,
@@ -99,7 +99,8 @@ class ArticleTest(FunctionalTest):
         )
 
         # Шайтан выходит из системы
-
+        article_page.logout_btn.click()
+        time.sleep(2)
         # Возвращается Гал
 
         # Он заходит на страницу Сататьи
