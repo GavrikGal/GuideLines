@@ -1,6 +1,6 @@
 from abc import ABC
 
-
+from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
@@ -134,15 +134,8 @@ class DetailGuideView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # guide = Guide()
-        # guide.article_set.filter(draft=False)
-
-        print("in DetailGuideView.get_context_data")
-        print(self.request)
-        articles = self.object.article_set.filter(draft=False, author=self.request.user)
+        articles = self.object.article_set.filter(Q(draft=False) | Q(author=self.request.user))
         context['articles'] = articles
-        print(context)
-
         return context
 
 

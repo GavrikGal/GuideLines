@@ -19,6 +19,7 @@ class DetailGuideViewTest(TestCase):
         guide = Guide.objects.create(author=author)
         article1 = Article.objects.create(guide=guide, author=author, draft=True)
         article2 = Article.objects.create(guide=guide, author=author, draft=False)
+
         view = DetailGuideView()
         view.object = guide
         view.request = Mock()
@@ -36,8 +37,11 @@ class DetailGuideViewTest(TestCase):
         guide = Guide.objects.create(author=author)
         article1 = Article.objects.create(guide=guide, author=author, draft=True)
         article2 = Article.objects.create(guide=guide, author=author, draft=False)
+
         view = DetailGuideView()
         view.object = guide
+        view.request = Mock()
+        view.request.user = CustomUser()
 
         self.assertEqual(
             len(view.get_context_data()['articles']),
@@ -50,8 +54,11 @@ class DetailGuideViewTest(TestCase):
         article.draft = False
         article.save()
         guide = article.guide
+
         view = DetailGuideView()
         view.object = guide
+        view.request = Mock()
+        view.request.user = CustomUser()
 
         self.assertIsNot(
             0,
@@ -61,8 +68,11 @@ class DetailGuideViewTest(TestCase):
     def test_articles_in_context_data_is_set(self) -> None:
         """Тестирует, что Статьи articles в context_data - это QuerySet"""
         guide = create_default_guide()
+
         view = DetailGuideView()
         view.object = guide
+        view.request = Mock()
+        view.request.user = CustomUser()
 
         self.assertIsInstance(
             view.get_context_data()['articles'],
@@ -72,8 +82,11 @@ class DetailGuideViewTest(TestCase):
     def test_articles_is_in_context_data(self) -> None:
         """Тестирует есть ли в контексте context_data ключ Статей articles"""
         guide = create_default_guide()
+
         view = DetailGuideView()
         view.object = guide
+        view.request = Mock()
+        view.request.user = CustomUser()
 
         self.assertIn(
             'articles',
@@ -90,6 +103,7 @@ class DetailGuideViewTest(TestCase):
         self.assertTrue(
             mock_get_context_data.called
         )
+
 
 class DeleteGuideViewTest(TestCase):
     """Тестирует вьюху удаления Руководства"""
