@@ -134,16 +134,15 @@ class DetailGuideView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context['publisher'] = self.publisher
-        print("in DetailGuideView.get_context_data")
-        print(context)
         # guide = Guide()
-        # guide.article_set.get()
-        articles = self.object.article_set.all()
-        print(articles)
+        # guide.article_set.filter(draft=False)
+
+        print("in DetailGuideView.get_context_data")
+        print(self.request)
+        articles = self.object.article_set.filter(draft=False, author=self.request.user)
         context['articles'] = articles
-        print(context['articles'])
         print(context)
+
         return context
 
 

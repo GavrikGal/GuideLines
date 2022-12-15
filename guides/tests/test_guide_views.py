@@ -4,23 +4,51 @@ from django.urls import reverse_lazy
 from unittest.mock import Mock, patch
 
 from ..views import UpdateGuideView, DeleteGuideView, DetailGuideView
-from ..models import CustomUser, Guide
+from ..models import CustomUser, Guide, Article
 from .utils.services import create_default_article, create_default_guide
+from .utils.const import TEST_USERNAME
 
 
 class DetailGuideViewTest(TestCase):
     """Тесты вьюхи DetailGuideView"""
 
-    def test_articles_in_context_data_without_drafts_for_no_author(self) -> None:
-        """Тестирует, чтобы Статьи в context_data были без черновиков для обычного пользователя (не автора)"""
-        article1 = create_default_article()
-        guide = article.guide
+    def test_articles_in_context_data_with_drafts_for_author(self) -> None:
+        """Тестирует, чтобы Статьи в context_data были С черновиком для автора Статьи"""
+
+        author = CustomUser.objects.create(username=TEST_USERNAME)
+        guide = Guide.objects.create(author=author)
+        article1 = Article.objects.create(guide=guide, author=author, draft=True)
+        article2 = Article.objects.create(guide=guide, author=author, draft=False)
         view = DetailGuideView()
         view.object = guide
+        view.request = Mock()
+        view.request.user = author
+
+        self.assertEqual(
+            len(view.get_context_data()['articles']),
+            2
+        )
+
+    def test_articles_in_context_data_without_drafts_for_no_author(self) -> None:
+        """Тестирует, чтобы Статьи в context_data были без черновиков для обычного пользователя (не автора)"""
+
+        author = CustomUser.objects.create(username=TEST_USERNAME)
+        guide = Guide.objects.create(author=author)
+        article1 = Article.objects.create(guide=guide, author=author, draft=True)
+        article2 = Article.objects.create(guide=guide, author=author, draft=False)
+        view = DetailGuideView()
+        view.object = guide
+
+        self.assertEqual(
+            len(view.get_context_data()['articles']),
+            1
+        )
 
     def test_articles_in_context_data_is_present(self) -> None:
         """Тестирует чтоб ключ articles в context_data возвращал не пустой Set"""
         article = create_default_article()
+        article.draft = False
+        article.save()
         guide = article.guide
         view = DetailGuideView()
         view.object = guide
