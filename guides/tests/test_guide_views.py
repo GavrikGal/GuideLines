@@ -1,11 +1,67 @@
+from django.db.models.query import QuerySet
 from django.test import TestCase
 from django.urls import reverse_lazy
 from unittest.mock import Mock, patch
 
-from ..views import UpdateGuideView, DeleteGuideView
+from ..views import UpdateGuideView, DeleteGuideView, DetailGuideView
 from ..models import CustomUser, Guide
 from .utils.services import create_default_article, create_default_guide
 
+
+class DetailGuideViewTest(TestCase):
+    """Тесты вьюхи DetailGuideView"""
+
+    def test_articles_in_context_data_without_drafts_for_no_author(self) -> None:
+        """Тестирует, чтобы Статьи в context_data были без черновиков для обычного пользователя (не автора)"""
+        article1 = create_default_article()
+        guide = article.guide
+        view = DetailGuideView()
+        view.object = guide
+
+    def test_articles_in_context_data_is_present(self) -> None:
+        """Тестирует чтоб ключ articles в context_data возвращал не пустой Set"""
+        article = create_default_article()
+        guide = article.guide
+        view = DetailGuideView()
+        view.object = guide
+
+        self.assertIsNot(
+            0,
+            len(view.get_context_data()['articles'])
+        )
+
+    def test_articles_in_context_data_is_set(self) -> None:
+        """Тестирует, что Статьи articles в context_data - это QuerySet"""
+        guide = create_default_guide()
+        view = DetailGuideView()
+        view.object = guide
+
+        self.assertIsInstance(
+            view.get_context_data()['articles'],
+            QuerySet
+        )
+
+    def test_articles_is_in_context_data(self) -> None:
+        """Тестирует есть ли в контексте context_data ключ Статей articles"""
+        guide = create_default_guide()
+        view = DetailGuideView()
+        view.object = guide
+
+        self.assertIn(
+            'articles',
+            view.get_context_data()
+        )
+
+    @patch('guides.views.DetailGuideView.get_context_data', return_value=None)
+    def test_get_context_data_called(self, mock_get_context_data: Mock) -> None:
+        """Функция get_context_data вьюхи DetailGuideView вызывается"""
+
+        guide = create_default_guide()
+        self.client.get(reverse_lazy('guides:detail_guide', kwargs={'guide_pk': guide.pk}))
+
+        self.assertTrue(
+            mock_get_context_data.called
+        )
 
 class DeleteGuideViewTest(TestCase):
     """Тестирует вьюху удаления Руководства"""

@@ -132,9 +132,19 @@ class DetailGuideView(DetailView):
     slug_field = 'pk'
     slug_url_kwarg = 'guide_pk'
 
-    def get_queryset(self):
-        print(1234)
-        return Guide.objects.all()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['publisher'] = self.publisher
+        print("in DetailGuideView.get_context_data")
+        print(context)
+        # guide = Guide()
+        # guide.article_set.get()
+        articles = self.object.article_set.all()
+        print(articles)
+        context['articles'] = articles
+        print(context['articles'])
+        print(context)
+        return context
 
 
 def delete_article_view(request):
