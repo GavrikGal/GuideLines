@@ -10,17 +10,63 @@ from .utils.services import create_default_article
 class DetailArticleViewTest(TestCase):
     """Тестирует вьюху Статьи"""
 
-    def test_mixins_test_func_deny_for_anonymous(self):
-        """Функция test_func миксина UserPassesTestMixin возвращает False для Анонимста"""
+    def test_mixins_test_func_allow_access_if_article_is_draft_and_user_is_author(self):
+        """Функция test_func миксина UserPassesTestMixin возвращает True для Черновика, если пользователь автор"""
 
         mock_article = Mock()
+        mock_article.draft = True
+        mock_request = Mock()
+        mock_request.user = mock_article.author  # Пользователь - это автор
+
+        view = DetailArticleView()
+        view.request = mock_request
+        view.get_object = Mock(return_value=mock_article)
+
+        self.assertTrue(
+            view.test_func()
+        )
+
+    def test_mixins_test_func_deny_access_if_article_is_draft_and_user_is_not_author(self):
+        """Функция test_func миксина UserPassesTestMixin возвращает False для Черновика, если пользователь не автор"""
+
+        mock_article = Mock()
+        mock_article.draft = True
+        mock_request = Mock()
+
+        view = DetailArticleView()
+        view.request = mock_request
+        view.get_object = Mock(return_value=mock_article)
+
+        self.assertFalse(
+            view.test_func()
+        )
+
+    def test_mixins_test_func_deny_access_if_article_is_draft_and_anonymous(self):
+        """Функция test_func миксина UserPassesTestMixin возвращает False для Черновика и анонима"""
+
+        mock_article = Mock()
+        mock_article.draft = True
         mock_request = Mock()
 
         view = DetailArticleView()
         view.request = mock_request
         view.request.user.is_authenticated = False
+        view.get_object = Mock(return_value=mock_article)
 
         self.assertFalse(
+            view.test_func()
+        )
+
+    def test_mixins_test_func_allow_access_if_not_draft(self):
+        """Функция test_func миксина UserPassesTestMixin возвращает True если статья не Черновик"""
+
+        mock_article = Mock()
+        mock_article.draft = False
+
+        view = DetailArticleView()
+        view.get_object = Mock(return_value=mock_article)
+
+        self.assertTrue(
             view.test_func()
         )
 

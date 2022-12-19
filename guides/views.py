@@ -46,7 +46,15 @@ class DetailArticleView(UserPassesTestMixin, DetailView):
     template_name = 'article/detail.html'
 
     def test_func(self):
-        return True
+        article: Article = self.get_object()
+        if article.draft:
+            if not self.request.user.is_authenticated:
+                return False
+            if self.request.user == article.author:
+                return True
+            return False
+        else:
+            return True
 
 
 class NewArticleView(LoginRequiredMixin, CreateView):

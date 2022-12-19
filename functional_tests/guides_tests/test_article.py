@@ -18,7 +18,7 @@ from functional_tests.utils.services import (
 class ArticleTest(FunctionalTest):
     """тесты Статей"""
 
-    def test_new_article_is_draft(self) -> None:
+    def test_draft_and_publication(self) -> None:
         """Тест. Только созданная Статья - это черновик. Видеть ее может только автор (и заходить на её страницу).
         Автор может опубликовать Статью. Тогда она станет доступна всем"""
 
@@ -108,6 +108,10 @@ class ArticleTest(FunctionalTest):
         article_page.go_to_page()
 
         # Находит там кнопку "Опубликовать Статью"
+        self.assertTrue(
+            article_page.publish_btn.is_displayed(),
+            'На странице Статьи нет кнопки "Опубликовать"'
+        )
 
         # Нажимает на нее
 
