@@ -2,9 +2,37 @@ from django.test import TestCase
 from django.urls import reverse_lazy
 from unittest.mock import Mock, patch
 
-from ..views import UpdateArticleView, DeleteArticleView
+from ..views import UpdateArticleView, DeleteArticleView, DetailArticleView
 from ..models import CustomUser, Article
 from .utils.services import create_default_article
+
+
+class DetailArticleViewTest(TestCase):
+    """Тестирует вьюху Статьи"""
+
+    def test_mixins_test_func_deny_for_anonymous(self):
+        """Функция test_func миксина UserPassesTestMixin возвращает False для Анонимста"""
+
+        mock_article = Mock()
+        mock_request = Mock()
+
+        view = DetailArticleView()
+        view.request = mock_request
+        view.request.user.is_authenticated = False
+
+        self.assertFalse(
+            view.test_func()
+        )
+
+    @patch('guides.views.DetailArticleView.test_func', return_value=True)
+    def test_mixins_test_func_called(self, mock_test_func) -> None:
+        """Функция test_func миксина UserPassesTestMixin вызывается"""
+
+        self.client.post(reverse_lazy('guides:detail_article', kwargs={'guide_pk': 1,
+                                                                       'pk': 1}))
+        self.assertTrue(
+            mock_test_func.called
+        )
 
 
 class DeleteArticleViewTest(TestCase):

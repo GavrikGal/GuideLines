@@ -39,11 +39,14 @@ class UpdateArticleView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.get_object().author == self.request.user
 
 
-class DetailArticleView(DetailView):
+class DetailArticleView(UserPassesTestMixin, DetailView):
     """Детальный просмотр Статьи"""
     model = Article
     context_object_name = 'article'
     template_name = 'article/detail.html'
+
+    def test_func(self):
+        return True
 
 
 class NewArticleView(LoginRequiredMixin, CreateView):
@@ -134,7 +137,11 @@ class DetailGuideView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        articles = self.object.article_set.filter(Q(draft=False) | Q(author=self.request.user))
+        if not self.request.user.is_authenticated:
+            q = Q(draft=False)
+        else:
+            q = Q(draft=False) | Q(author=self.request.user)
+        articles = self.object.article_set.filter(q)
         context['articles'] = articles
         return context
 

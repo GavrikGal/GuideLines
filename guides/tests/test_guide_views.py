@@ -12,6 +12,24 @@ from .utils.const import TEST_USERNAME
 class DetailGuideViewTest(TestCase):
     """Тесты вьюхи DetailGuideView"""
 
+    def test_articles_in_context_data_without_drafts_for_anonymous(self) -> None:
+        """Тестирует, чтобы Статьи в context_data были без черновиков для анонимного пользователя"""
+
+        author = CustomUser.objects.create(username=TEST_USERNAME)
+        guide = Guide.objects.create(author=author)
+        article1 = Article.objects.create(guide=guide, author=author, draft=True)
+        article2 = Article.objects.create(guide=guide, author=author, draft=False)
+
+        view = DetailGuideView()
+        view.object = guide
+        view.request = Mock()
+        view.request.user.is_authenticated = False
+
+        self.assertEqual(
+            len(view.get_context_data()['articles']),
+            1
+        )
+
     def test_articles_in_context_data_with_drafts_for_author(self) -> None:
         """Тестирует, чтобы Статьи в context_data были С черновиком для автора Статьи"""
 
