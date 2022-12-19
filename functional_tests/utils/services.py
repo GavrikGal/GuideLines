@@ -26,6 +26,8 @@ def create_article_and_guide_and_user_without_authenticated() -> tuple[Article, 
     """
     guide, user = create_guide_and_user_without_authenticated()
     article = create_article(user, guide)
+    article.draft = False
+    article.save()
     return article, guide, user
 
 
