@@ -114,9 +114,20 @@ class ArticleTest(FunctionalTest):
         )
 
         # Нажимает на нее
+        article_page.publish_btn.click()
 
         # Его переносит на страницу Руководства
+        self.assertIn(
+            guide.name,
+            guide_page.page_title,
+            'Не перешло на страницу Руководства'
+        )
+
         # Где он больше не видит надписи "Черновик" на обложке Статьи
+        self.assertFalse(
+            article_page.is_text_present(ARTICLE_DRAFT_LABEL),
+            'Есть надписи "Черновик" на странице Статьи'
+        )
 
         # Он заходит на страницу Статьи
 
