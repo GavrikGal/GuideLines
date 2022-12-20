@@ -76,8 +76,8 @@ class ArticleTest(FunctionalTest):
         )
 
         # Приходит Шайтан, и так же
-        create_user_and_pre_authenticated_session(self.browser, self.live_server_url, username='Shaitan',
-                                                  first_name='Шайтан', last_name='Лох')
+        shaitan = create_user_and_pre_authenticated_session(self.browser, self.live_server_url, username='Shaitan',
+                                                            first_name='Шайтан', last_name='Лох')
 
         # Заходит на страницу Руководства
         guide_page.go_to_page()
@@ -125,55 +125,123 @@ class ArticleTest(FunctionalTest):
 
         # Где он больше не видит надписи "Черновик" на обложке Статьи
         self.assertFalse(
-            article_page.is_text_present(ARTICLE_DRAFT_LABEL),
-            'Есть надписи "Черновик" на странице Статьи'
+            guide_page.is_text_present(ARTICLE_DRAFT_LABEL),
+            'Есть надпись "Черновик" на карточке Статьи на странице Руководства'
         )
 
         # Он заходит на страницу Статьи
+        article_page.go_to_page()
 
         # И там тоже больше нет надписи "Черновик"
+        self.assertFalse(
+            article_page.is_text_present(ARTICLE_DRAFT_LABEL),
+            'Есть надпись "Черновик" на странице Статьи'
+        )
 
         # Кнопки "Опубликовать Статью" тоже больше нет
+        self.assertFalse(
+            article_page.publish_btn.is_displayed(),
+            'На странице Статьи всё ещё есть кнопка "Опубликовать"'
+        )
 
         # Вместо нее появилась кнопка "Отметить как Черновик"
+        self.assertTrue(
+            article_page.make_draft_btn.is_displayed(),
+            'На странице Статьи нет кнопки "Сделать черновиком"'
+        )
 
         # Гал выходит из системы
+        article_page.logout_btn.click()
 
         # Приходит незареганный Анонимст
         # Заходит на страницу Руководства
+        guide_page.go_to_page()
 
         # Там ему уже видна обложка, недавно опубликованной Галом, Статьи
+        self.assertTrue(
+            article_card.is_displayed(),
+            'Обложка Статьи не видна на странице Руководства'
+        )
 
         # Естественно, никакой надписи "Черновик" на ней нет
+        # ну мало ли...
+        self.assertFalse(
+            guide_page.is_text_present(ARTICLE_DRAFT_LABEL),
+            'Есть надпись "Черновик" на карточке Статьи на странице Руководства'
+        )
 
         # Анонимст нажимает на обложку
+        article_card.click()
 
         # И попадает на страницу Статьи
+        self.assertIn(
+            article.name,
+            article_page.page_title,
+            'Не перешло на страницу Статьи'
+        )
 
         # Естественно, и там тоже нет надписи "Черновик"
+        self.assertFalse(
+            article_page.is_text_present(ARTICLE_DRAFT_LABEL),
+            'Есть надпись "Черновик" на странице Статьи'
+        )
 
         # Кнопки "Опубликовать Статью" на странице нет
+        self.assertFalse(
+            article_page.publish_btn.is_displayed(),
+            'На странице Статьи есть кнопка "Опубликовать"'
+        )
 
         # И кроме того, кнопку "Отметить как Черновик" Анонимст видеть не может (только автор)
+        self.assertFalse(
+            article_page.make_draft_btn.is_displayed(),
+            'На странице Статьи видна кнопка "Сделать черновиком" анонимсту'
+        )
 
         # Приходит зареганый Шайтан
         # Заходит на страницу Руководства
+        create_pre_authenticated_session(self.browser, self.live_server_url, shaitan)
+        guide_page.go_to_page()
 
         # Там ему уже видна обложка, недавно опубликованной Галом, Статьи
+        self.assertTrue(
+            article_card.is_displayed(),
+            'Обложка Статьи не видна на странице Руководства'
+        )
 
         # Естественно, никакой надписи "Черновик" на ней нет
+        self.assertFalse(
+            article_page.is_text_present(ARTICLE_DRAFT_LABEL),
+            'Есть надпись "Черновик" на странице Статьи'
+        )
 
         # Шайтан нажимает на обложку
+        article_card.click()
 
         # И попадает на страницу Статьи
+        self.assertIn(
+            article.name,
+            article_page.page_title,
+            'Не перешло на страницу Статьи'
+        )
 
         # Естественно, и там тоже нет надписи "Черновик"
+        self.assertFalse(
+            article_page.is_text_present(ARTICLE_DRAFT_LABEL),
+            'Есть надпись "Черновик" на странице Статьи'
+        )
 
         # Кнопки "Опубликовать Статью" на странице нет
+        self.assertFalse(
+            article_page.publish_btn.is_displayed(),
+            'На странице Статьи есть кнопка "Опубликовать"'
+        )
 
         # И кроме того, кнопку "Отметить как Черновик" Шайтан видеть не может (только автор)
-
-        self.fail("Доделать")
+        self.assertFalse(
+            article_page.make_draft_btn.is_displayed(),
+            'На странице Статьи видна кнопка "Сделать черновиком" Шайтану'
+        )
 
     def test_can_delete_article(self) -> None:
         """Тест можно удалить Статью"""

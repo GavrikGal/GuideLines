@@ -2,9 +2,22 @@ from django.test import TestCase
 from django.urls import reverse_lazy
 from unittest.mock import Mock, patch
 
-from ..views import UpdateArticleView, DeleteArticleView, DetailArticleView
+from ..views import UpdateArticleView, DeleteArticleView, DetailArticleView, publish_article
 from ..models import CustomUser, Article
 from .utils.services import create_default_article
+
+
+class PublishArticleTest(TestCase):
+    """Тестирует вьюху публикации Статьи"""
+
+    def test_publish_article_make_article_not_draft(self) -> None:
+        """Тестирует, вьюха publish_article делает Статью не черновиком"""
+        article = create_default_article()
+        publish_article(Mock(), article.guide.pk, article.pk)
+        self.assertFalse(
+            Article.objects.get(pk=article.pk).draft,
+            'Статья всё ещё черновик'
+        )
 
 
 class DetailArticleViewTest(TestCase):

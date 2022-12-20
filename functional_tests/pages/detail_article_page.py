@@ -22,6 +22,7 @@ class DetailArticlePage(BasePage):
         self.article_menu = BasePanel(browser, _panel_id='id_article_menu')
         self.modal_delete_panel = BasePanel(browser, _panel_id='id_modal_delete_panel')
         self.publish_btn = BaseButton(browser, id_="id_publish_btn")
+        self.make_draft_btn = BaseButton(browser, id_='id_make_draft_btn')
 
     # @property
     # def guide_author(self) -> str:

@@ -10,8 +10,9 @@
 {% block content %}
     <article id="article">
         <div class="row">
-{#todo: Черновик#}
-            <span class="p-2 text-center text-danger col-2 border border-danger">Черновик</span>
+            {% if article.draft %}
+                <span class="p-2 text-center text-danger col-2 border border-danger">Черновик</span>
+            {% endif %}
             <h2 class="text-center col-8">{{ article.name }}</h2>
 
             {% if article.author == user %}
@@ -31,7 +32,13 @@
 
         <p class="text">{{ article.text }}</p>
     </article>
-    <a class="btn btn-primary align-right" href="#" id="id_publish_btn">Опубликовать Статью</a>
+    {% if article.draft %}
+        <a class="btn btn-outline-primary" href="{% url 'guides:publish_article' guide_pk=article.guide.pk pk=article.pk%}" id="id_publish_btn">Опубликовать Статью</a>
+    {% else %}
+        {% if user.is_authenticated and user == article.author%}
+            <a class="btn btn-outline-secondary" href="#" id="id_make_draft_btn">Сделать черновиком</a>
+        {% endif %}
+    {% endif %}
 
      <!-- Modal -->
 {% if article.author == user %}

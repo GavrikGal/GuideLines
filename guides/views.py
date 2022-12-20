@@ -1,7 +1,8 @@
 from abc import ABC
-
+from django.http import HttpResponse, HttpRequest
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
@@ -10,6 +11,14 @@ from django.urls import reverse_lazy
 
 from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm, CreationArticleForm, UpdateArticleForm
 from .models import Guide, Article
+
+
+def publish_article(request: HttpRequest, guide_pk: int, pk: int) -> HttpResponse:
+    """Публикует Статью"""
+    article = Article.objects.get(pk=pk)
+    article.draft = False
+    article.save()
+    return redirect('guides:detail_guide', guide_pk=guide_pk)
 
 
 class DeleteArticleView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
