@@ -2,7 +2,10 @@ import os
 from datetime import datetime
 from shutil import rmtree
 
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.test.testcases import LiveServerThread, QuietWSGIRequestHandler
+from django.core.servers.basehttp import WSGIServer
+
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase, LiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.firefox.options import Options
@@ -19,6 +22,26 @@ MAX_WAIT = 3
 SCREEN_DUMP_LOCATION = settings.BASE_DIR / 'logs' / 'screendumps'
 
 
+class LiveServerSingleThread(LiveServerThread):
+    """Runs a single threaded server rather than multi threaded. Reverts https://github.com/django/django/pull/7832"""
+
+    def _create_server(self):
+
+        """
+        the keep-alive fixes introduced in Django 2.1.4 (934acf1126995f6e6ccba5947ec8f7561633c27f)
+        cause problems when serving the static files in a stream.
+        We disable the helper handle method that calls handle_one_request multiple times.
+        """
+        QuietWSGIRequestHandler.handle = QuietWSGIRequestHandler.handle_one_request
+
+        return WSGIServer((self.host, self.port), QuietWSGIRequestHandler, allow_reuse_address=False)
+
+
+class LiveServerSingleThreadedTestCase(LiveServerTestCase):
+    "A thin sub-class which only sets the single-threaded server as a class"
+    server_thread_class = LiveServerSingleThread
+
+
 def wait(fn):
     def modified_fn(*args, **kwargs):
         start_time = time.time()
@@ -32,7 +55,8 @@ def wait(fn):
     return modified_fn
 
 
-class FunctionalTest(StaticLiveServerTestCase):
+# class FunctionalTest(StaticLiveServerTestCase):
+class FunctionalTest(LiveServerSingleThreadedTestCase):
     """базовый функциональный тест"""
 
     @classmethod

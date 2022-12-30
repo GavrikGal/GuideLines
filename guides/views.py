@@ -125,7 +125,8 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         """Добавляет Руководства в контекст страницы"""
         context = super().get_context_data(**kwargs)
-        context['guides'] = Guide.objects.all()
+        # context['guides'] = Guide.objects.all()
+        context['guides'] = Guide.objects.select_related('author').all()
         return context
 
 
@@ -158,7 +159,9 @@ class DetailGuideView(DetailView):
             q = Q(draft=False)
         else:
             q = Q(draft=False) | Q(author=self.request.user)
-        articles = self.object.article_set.filter(q)
+        # articles = self.object.article_set.filter(q)
+        articles = self.object.article_set.select_related('guide', 'author').filter(q)
+        # articles = Article.objects.select_related('guide', 'author').filter(Q(guide=self.object) & q)
         context['articles'] = articles
         return context
 
