@@ -1,8 +1,9 @@
 from abc import ABC
+from django.db.models import QuerySet
 from django.http import HttpResponse, HttpRequest
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
@@ -40,6 +41,9 @@ class UpdateArticleView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'article/edit.html'
     login_url = reverse_lazy('login')
 
+    def get_queryset(self):
+        return Article.objects.select_related('guide', 'author').filter(pk=self.kwargs.get('pk'))
+
     def get_success_url(self):
         return reverse_lazy('guides:detail_article', kwargs={'guide_pk': self.object.guide.pk,
                                                              'pk': self.object.pk})
@@ -53,6 +57,9 @@ class DetailArticleView(UserPassesTestMixin, DetailView):
     model = Article
     context_object_name = 'article'
     template_name = 'article/detail.html'
+
+    def get_queryset(self):
+        return Article.objects.select_related('guide', 'author').filter(pk=self.kwargs.get('pk'))
 
     def test_func(self):
         article: Article = self.get_object()
@@ -103,6 +110,9 @@ class UpdateGuideView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     login_url = reverse_lazy('login')
     slug_field = 'pk'
     slug_url_kwarg = 'guide_pk'
+
+    def get_queryset(self):
+        return Guide.objects.select_related('author').filter(pk=self.kwargs.get('guide_pk'))
 
     def get_success_url(self):
         return reverse_lazy('guides:detail_guide', kwargs={'guide_pk': self.object.pk})
