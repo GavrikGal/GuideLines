@@ -4,7 +4,7 @@ from unittest.mock import Mock, patch
 
 from ..views import UpdateArticleView, DeleteArticleView, DetailArticleView, publish_article
 from ..models import CustomUser, Article
-from .utils.services import create_default_article
+from .utils.services import create_default_article, create_detail_article_view_with_mock_request_and_article
 
 
 class PublishArticleTest(TestCase):
@@ -26,14 +26,9 @@ class DetailArticleViewTest(TestCase):
     def test_mixins_test_func_allow_access_if_article_is_draft_and_user_is_author(self):
         """Функция test_func миксина UserPassesTestMixin возвращает True для Черновика, если пользователь автор"""
 
-        mock_article = Mock()
-        mock_article.draft = True
-        mock_request = Mock()
-        mock_request.user = mock_article.author  # Пользователь - это автор
-
-        view = DetailArticleView()
-        view.request = mock_request
-        view.get_object = Mock(return_value=mock_article)
+        view = create_detail_article_view_with_mock_request_and_article(
+            user_is_article_author=True
+        )
 
         self.assertTrue(
             view.test_func()
@@ -42,13 +37,7 @@ class DetailArticleViewTest(TestCase):
     def test_mixins_test_func_deny_access_if_article_is_draft_and_user_is_not_author(self):
         """Функция test_func миксина UserPassesTestMixin возвращает False для Черновика, если пользователь не автор"""
 
-        mock_article = Mock()
-        mock_article.draft = True
-        mock_request = Mock()
-
-        view = DetailArticleView()
-        view.request = mock_request
-        view.get_object = Mock(return_value=mock_article)
+        view = create_detail_article_view_with_mock_request_and_article()
 
         self.assertFalse(
             view.test_func()
@@ -57,14 +46,8 @@ class DetailArticleViewTest(TestCase):
     def test_mixins_test_func_deny_access_if_article_is_draft_and_anonymous(self):
         """Функция test_func миксина UserPassesTestMixin возвращает False для Черновика и анонима"""
 
-        mock_article = Mock()
-        mock_article.draft = True
-        mock_request = Mock()
-
-        view = DetailArticleView()
-        view.request = mock_request
+        view = create_detail_article_view_with_mock_request_and_article()
         view.request.user.is_authenticated = False
-        view.get_object = Mock(return_value=mock_article)
 
         self.assertFalse(
             view.test_func()
@@ -73,11 +56,8 @@ class DetailArticleViewTest(TestCase):
     def test_mixins_test_func_allow_access_if_not_draft(self):
         """Функция test_func миксина UserPassesTestMixin возвращает True если статья не Черновик"""
 
-        mock_article = Mock()
-        mock_article.draft = False
-
-        view = DetailArticleView()
-        view.get_object = Mock(return_value=mock_article)
+        view = create_detail_article_view_with_mock_request_and_article(
+            article_is_draft=False)
 
         self.assertTrue(
             view.test_func()
