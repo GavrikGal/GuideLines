@@ -4,7 +4,7 @@ from unittest.mock import Mock, patch
 
 from ..views import UpdateArticleView, DeleteArticleView, DetailArticleView, publish_article
 from ..models import CustomUser, Article
-from .utils.services import create_default_article, create_detail_article_view_with_mock_request_and_article
+from .utils.services import create_default_article, add_mock_request_and_mock_article_to_view
 
 
 class PublishArticleTest(TestCase):
@@ -26,9 +26,8 @@ class DetailArticleViewTest(TestCase):
     def test_mixins_test_func_allow_access_if_article_is_draft_and_user_is_author(self):
         """Функция test_func миксина UserPassesTestMixin возвращает True для Черновика, если пользователь автор"""
 
-        view = create_detail_article_view_with_mock_request_and_article(
-            user_is_article_author=True
-        )
+        view = add_mock_request_and_mock_article_to_view(DetailArticleView(),
+                                                         user_is_article_author=True)
 
         self.assertTrue(
             view.test_func()
@@ -37,7 +36,7 @@ class DetailArticleViewTest(TestCase):
     def test_mixins_test_func_deny_access_if_article_is_draft_and_user_is_not_author(self):
         """Функция test_func миксина UserPassesTestMixin возвращает False для Черновика, если пользователь не автор"""
 
-        view = create_detail_article_view_with_mock_request_and_article()
+        view = add_mock_request_and_mock_article_to_view(DetailArticleView())
 
         self.assertFalse(
             view.test_func()
@@ -46,7 +45,7 @@ class DetailArticleViewTest(TestCase):
     def test_mixins_test_func_deny_access_if_article_is_draft_and_anonymous(self):
         """Функция test_func миксина UserPassesTestMixin возвращает False для Черновика и анонима"""
 
-        view = create_detail_article_view_with_mock_request_and_article()
+        view = add_mock_request_and_mock_article_to_view(DetailArticleView())
         view.request.user.is_authenticated = False
 
         self.assertFalse(
@@ -56,8 +55,8 @@ class DetailArticleViewTest(TestCase):
     def test_mixins_test_func_allow_access_if_not_draft(self):
         """Функция test_func миксина UserPassesTestMixin возвращает True если статья не Черновик"""
 
-        view = create_detail_article_view_with_mock_request_and_article(
-            article_is_draft=False)
+        view = add_mock_request_and_mock_article_to_view(DetailArticleView(),
+                                                         article_is_draft=False)
 
         self.assertTrue(
             view.test_func()
@@ -80,15 +79,8 @@ class DeleteArticleViewTest(TestCase):
     def test_user_passes_test_func_passed(self) -> None:
         """Функция test_func миксина UserPassesTestMixin разрешает доступ к вьюхе"""
 
-        mock_article = Mock()
-        mock_request = Mock()
-
-        mock_request.user = mock_article.author     # Пользователь - это автор
-
-        view = DeleteArticleView()
-        view.get_object = Mock(return_value=mock_article)
-        view.request = mock_request
-
+        view = add_mock_request_and_mock_article_to_view(DeleteArticleView(),
+                                                         user_is_article_author=True)
         self.assertTrue(
             view.test_func()
         )
@@ -96,12 +88,7 @@ class DeleteArticleViewTest(TestCase):
     def test_user_passes_test_mixin_test_func_denied(self) -> None:
         """Функция test_func миксина UserPassesTestMixin НЕ разрешает доступ к вьюхе"""
 
-        mock_article = Mock()
-        mock_request = Mock()
-
-        view = DeleteArticleView()
-        view.get_object = Mock(return_value=mock_article)
-        view.request = mock_request
+        view = add_mock_request_and_mock_article_to_view(DeleteArticleView())
 
         self.assertFalse(
             view.test_func()
@@ -167,12 +154,8 @@ class DeleteArticleViewTest(TestCase):
 
         test_guide_pk = 1
 
-        mock_article = Mock()
-        mock_article.guide.pk = test_guide_pk
-
-        view = DeleteArticleView()
-        view.object = mock_article
-
+        view = add_mock_request_and_mock_article_to_view(DeleteArticleView(),
+                                                         guide_pk=test_guide_pk)
         self.assertEqual(
             reverse_lazy('guides:detail_guide', kwargs={'guide_pk': test_guide_pk}),
             view.get_success_url()
@@ -190,7 +173,6 @@ class UpdateArticleViewTest(TestCase):
         self.client.force_login(author)
         self.client.get(reverse_lazy('guides:edit_article', kwargs={'guide_pk': 1,
                                                                     'pk': 1}))
-
         self.assertTrue(
             mock_test_func.called
         )
@@ -198,14 +180,8 @@ class UpdateArticleViewTest(TestCase):
     def test_user_passes_test_func_passed(self) -> None:
         """Функция test_func миксина UserPassesTestMixin разрешает доступ к вьюхе"""
 
-        mock_article = Mock()
-        mock_request = Mock()
-        mock_request.user = mock_article.author     # Пользователь - это автор
-
-        view = UpdateArticleView()
-        view.get_object = Mock(return_value=mock_article)
-        view.request = mock_request
-
+        view = add_mock_request_and_mock_article_to_view(UpdateArticleView(),
+                                                         user_is_article_author=True)
         self.assertTrue(
             view.test_func()
         )
@@ -213,12 +189,7 @@ class UpdateArticleViewTest(TestCase):
     def test_user_passes_test_mixin_test_func_denied(self) -> None:
         """Функция test_func миксина UserPassesTestMixin НЕ разрешает доступ к вьюхе"""
 
-        mock_article = Mock()
-        mock_request = Mock()
-
-        view = UpdateArticleView()
-        view.get_object = Mock(return_value=mock_article)
-        view.request = mock_request
+        view = add_mock_request_and_mock_article_to_view(UpdateArticleView())
 
         self.assertFalse(
             view.test_func()
@@ -230,13 +201,9 @@ class UpdateArticleViewTest(TestCase):
         test_guide_pk = 1
         test_article_pk = 1
 
-        mock_article = Mock()
-        mock_article.pk = test_article_pk
-        mock_article.guide.pk = test_guide_pk
-
-        view = UpdateArticleView()
-        view.object = mock_article
-
+        view = add_mock_request_and_mock_article_to_view(UpdateArticleView(),
+                                                         article_pk=test_article_pk,
+                                                         guide_pk=test_guide_pk)
         self.assertEqual(
             reverse_lazy('guides:detail_article', kwargs={'guide_pk': test_guide_pk, 'pk': test_article_pk}),
             view.get_success_url()
