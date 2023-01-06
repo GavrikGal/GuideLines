@@ -8,16 +8,19 @@
 {% endblock %}
 
 {% block content %}
-    <article id="article">
-        <div class="row">
+    <article id="article" class="container">
+        <div class="row title bg-white border mb-4">
             {% if article.draft %}
-                <span class="p-2 text-center text-danger col-2 border border-danger">Черновик</span>
+                <div class="p-2 col-md-2 col-3 ">
+                    <span class="w-100 h-100 text-center text-danger border border-danger d-block py-2">Черновик</span>
+                </div>
             {% endif %}
-            <h2 class="text-center col-8">{{ article.name }}</h2>
+
+            <h2 class="text-center col-md-8 col-6 py-2">{{ article.name }}</h2>
 
             {% if article.author == user %}
-            <div class="dropdown">
-                <a href="#" class="btn rounded-circle text-dark my-1 mx-4 p-1" id="id_article_menu_btn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="dropdown w-auto">
+                <a href="#" class="btn rounded-circle text-dark my-2 mx-1 p-1" id="id_article_menu_btn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
                       <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
                     </svg>
@@ -30,8 +33,13 @@
         </div>
         {% endif %}
 
-        <p class="text">{{ article.text }}</p>
+        <div class="row bg-white border mb-5">
+            <div class="col">
+                <p class="text pt-3">{{ article.text }}</p>
+            </div>
+        </div>
     </article>
+
     {% if article.draft %}
         <a class="btn btn-outline-primary" href="{% url 'guides:publish_article' guide_pk=article.guide.pk pk=article.pk%}" id="id_publish_btn">Опубликовать Статью</a>
     {% else %}

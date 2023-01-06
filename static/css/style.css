@@ -1,3 +1,7 @@
+:root {
+	--bs-body-bg: #fbfcfd;
+}
+
 #guide {
 	position: relative;
 }
@@ -43,12 +47,16 @@
 	position: relative;
 }
 
-#article {
+#article .container{
+	position: relative;
+}
+
+#article .title{
 	position: relative;
 }
 
 #article .dropdown {
 	position: absolute;
 	right: 0;
-	top: 0;
+	top: 0.3em;
 }
