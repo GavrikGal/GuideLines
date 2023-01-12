@@ -41,10 +41,18 @@
     </article>
 
     {% if article.draft %}
-        <a class="btn btn-outline-primary" href="{% url 'guides:publish_article' guide_pk=article.guide.pk pk=article.pk%}" id="id_publish_btn">Опубликовать Статью</a>
+        <a class="btn btn-outline-primary" href="{% url 'guides:publish_article' guide_pk=article.guide.pk pk=article.pk %}" id="id_publish_btn">Опубликовать Статью</a>
     {% else %}
         {% if user.is_authenticated and user == article.author%}
-            <a class="btn btn-outline-secondary" href="#" id="id_make_draft_btn">Сделать черновиком</a>
+            <a class="btn btn-outline-secondary" href="{% url 'guides:do_not_publish_article' guide_pk=article.guide.pk pk=article.pk %}" id="id_make_draft_btn">Сделать черновиком</a>
+        {% endif %}
+    {% endif %}
+
+    {% if article.draft %}
+        <a class="btn btn-outline-primary" href="{% url 'guides:publish_article' guide_pk=article.guide.pk pk=article.pk %}" id="id_publish_btn">Опубликовать Статью</a>
+    {% else %}
+        {% if user.is_authenticated and user == article.author%}
+            <a class="btn btn-outline-secondary" href="{% url 'guides:do_not_publish_article' guide_pk=article.guide.pk pk=article.pk %}" id="id_make_draft_btn">Сделать черновиком</a>
         {% endif %}
     {% endif %}
 

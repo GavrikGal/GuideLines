@@ -18,6 +18,30 @@ from functional_tests.utils.services import (
 class ArticleTest(FunctionalTest):
     """тесты Статей"""
 
+    def test_mark_as_draft_and_cancel_publication(self):
+        """Тест. Опубликованную статью автор может пометить как черновик, что снимет ее
+        с публикации (ее никто кроме него не увидит)"""
+
+        # Гал имеет написанную и опубликованную Статью и он заходит на страницу своей статьи
+        article_page, guide, author, article = create_user_guide_article_then_go_to_article_page(self.browser,
+                                                                                                 self.live_server_url,
+                                                                                                 article_is_draft=False)
+        # На ней есть кнопка "Отметить как Черновик"
+        self.assertTrue(
+            article_page.make_draft_btn.is_displayed(),
+            'На странице Статьи нет кнопки "Сделать черновиком"'
+        )
+
+        # Гал нажимает ее
+        article_page.make_draft_btn.click()
+
+        # Страница обновляется
+        # Гал видит, что Статья опять помечена как черновик
+        self.assertTrue(
+            article_page.is_text_present(ARTICLE_DRAFT_LABEL),
+            'Нет надписи "Черновик" на странице Статьи'
+        )
+
     def test_draft_and_publication(self) -> None:
         """Тест. Только созданная Статья - это черновик. Видеть ее может только автор (и заходить на её страницу).
         Автор может опубликовать Статью. Тогда она станет доступна всем"""

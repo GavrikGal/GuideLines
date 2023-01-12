@@ -50,11 +50,11 @@ def create_guide_and_user_without_authenticated(
 
 
 def create_article(author: CustomUser, guide: Guide, name: str = TEST_ARTICLE_NAME,
-                   text: Optional[str] = TEST_ARTICLE_TEXT) -> Article:
+                   text: Optional[str] = TEST_ARTICLE_TEXT, draft: bool = True) -> Article:
     """Создает Статью в Руководстве Guide с автором author, названием name и текстом text.
     Если не задавать параметры name, text то будут испозованы тестовые
     значения поумолчанию"""
-    article = Article.objects.create(author=author, guide=guide, name=name, text=text)
+    article = Article.objects.create(author=author, guide=guide, name=name, text=text, draft=draft)
     return article
 
 
@@ -62,7 +62,8 @@ def create_user_guide_article_then_go_to_article_page(
         browser: WebDriver,
         live_server_url: str,
         description: Optional[str] = TEST_GUIDE_DESCRIPTION,
-        cover_path: Optional[str] = TEST_GUIDE_COVER_IMG_PATH) -> tuple[DetailArticlePage, Guide, CustomUser, Article]:
+        cover_path: Optional[str] = TEST_GUIDE_COVER_IMG_PATH,
+        article_is_draft: bool = True) -> tuple[DetailArticlePage, Guide, CustomUser, Article]:
     """
     Создает залогиненогого пользователя CustomUser, Руководство Guide
     и переходит настраницу Руководства.
@@ -76,10 +77,16 @@ def create_user_guide_article_then_go_to_article_page(
     """
     user = create_user_and_pre_authenticated_session(browser, live_server_url)
     guide = create_guide(user, description=description, cover_path=cover_path)
-    article = Article.objects.create(name=TEST_ARTICLE_NAME,
-                                     text=TEST_ARTICLE_TEXT,
-                                     author=user,
-                                     guide=guide)
+    article = create_article(name=TEST_ARTICLE_NAME,
+                             text=TEST_ARTICLE_TEXT,
+                             author=user,
+                             guide=guide,
+                             draft=article_is_draft)
+    # article = Article.objects.create(name=TEST_ARTICLE_NAME,
+    #                                  text=TEST_ARTICLE_TEXT,
+    #                                  author=user,
+    #                                  guide=guide,
+    #                                  draft=article_is_draft)
     article_page = DetailArticlePage(browser, live_server_url, guide.pk, article.pk)
     article_page.go_to_page()
     return article_page, guide, user, article
@@ -93,6 +100,7 @@ def create_user_guide_and_go_to_guide_page(
     """
     Создает залогиненогого пользователя CustomUser, Руководство Guide
     и переходит настраницу Руководства.
+    :param article_is_draft: Статья, является черновиком
     :param browser: Драйвер вэб-браузера
     :param live_server_url: корневой адрес веб-приложения
     :param description: Добавить описание. Опциональный. По умолчанию const.TEST_GUIDE_DESCRIPTION.

@@ -14,6 +14,14 @@ from .forms import CustomUserCreationForm, CreationGuideForm, UpdateGuideForm, C
 from .models import Guide, Article
 
 
+def do_not_publish_article(request: HttpRequest, guide_pk: int, pk: int) -> HttpResponse:
+    """Снимает Статью с публикации"""
+    article = Article.objects.get(pk=pk)
+    article.draft = True
+    article.save()
+    return redirect('guides:detail_guide', guide_pk=guide_pk)
+
+
 def publish_article(request: HttpRequest, guide_pk: int, pk: int) -> HttpResponse:
     """Публикует Статью"""
     article = Article.objects.get(pk=pk)
