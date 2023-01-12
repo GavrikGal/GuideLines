@@ -48,14 +48,6 @@
         {% endif %}
     {% endif %}
 
-    {% if article.draft %}
-        <a class="btn btn-outline-primary" href="{% url 'guides:publish_article' guide_pk=article.guide.pk pk=article.pk %}" id="id_publish_btn">Опубликовать Статью</a>
-    {% else %}
-        {% if user.is_authenticated and user == article.author%}
-            <a class="btn btn-outline-secondary" href="{% url 'guides:do_not_publish_article' guide_pk=article.guide.pk pk=article.pk %}" id="id_make_draft_btn">Сделать черновиком</a>
-        {% endif %}
-    {% endif %}
-
      <!-- Modal -->
 {% if article.author == user %}
 <div class="modal fade" id="id_modal_delete_panel" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
