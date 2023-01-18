@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -127,7 +128,7 @@ def create_guide(author: CustomUser, name: str = TEST_GUIDE_NAME,
                                  author=author)
     if cover_path:
         guide.cover = SimpleUploadedFile(cover_path,
-                                         content=open(settings.BASE_DIR / cover_path, 'rb').read(),
+                                         content=open(settings.BASE_DIR / os.path.normpath(cover_path), 'rb').read(),
                                          content_type='image/jpeg')
         guide.save()
     return guide
