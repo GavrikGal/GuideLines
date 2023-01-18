@@ -77,6 +77,7 @@ class FunctionalTest(LiveServerSingleThreadedTestCase):
             options.add_argument('--headless')
             options.add_argument('--disable-gpu')
         self.browser = webdriver.Firefox(options=options)
+        self.browser.set_window_size(1920, 1080)
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
             self.live_server_url = 'http://' + self.staging_server
