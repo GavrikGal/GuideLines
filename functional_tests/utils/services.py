@@ -126,9 +126,13 @@ def create_guide(author: CustomUser, name: str = TEST_GUIDE_NAME,
     guide = Guide.objects.create(name=name,
                                  description=description,
                                  author=author)
+    print(cover_path)
+    print(settings.BASE_DIR)
+    print(os.path.join(settings.BASE_DIR, os.path.normpath(cover_path)))
+    print(os.path.normpath(cover_path))
     if cover_path:
         guide.cover = SimpleUploadedFile(os.path.normpath(cover_path),
-                                         content=open(settings.BASE_DIR / os.path.normpath(cover_path), 'rb').read(),
+                                         content=open(os.path.join(settings.BASE_DIR, os.path.normpath(cover_path)), 'rb').read(),
                                          content_type='image/jpeg')
         guide.save()
     return guide
