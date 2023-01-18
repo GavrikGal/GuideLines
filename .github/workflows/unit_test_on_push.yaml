@@ -27,5 +27,10 @@ jobs:
       - name: view files in the container
         run: ls -la
 
+      - name: migrations
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+
       - name: Run tests
         run: python manage.py test guides.tests
