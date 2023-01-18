@@ -21,7 +21,7 @@ jobs:
       - name: Install software
         run: sudo apt-get install -y firefox
       - name: Install the necessary packages
-        run: pip install requests webdriver-manager selenium pytest
+        run: pip install requests webdriver-manager selenium
 
       - name: Install requirements
         # Устанавливаем зависимости
@@ -32,5 +32,7 @@ jobs:
           python manage.py makemigrations
           python manage.py migrate
 
-      - name: Run the PytTest script
-        run: pytest -rA
+      - name: Run functional tests
+        run: python manage.py test functional_tests
+        env:
+          HEADLESS_DRIVER: True

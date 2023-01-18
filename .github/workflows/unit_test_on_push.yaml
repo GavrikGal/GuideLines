@@ -34,5 +34,4 @@ jobs:
 
       - name: Run tests
         run: python manage.py test guides.tests
-        env:
-          HEADLESS_DRIVER: True
+
