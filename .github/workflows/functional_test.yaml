@@ -27,5 +27,10 @@ jobs:
         # Устанавливаем зависимости
         run: pip install -r requirements.txt
 
+      - name: Migrations
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+
       - name: Run the PytTest script
         run: pytest -rA
