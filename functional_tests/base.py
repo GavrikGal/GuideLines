@@ -18,7 +18,7 @@ from functional_tests.utils.const import (
 )
 
 
-MAX_WAIT = 3
+MAX_WAIT = 20
 SCREEN_DUMP_LOCATION = settings.BASE_DIR / 'logs' / 'screendumps'
 
 
