@@ -1,4 +1,4 @@
-name: Unit-tests-on-push
+name: Unit-tests
 
 on:
   push:
