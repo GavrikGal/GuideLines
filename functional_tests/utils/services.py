@@ -131,12 +131,12 @@ def create_guide(author: CustomUser, name: str = TEST_GUIDE_NAME,
 
     print(cover_path)
     print(settings.BASE_DIR)
-    print(os.path.join(settings.BASE_DIR, cover_path))
+    print(os.path.join('functional_tests', 'img', 'Cover.jpg'))
     print(os.path.normpath(cover_path))
     print(os.path.realpath(cover_path))
     if cover_path:
         guide.cover = SimpleUploadedFile(os.path.normpath(cover_path),
-                                         content=open(os.path.join(settings.BASE_DIR, os.path.normpath(cover_path)), 'rb').read(),
+                                         content=open(os.path.join(settings.BASE_DIR, os.path.join('functional_tests', 'img', 'Cover.jpg')), 'rb').read(),
                                          content_type='image/jpeg')
         guide.save()
     return guide
