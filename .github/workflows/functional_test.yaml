@@ -33,6 +33,6 @@ jobs:
           python manage.py migrate
 
       - name: Run functional tests
-        run: python manage.py test functional_tests.guides_tests.test_article.ArticleTest.test_can_create_new_article
+        run: python manage.py test functional_tests.guides_tests
         env:
-          HEADLESS_DRIVER: False
+          HEADLESS_DRIVER: True
