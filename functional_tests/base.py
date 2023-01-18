@@ -71,7 +71,7 @@ class FunctionalTest(LiveServerSingleThreadedTestCase):
         options = Options()
         # использовать для тестов драйвер без окна или с окном
         # options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
-        options.binary_location = r'/usr/bin/firefox'
+        # options.binary_location = r'/usr/bin/firefox'
         self.used_headless_driver = os.environ.get("HEADLESS_DRIVER", False)
         if self.used_headless_driver:
             options.add_argument('--headless')
