@@ -128,7 +128,7 @@ def create_guide(author: CustomUser, name: str = TEST_GUIDE_NAME,
                                  description=description,
                                  author=author)
 
-    cover_path = 'functional_tests\img\Cover.jpg'
+    cover_path = 'functional_tests/img/Cover.jpg'
 
     print(cover_path)
     print(Path(cover_path))
