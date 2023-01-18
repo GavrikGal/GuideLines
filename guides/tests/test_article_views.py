@@ -15,7 +15,7 @@ class PublishArticleTest(TestCase):
         article = create_default_article()
         publish_article(Mock(), article.guide.pk, article.pk)
         do_not_publish_article(Mock(), article.guide.pk, article.pk)
-        self.assertFalse(
+        self.assertTrue(
             Article.objects.get(pk=article.pk).draft,
             'Статья все еще не черновик'
         )
