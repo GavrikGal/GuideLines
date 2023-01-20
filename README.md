@@ -2,3 +2,5 @@
 
 
 [![Unit-tests](https://github.com/GavrikGal/GuideLines/actions/workflows/unit_test_on_push.yaml/badge.svg)](https://github.com/GavrikGal/GuideLines/actions/workflows/unit_test_on_push.yaml)
+
+[![Functional-tests](https://github.com/GavrikGal/GuideLines/actions/workflows/functional_test.yaml/badge.svg)](https://github.com/GavrikGal/GuideLines/actions/workflows/functional_test.yaml)
