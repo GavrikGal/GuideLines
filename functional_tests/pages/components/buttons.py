@@ -4,6 +4,8 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebElement
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class BaseButton(object):
@@ -52,6 +54,7 @@ class BaseButton(object):
         """Клик по кнопке"""
         if self._btn:
             self._btn.click()
+            WebDriverWait(self._browser, 20).until(EC.element_to_be_clickable((By.ID, self._id))).click()
 
     def hover(self) -> None:
         """Навести курсор на кнопку"""
