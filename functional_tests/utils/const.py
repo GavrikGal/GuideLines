@@ -7,7 +7,7 @@ TEST_GUIDE_DESCRIPTION = 'Это Руководство замечательно
                          'получится нормально протестировать это описание. Я думаю этого должно хватить. Но, ' \
                          'на всякий случай, пусть будет еще пару слов. Пара слов."'
 TEST_GUIDE_COVER_IMG_PATH = r'functional_tests/img/Cover.jpg'
-TEST_AVATAR_IMG_PATH = r'functional_tests/img/avatar.jpg'
+TEST_AVATAR_IMG_PATH = r'functional_tests/img/Avatar.jpg'
 TEST_PASSWORD = 'TestPassword12345!'
 TEST_GUIDE_NEW_COVER_IMG_PATH = r'functional_tests/img/New Cover.jpg'
 TEST_ARTICLE_NAME = 'Это замечательное название новой статьи'
