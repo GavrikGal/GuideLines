@@ -53,8 +53,8 @@ class BaseButton(object):
     def click(self) -> None:
         """Клик по кнопке"""
         if self._btn:
-            self._btn.click()
-            WebDriverWait(self._browser, 20).until(EC.element_to_be_clickable((By.ID, self._id))).click()
+            # self._btn.click()
+            WebDriverWait(self._browser, 20).until(EC.element_to_be_clickable(self._btn)).click()
 
     def hover(self) -> None:
         """Навести курсор на кнопку"""
