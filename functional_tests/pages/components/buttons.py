@@ -54,7 +54,7 @@ class BaseButton(object):
         """Клик по кнопке"""
         if self._btn:
             # self._btn.click()
-            # print(self._btn.location_once_scrolled_into_view)
+            self._btn.location_once_scrolled_into_view()
             self._browser.execute_script("arguments[0].scrollIntoView();", self._btn)
             WebDriverWait(self._browser, 20).until(EC.element_to_be_clickable(self._btn)).click()
 
