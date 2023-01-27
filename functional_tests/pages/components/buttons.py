@@ -53,10 +53,17 @@ class BaseButton(object):
     def click(self) -> None:
         """Клик по кнопке"""
         if self._btn:
-            # self._btn.click()
-            self._btn.location_once_scrolled_into_view()
-            self._browser.execute_script("arguments[0].scrollIntoView();", self._btn)
-            WebDriverWait(self._browser, 20).until(EC.element_to_be_clickable(self._btn)).click()
+            self._btn.location_once_scrolled_into_view
+
+            actions = ActionChains(self._browser)
+            actions.move_to_element(self._btn).perform()
+
+            self._btn.click()
+
+            # driver.execute_script("arguments[0].click();", ok3)
+            # self._browser.execute_script("arguments[0].scrollIntoView();", self._btn)
+            # self._browser.execute_script("arguments[0].click();", self._btn)
+            # WebDriverWait(self._browser, 20).until(EC.element_to_be_clickable(self._btn)).click()
 
     def hover(self) -> None:
         """Навести курсор на кнопку"""
