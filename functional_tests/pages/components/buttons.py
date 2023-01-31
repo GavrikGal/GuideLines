@@ -8,6 +8,8 @@ from selenium.webdriver.remote.webdriver import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from ...base import wait
+
 
 class BaseButton(object):
     """Базовая кнопка"""
@@ -20,6 +22,11 @@ class BaseButton(object):
         self._class = class_
         self._id = id_
         self._name = name
+
+    @wait
+    def wait_for(self, fn):
+        """ожидать"""
+        return fn()
 
     @property
     def _btn(self) -> Optional[WebElement]:
@@ -76,8 +83,11 @@ class BaseButton(object):
 
             # todo: рефакторинг без костылей
             self._browser.execute_script("arguments[0].scrollIntoView();", element)
-            WebDriverWait(self._browser, 5).until(EC.element_to_be_clickable(element)).click()
+            # WebDriverWait(self._browser, 5).until(EC.element_to_be_clickable(element)).click()
             # time.sleep(2)
+
+            self.wait_for(self._btn.click)
+
 
 
             # self._browser.execute_script("arguments[0].click();", self._btn)

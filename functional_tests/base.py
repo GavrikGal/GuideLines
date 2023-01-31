@@ -74,7 +74,6 @@ class FunctionalTest(LiveServerSingleThreadedTestCase):
             options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
         # options.binary_location = r'/usr/bin/firefox'
         self.used_headless_driver = os.environ.get("HEADLESS_DRIVER", False)
-        print(self.used_headless_driver)
         if self.used_headless_driver:
             options.add_argument('--headless')
             # options.add_argument('--disable-gpu')
