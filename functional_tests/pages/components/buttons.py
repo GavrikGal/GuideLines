@@ -85,6 +85,9 @@ class BaseButton(object):
             self._browser.execute_script("arguments[0].scrollIntoView();", element)
             # WebDriverWait(self._browser, 5).until(EC.element_to_be_clickable(element)).click()
             # time.sleep(2)
+            # actions = ActionChains(self._browser)
+            # actions.move_to_element(self._btn)
+            # actions.perform()
 
             self.wait_for(self._btn.click)
 

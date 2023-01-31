@@ -55,8 +55,8 @@ def wait(fn):
     return modified_fn
 
 
-# class FunctionalTest(StaticLiveServerTestCase):
-class FunctionalTest(LiveServerSingleThreadedTestCase):
+class FunctionalTest(StaticLiveServerTestCase):
+# class FunctionalTest(LiveServerSingleThreadedTestCase):
     """базовый функциональный тест"""
 
     @classmethod
