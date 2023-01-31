@@ -464,4 +464,3 @@ class ArticleTest(FunctionalTest):
         self.assertTrue(guide_page.is_text_present(TEST_ARTICLE_TEXT))
 
         # Гал рад, что все получилось
-        self.fail("Доделать")

@@ -113,8 +113,7 @@ class BaseButton(object):
             # actions = ActionChains(self._browser)
             # actions.move_to_element(self._btn).click().perform()
 
-
-            self.wait_for(self._btn.click)
+            self._btn.click()
 
 
 
