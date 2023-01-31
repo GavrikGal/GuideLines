@@ -76,11 +76,11 @@ class FunctionalTest(LiveServerSingleThreadedTestCase):
         self.used_headless_driver = os.environ.get("HEADLESS_DRIVER", False)
         if self.used_headless_driver:
             options.add_argument('--headless')
-            options.add_argument('--disable-gpu')
+            # options.add_argument('--disable-gpu')
         self.browser = webdriver.Firefox(options=options)
         # self.browser.set_window_size(5120, 2880)
-        self.browser.set_window_size(1920, 1080)
-        # self.browser.set_window_size(320, 480)
+        # self.browser.set_window_size(1920, 1080)
+        self.browser.set_window_size(320, 480)
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
             self.live_server_url = 'http://' + self.staging_server
