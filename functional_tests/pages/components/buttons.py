@@ -64,24 +64,26 @@ class BaseButton(object):
 
             element = self._btn
 
-            desired_y = (element.size['height'] / 2) + element.location['y']
-            window_h = self._browser.execute_script('return window.innerHeight')
-            window_y = self._browser.execute_script('return window.pageYOffset')
-            current_y = (window_h / 2) + window_y
-            scroll_y_by = desired_y - current_y
-
-            self._browser.execute_script("window.scrollBy(0, arguments[0]);", scroll_y_by)
+            # desired_y = (element.size['height'] / 2) + element.location['y']
+            # window_h = self._browser.execute_script('return window.innerHeight')
+            # window_y = self._browser.execute_script('return window.pageYOffset')
+            # current_y = (window_h / 2) + window_y
+            # scroll_y_by = desired_y - current_y
+            #
+            # self._browser.execute_script("window.scrollBy(0, arguments[0]);", scroll_y_by)
 
             # self._browser.execute_script("arguments[0].scrollBy(0, 100)", element)
 
             # todo: рефакторинг без костылей
-            time.sleep(2)
+            self._browser.execute_script("arguments[0].scrollIntoView();", element)
+            WebDriverWait(self._browser, 5).until(EC.element_to_be_clickable(element)).click()
+            # time.sleep(2)
 
 
             # self._browser.execute_script("arguments[0].click();", self._btn)
             # WebDriverWait(self._browser, 20).until(EC.element_to_be_clickable(self._btn)).click()
 
-            element.click()
+            # element.click()
 
     def hover(self) -> None:
         """Навести курсор на кнопку"""
