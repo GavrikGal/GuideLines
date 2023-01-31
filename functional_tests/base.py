@@ -95,7 +95,7 @@ class FunctionalTest(StaticLiveServerTestCase):
                     self._windowid = ix
                     self.browser.switch_to.window(handle)
                     self.take_screenshot()
-                    self.dump_html()
+                    # self.dump_html()
         self.browser.quit()
         rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
         super().tearDown()

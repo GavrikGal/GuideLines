@@ -51,6 +51,29 @@ class BaseButton(object):
             return None
 
     @property
+    def _locator(self):
+        """Локатор элемента"""
+        try:
+            if self._id:
+                return (
+                    By.ID,
+                    self._id
+                )
+            elif self._name:
+                return (
+                    By.NAME,
+                    self._name
+                )
+            else:
+                return (
+                    By.CSS_SELECTOR,
+                    f"{self._section} form .{self._class}[type='{self._type}']"
+                )
+        except selenium.common.exceptions.NoSuchElementException:
+            return None
+
+
+    @property
     def label(self) -> Optional[str]:
         """Надпись на кнопке"""
         if self._btn:
@@ -84,10 +107,12 @@ class BaseButton(object):
             # todo: рефакторинг без костылей
             self._browser.execute_script("arguments[0].scrollIntoView();", element)
             # WebDriverWait(self._browser, 5).until(EC.element_to_be_clickable(element)).click()
+
+            WebDriverWait(self._browser, 10).until(EC.visibility_of_element_located(self._locator))
             # time.sleep(2)
             # actions = ActionChains(self._browser)
-            # actions.move_to_element(self._btn)
-            # actions.perform()
+            # actions.move_to_element(self._btn).click().perform()
+
 
             self.wait_for(self._btn.click)
 
