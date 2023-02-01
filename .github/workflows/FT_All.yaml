@@ -9,26 +9,26 @@ on:
 
 jobs:
   article_tests:
-    uses: ./.github/workflows/Init_with_container.yaml
+    uses: ./.github/workflows/Init_with_firefox-container.yaml
     with:
       tests-path: guides_tests.test_article
 
   guide_tests:
-    uses: ./.github/workflows/Init_with_container.yaml
+    uses: ./.github/workflows/Init_with_firefox-container.yaml
     with:
       tests-path: guides_tests.test_guides
 
 #  home_tests:
-#    uses: ./.github/workflows/Init_with_container.yaml
+#    uses: ./.github/workflows/Init_with_firefox-container.yaml
 #    with:
 #      tests-path: guides_tests.test_home_page
 #
 #  permission_tests:
-#    uses: ./.github/workflows/Init_with_container.yaml
+#    uses: ./.github/workflows/Init_with_firefox-container.yaml
 #    with:
 #      tests-path: guides_tests.test_permission
 #
 #  registration_tests:
-#    uses: ./.github/workflows/Init_with_container.yaml
+#    uses: ./.github/workflows/Init_with_firefox-container.yaml
 #    with:
 #      tests-path: registration_tests
