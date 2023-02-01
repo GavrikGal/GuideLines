@@ -14,6 +14,13 @@ jobs:
       - name: Check out this repo
         uses: actions/checkout@v3
 
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cache/firefox
+          key: ${{ runner.os }}-firefox-${{ hashFiles('firefox') }}
+          restore-keys: |
+            ${{ runner.os }}-firefox-
+
       - name: Install Firefox
         run: sudo apt-get install -y firefox
 
@@ -37,24 +44,10 @@ jobs:
 #          key: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
 #          restore-keys: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
 
-      - uses: actions/cache@v3
-        id: cache-venv  # name for referring later
-        with:
-          path: ./.venv/  # what we cache: the virtualenv
-          # The cache key depends on requirements.txt
-          key: ${{ runner.os }}-venv-${{ hashFiles('**/requirements*.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-venv-
-      # Build a virtualenv, but only if it doesn't already exist
-      - run: python -m venv ./.venv && . ./.venv/bin/activate &&
-          pip install -r requirements.txt
-        if: steps.cache-venv.outputs.cache-hit != 'true'
 
-
-
-#      - name: Install requirements
-#        run: pip install --upgrade --upgrade-strategy eager -r requirements.txt
-#        if: steps.cache-requirements.outputs.cache-hit != 'true'
+      - name: Install requirements
+        run: pip install --upgrade --upgrade-strategy eager -r requirements.txt
+        if: steps.cache-requirements.outputs.cache-hit != 'true'
 
 
 
