@@ -1,0 +1,44 @@
+name: Init
+
+on:
+  workflow_call:
+    inputs:
+      tests-path:
+        required: true
+        type: string
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+      - name: Install software
+        run: sudo apt-get install -y firefox
+      - name: Update pip
+        run: python -m pip install --upgrade pip
+      - name: Install the necessary packages
+        run: pip install requests webdriver-manager selenium
+      - name: Install requirements
+        run: pip install -r requirements.txt
+      - name: Migrations
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+
+      - name: Run functional tests
+        run: python manage.py test functional_tests.${{ inputs.tests-path }}
+        env:
+          HEADLESS_DRIVER: True
+
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.tests-path }}_logs
+          path: logs
+        if: ${{ failure() }}
