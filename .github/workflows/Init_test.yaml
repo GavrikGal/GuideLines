@@ -27,13 +27,27 @@ jobs:
       - name: Install the necessary packages
         run: pip install requests webdriver-manager selenium
 
-      - name: Cache requirements
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
+
+      - name: pip cache
         id: cache-requirements
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
-          restore-keys: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+#      - name: Cache requirements
+#        id: cache-requirements
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.cache/pip
+#          key: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
+#          restore-keys: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
 
       - name: Install requirements
         run: pip install --upgrade --upgrade-strategy eager -r requirements.txt
