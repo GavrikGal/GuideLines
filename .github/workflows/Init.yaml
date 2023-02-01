@@ -38,7 +38,7 @@ jobs:
         with:
           path: ~/.cache/pip
           key: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
-          restore-keys: ${{ hashFiles('setup.py') }}-
+          restore-keys: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
 
       - if: ${{ steps.cache-requirements.outputs.cache-hit != 'true' }}
         name: Install requirements
