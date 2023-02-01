@@ -11,6 +11,8 @@ jobs:
   init:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out this repo
+        uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -22,15 +24,19 @@ jobs:
         run: python -m pip install --upgrade pip
       - name: Install the necessary packages
         run: pip install requests webdriver-manager selenium
-
-      - name: Check out this repo
-        uses: actions/checkout@v3
       - name: Install requirements
         run: pip install -r requirements.txt
       - name: Migrations
         run: |
           python manage.py makemigrations
           python manage.py migrate
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.pip
+          key: v1-pip-deps-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: v1-pip-deps-
 
       - name: Run functional tests
         run: python manage.py test functional_tests.${{ inputs.tests-path }}
