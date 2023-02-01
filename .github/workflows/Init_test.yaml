@@ -47,7 +47,7 @@ jobs:
 
       - name: Install requirements
         run: pip install --upgrade --upgrade-strategy eager -r requirements.txt
-        if: steps.cache-requirements.outputs.cache-hit != 'true'
+#        if: steps.cache-requirements.outputs.cache-hit != 'true'
 
 
 
