@@ -53,25 +53,21 @@ class BaseButton(object):
     @property
     def _locator(self):
         """Локатор элемента"""
-        try:
-            if self._id:
-                return (
-                    By.ID,
-                    self._id
-                )
-            elif self._name:
-                return (
-                    By.NAME,
-                    self._name
-                )
-            else:
-                return (
-                    By.CSS_SELECTOR,
-                    f"{self._section} form .{self._class}[type='{self._type}']"
-                )
-        except selenium.common.exceptions.NoSuchElementException:
-            return None
-
+        if self._id:
+            return (
+                By.ID,
+                self._id
+            )
+        elif self._name:
+            return (
+                By.NAME,
+                self._name
+            )
+        else:
+            return (
+                By.CSS_SELECTOR,
+                f"{self._section} form .{self._class}[type='{self._type}']"
+            )
 
     @property
     def label(self) -> Optional[str]:
@@ -84,43 +80,10 @@ class BaseButton(object):
     def click(self) -> None:
         """Клик по кнопке"""
         if self._btn:
-            # self._btn.location_once_scrolled_into_view
-
-            # self._browser.execute_script("arguments[0].scrollIntoView(true);", self._btn)
-            #
-            # actions = ActionChains(self._browser)
-            # actions.move_to_element(self._btn)
-            # actions.perform()
-
-            element = self._btn
-
-            # desired_y = (element.size['height'] / 2) + element.location['y']
-            # window_h = self._browser.execute_script('return window.innerHeight')
-            # window_y = self._browser.execute_script('return window.pageYOffset')
-            # current_y = (window_h / 2) + window_y
-            # scroll_y_by = desired_y - current_y
-            #
-            # self._browser.execute_script("window.scrollBy(0, arguments[0]);", scroll_y_by)
-
-            # self._browser.execute_script("arguments[0].scrollBy(0, 100)", element)
-
-            # todo: рефакторинг без костылей
-            self._browser.execute_script("arguments[0].scrollIntoView();", element)
-            # WebDriverWait(self._browser, 5).until(EC.element_to_be_clickable(element)).click()
-
+            self._browser.execute_script("arguments[0].scrollIntoView();", self._btn)
             WebDriverWait(self._browser, 10).until(EC.visibility_of_element_located(self._locator))
-            # time.sleep(2)
-            # actions = ActionChains(self._browser)
-            # actions.move_to_element(self._btn).click().perform()
 
             self._btn.click()
-
-
-
-            # self._browser.execute_script("arguments[0].click();", self._btn)
-            # WebDriverWait(self._browser, 20).until(EC.element_to_be_clickable(self._btn)).click()
-
-            # element.click()
 
     def hover(self) -> None:
         """Навести курсор на кнопку"""

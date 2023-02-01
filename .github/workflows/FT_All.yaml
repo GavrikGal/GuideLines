@@ -8,7 +8,11 @@ on:
       - '*'
 
 jobs:
-  run_tests:
+  init:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+  article_tests:
     runs-on: ubuntu-latest
     steps:
       - name: Check out this repo
@@ -33,6 +37,153 @@ jobs:
           python manage.py migrate
 
       - name: Run functional tests
-        run: python manage.py test functional_tests
+        run: python manage.py test functional_tests.guides_tests.test_article
         env:
           HEADLESS_DRIVER: True
+
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: article_logs
+          path: logs
+        if: ${{ always() }}
+  guide_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v2
+      #Setup Python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - name: Install software
+        run: sudo apt-get install -y firefox
+      - name: Install the necessary packages
+        run: pip install requests webdriver-manager selenium
+
+      - name: Install requirements
+        # Устанавливаем зависимости
+        run: pip install -r requirements.txt
+
+      - name: Migrations
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+
+      - name: Run functional tests
+        run: python manage.py test functional_tests.guides_tests.test_guides
+        env:
+          HEADLESS_DRIVER: True
+
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: guides_logs
+          path: logs
+        if: ${{ always() }}
+  home_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v2
+      #Setup Python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - name: Install software
+        run: sudo apt-get install -y firefox
+      - name: Install the necessary packages
+        run: pip install requests webdriver-manager selenium
+
+      - name: Install requirements
+        # Устанавливаем зависимости
+        run: pip install -r requirements.txt
+
+      - name: Migrations
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+
+      - name: Run functional tests
+        run: python manage.py test functional_tests.guides_tests.test_home_page
+        env:
+          HEADLESS_DRIVER: True
+
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: home_page_logs
+          path: logs
+        if: ${{ always() }}
+  permission_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v2
+      #Setup Python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - name: Install software
+        run: sudo apt-get install -y firefox
+      - name: Install the necessary packages
+        run: pip install requests webdriver-manager selenium
+
+      - name: Install requirements
+        # Устанавливаем зависимости
+        run: pip install -r requirements.txt
+
+      - name: Migrations
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+
+      - name: Run functional tests
+        run: python manage.py test functional_tests.guides_tests.test_permission
+        env:
+          HEADLESS_DRIVER: True
+
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: permission_logs
+          path: logs
+        if: ${{ always() }}
+  registration_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v2
+      #Setup Python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - name: Install software
+        run: sudo apt-get install -y firefox
+      - name: Install the necessary packages
+        run: pip install requests webdriver-manager selenium
+
+      - name: Install requirements
+        # Устанавливаем зависимости
+        run: pip install -r requirements.txt
+
+      - name: Migrations
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+
+      - name: Run functional tests
+        run: python manage.py test functional_tests.registration_tests
+        env:
+          HEADLESS_DRIVER: True
+
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: registration_logs
+          path: logs
+        if: ${{ always() }}
