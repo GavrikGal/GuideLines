@@ -9,12 +9,12 @@ on:
 
 jobs:
   article_tests:
-    uses: ./.github/workflows/Init_with_firefox-container.yaml
+    uses: ./.github/workflows/Init.yaml
     with:
       tests-path: guides_tests.test_article
 
   guide_tests:
-    uses: ./.github/workflows/Init_with_firefox-container.yaml
+    uses: ./.github/workflows/Init.yaml
     with:
       tests-path: guides_tests.test_guides
 
