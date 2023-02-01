@@ -8,13 +8,18 @@ on:
       - '*'
 
 jobs:
+  unit_test:
+    uses: ./.github/workflows/UT_All.yaml
+
   article_tests:
-    uses: ./.github/workflows/Init.yaml
+    needs: unit_test
+    uses: ./.github/workflows/Init_with_firefox-container.yaml
     with:
       tests-path: guides_tests.test_article
 
   guide_tests:
-    uses: ./.github/workflows/Init.yaml
+    needs: unit_test
+    uses: ./.github/workflows/Init_with_firefox-container.yaml
     with:
       tests-path: guides_tests.test_guides
 
