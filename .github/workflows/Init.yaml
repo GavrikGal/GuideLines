@@ -13,6 +13,10 @@ jobs:
     steps:
       - name: Check out this repo
         uses: actions/checkout@v3
+
+      - name: Install Firefox
+        run: sudo apt-get install -y firefox
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -20,26 +24,10 @@ jobs:
           cache: 'pip'
           cache-dependency-path: 'requirements.txt'
 
-      - uses: actions/cache@v3
-        with:
-          path: ~/.cache/firefox
-          key: ${{ hashFiles('setup.py') }}-${{ hashFiles('firefox') }}
-
-      - name: Install software
-        run: sudo apt-get install -y firefox
-
       - name: Update pip
         run: python -m pip install --upgrade pip
       - name: Install the necessary packages
         run: pip install requests webdriver-manager selenium
-
-      - name: Cache requirements
-        id: cache-requirements
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
-          restore-keys: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
 
       - name: Install requirements
         run: pip install --upgrade --upgrade-strategy eager -r requirements.txt
