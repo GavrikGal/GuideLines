@@ -11,12 +11,12 @@ jobs:
   init:
     runs-on: ubuntu-latest
 
-    container:
-      image: python:3.10
+#    container:
+#      image: python:3.10
 
     services:
       selenium:
-        image: selenium/standalone-firefox
+        image: selenium/standalone-firefox:latest
 
     steps:
       - name: Check out this repo
