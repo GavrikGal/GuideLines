@@ -25,7 +25,7 @@ jobs:
       - name: Install the necessary packages
         run: pip install requests webdriver-manager selenium
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
