@@ -46,6 +46,9 @@ jobs:
       - name: Run functional tests
         run: echo "python manage.py test functional_tests.${{ inputs.tests-path }}"
 
+      - name: Ls files
+        run: ls
+
       - name: Upload pytest test results
         uses: actions/upload-artifact@v3
         with:
