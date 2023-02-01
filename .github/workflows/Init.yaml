@@ -22,7 +22,8 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: ~/.cache/firefox
-          key: firefox-${{ hashFiles('firefox') }}
+          key: ${{ hashFiles('setup.py') }}-${{ hashFiles('firefox') }}
+
       - name: Install software
         run: sudo apt-get install -y firefox
 
@@ -31,12 +32,16 @@ jobs:
       - name: Install the necessary packages
         run: pip install requests webdriver-manager selenium
 
-      - uses: actions/cache@v3
+      - name: Cache requirements
+        id: cache-requirements
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ hashFiles('setup.py') }}-
 
-      - name: Install requirements
+      - if: ${{ steps.cache-requirements.outputs.cache-hit != 'true' }}
+        name: Install requirements
         run: pip install --upgrade --upgrade-strategy eager -r requirements.txt
 
       - name: Migrations
