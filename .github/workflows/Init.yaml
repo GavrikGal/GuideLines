@@ -42,6 +42,7 @@ jobs:
 
       - if: ${{ steps.cache-requirements.outputs.cache-hit != 'true' }}
         name: Install requirements
+        continue-on-error: true
         run: pip install --upgrade --upgrade-strategy eager -r requirements.txt
 
       - name: Migrations
