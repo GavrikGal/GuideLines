@@ -9,26 +9,26 @@ on:
 
 jobs:
   article_tests:
-    uses: GavrikGal/GuideLines/.github/workflows/init.yml@main
-      with:
-        tests-path: guides_tests.test_article
+    uses: GavrikGal/GuideLines/.github/workflows/init.yml
+    with:
+      tests-path: guides_tests.test_article
 
   guide_tests:
-    uses: GavrikGal/GuideLines/.github/workflows/init.yml@main
-      with:
-        tests-path: guides_tests.test_guides
+    uses: GavrikGal/GuideLines/.github/workflows/init.yml
+    with:
+      tests-path: guides_tests.test_guides
 
   home_tests:
-    uses: GavrikGal/GuideLines/.github/workflows/init.yml@main
-      with:
-        tests-path: guides_tests.test_home_page
+    uses: GavrikGal/GuideLines/.github/workflows/init.yml
+    with:
+      tests-path: guides_tests.test_home_page
 
   permission_tests:
-    uses: GavrikGal/GuideLines/.github/workflows/init.yml@main
-      with:
-        tests-path: guides_tests.test_permission
+    uses: GavrikGal/GuideLines/.github/workflows/init.yml
+    with:
+      tests-path: guides_tests.test_permission
 
   registration_tests:
-    uses: GavrikGal/GuideLines/.github/workflows/init.yml@main
-      with:
-        tests-path: registration_tests
+    uses: GavrikGal/GuideLines/.github/workflows/init.yml
+    with:
+      tests-path: registration_tests
