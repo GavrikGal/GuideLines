@@ -1,6 +1,4 @@
 <h2>Система для создания и просмотра различных Руководств</h2>
 
+[![All-Tests](https://github.com/GavrikGal/GuideLines/actions/workflows/tests.yaml/badge.svg)](https://github.com/GavrikGal/GuideLines/actions/workflows/tests.yaml)
 
-[![Unit-tests](https://github.com/GavrikGal/GuideLines/actions/workflows/unit_test_on_push.yaml/badge.svg)](https://github.com/GavrikGal/GuideLines/actions/workflows/unit_test_on_push.yaml)
-
-[![Functional-tests](https://github.com/GavrikGal/GuideLines/actions/workflows/functional_test.yaml/badge.svg)](https://github.com/GavrikGal/GuideLines/actions/workflows/functional_test.yaml)
