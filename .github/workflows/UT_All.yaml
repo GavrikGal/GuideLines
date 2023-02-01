@@ -1,11 +1,7 @@
 name: Unit-Tests
 
 on:
-  push:
-    tags:
-      - '!refs/tags/*'
-    branches:
-      - '*'
+  workflow_call:
 
 jobs:
   run_tests:
