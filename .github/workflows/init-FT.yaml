@@ -43,6 +43,10 @@ jobs:
         env:
           HEADLESS_DRIVER: True
 
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        if: always()
+
       - name: Upload pytest test results
         uses: actions/upload-artifact@v3
         with:
