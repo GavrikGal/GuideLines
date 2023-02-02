@@ -18,7 +18,7 @@ from functional_tests.utils.const import (
 )
 
 
-MAX_WAIT = 3
+MAX_WAIT = 20
 SCREEN_DUMP_LOCATION = settings.BASE_DIR / 'logs' / 'screendumps'
 
 
@@ -55,8 +55,8 @@ def wait(fn):
     return modified_fn
 
 
-# class FunctionalTest(StaticLiveServerTestCase):
-class FunctionalTest(LiveServerSingleThreadedTestCase):
+class FunctionalTest(StaticLiveServerTestCase):
+# class FunctionalTest(LiveServerSingleThreadedTestCase):
     """базовый функциональный тест"""
 
     @classmethod
@@ -70,12 +70,17 @@ class FunctionalTest(LiveServerSingleThreadedTestCase):
         """Установка параметров тестовой среды"""
         options = Options()
         # использовать для тестов драйвер без окна или с окном
-        options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
+        if os.name == 'nt':
+            options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
+        # options.binary_location = r'/usr/bin/firefox'
         self.used_headless_driver = os.environ.get("HEADLESS_DRIVER", False)
         if self.used_headless_driver:
             options.add_argument('--headless')
-            options.add_argument('--disable-gpu')
+            # options.add_argument('--disable-gpu')
         self.browser = webdriver.Firefox(options=options)
+        # self.browser.set_window_size(5120, 2880)
+        # self.browser.set_window_size(1920, 1080)
+        # self.browser.set_window_size(320, 480)
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
             self.live_server_url = 'http://' + self.staging_server
@@ -90,7 +95,7 @@ class FunctionalTest(LiveServerSingleThreadedTestCase):
                     self._windowid = ix
                     self.browser.switch_to.window(handle)
                     self.take_screenshot()
-                    self.dump_html()
+                    # self.dump_html()
         self.browser.quit()
         rmtree(settings.MEDIA_ROOT / TEST_USERNAME, ignore_errors=True)
         super().tearDown()

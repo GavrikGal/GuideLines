@@ -1,0 +1,40 @@
+name: All-Tests
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  unit_test:
+    uses: ./.github/workflows/UT.yaml
+
+  article_tests:
+    needs: unit_test
+    uses: ./.github/workflows/init-FT.yaml
+    with:
+      tests-path: guides_tests.test_article
+
+  guide_tests:
+    needs: unit_test
+    uses: ./.github/workflows/init-FT.yaml
+    with:
+      tests-path: guides_tests.test_guides
+
+  home_tests:
+    needs: unit_test
+    uses: ./.github/workflows/init-FT.yaml
+    with:
+      tests-path: guides_tests.test_home_page
+
+  permission_tests:
+    needs: unit_test
+    uses: ./.github/workflows/init-FT.yaml
+    with:
+      tests-path: guides_tests.test_permission
+
+  registration_tests:
+    needs: unit_test
+    uses: ./.github/workflows/init-FT.yaml
+    with:
+      tests-path: registration_tests

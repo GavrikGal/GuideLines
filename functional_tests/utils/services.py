@@ -1,4 +1,6 @@
+import os
 from typing import Optional
+from pathlib import Path
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
@@ -125,6 +127,7 @@ def create_guide(author: CustomUser, name: str = TEST_GUIDE_NAME,
     guide = Guide.objects.create(name=name,
                                  description=description,
                                  author=author)
+
     if cover_path:
         guide.cover = SimpleUploadedFile(cover_path,
                                          content=open(settings.BASE_DIR / cover_path, 'rb').read(),

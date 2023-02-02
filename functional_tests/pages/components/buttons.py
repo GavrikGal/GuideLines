@@ -1,9 +1,14 @@
+import time
 from typing import Optional
 import selenium.common.exceptions
 from selenium.webdriver import ActionChains
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebElement
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+from ...base import wait
 
 
 class BaseButton(object):
@@ -17,6 +22,11 @@ class BaseButton(object):
         self._class = class_
         self._id = id_
         self._name = name
+
+    @wait
+    def wait_for(self, fn):
+        """ожидать"""
+        return fn()
 
     @property
     def _btn(self) -> Optional[WebElement]:
@@ -41,6 +51,25 @@ class BaseButton(object):
             return None
 
     @property
+    def _locator(self):
+        """Локатор элемента"""
+        if self._id:
+            return (
+                By.ID,
+                self._id
+            )
+        elif self._name:
+            return (
+                By.NAME,
+                self._name
+            )
+        else:
+            return (
+                By.CSS_SELECTOR,
+                f"{self._section} form .{self._class}[type='{self._type}']"
+            )
+
+    @property
     def label(self) -> Optional[str]:
         """Надпись на кнопке"""
         if self._btn:
@@ -51,6 +80,9 @@ class BaseButton(object):
     def click(self) -> None:
         """Клик по кнопке"""
         if self._btn:
+            self._browser.execute_script("arguments[0].scrollIntoView();", self._btn)
+            WebDriverWait(self._browser, 10).until(EC.visibility_of_element_located(self._locator))
+
             self._btn.click()
 
     def hover(self) -> None:
